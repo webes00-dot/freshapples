@@ -17,25 +17,51 @@ RANGES = {
 APPROVED_ACTIONS = {"normalize", "canonical", "merge"}
 
 
+class WorkbookAccessError(Exception):
+    """A workbook access failure that is safe to report in a public run."""
+
+
+def google_api_failure(status, payload):
+    details = payload.get("error", {}).get("details", [])
+    if any(entry.get("reason") == "SERVICE_DISABLED" for entry in details):
+        return "sheets_api_disabled"
+    return f"google_http_{status}"
+
+
 def read_workbook(workbook_id):
+    from google.auth.exceptions import GoogleAuthError
     from google.auth.transport.requests import AuthorizedSession
     from google.oauth2.service_account import Credentials
+    from requests.exceptions import RequestException
 
-    auth = Credentials.from_service_account_info(
-        json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"]),
-        scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],
-    )
-    with AuthorizedSession(auth) as session:
-        response = session.get(
-            f"https://sheets.googleapis.com/v4/spreadsheets/{workbook_id}/values:batchGet",
-            params={
-                "ranges": [f"'{tab}'!{columns}" for tab, columns in RANGES.items()],
-                "valueRenderOption": "UNFORMATTED_VALUE",
-            },
-            timeout=45,
+    try:
+        auth = Credentials.from_service_account_info(
+            json.loads(os.environ["GOOGLE_SERVICE_ACCOUNT_JSON"]),
+            scopes=["https://www.googleapis.com/auth/spreadsheets.readonly"],
         )
-        response.raise_for_status()
-        return response.json()
+    except (GoogleAuthError, KeyError, TypeError, ValueError):
+        raise WorkbookAccessError("invalid_service_account_json") from None
+    with AuthorizedSession(auth) as session:
+        try:
+            response = session.get(
+                f"https://sheets.googleapis.com/v4/spreadsheets/{workbook_id}/values:batchGet",
+                params={
+                    "ranges": [f"'{tab}'!{columns}" for tab, columns in RANGES.items()],
+                    "valueRenderOption": "UNFORMATTED_VALUE",
+                },
+                timeout=45,
+            )
+        except GoogleAuthError:
+            raise WorkbookAccessError("token_exchange_failed") from None
+        except RequestException:
+            raise WorkbookAccessError("google_network_error") from None
+    try:
+        payload = response.json()
+    except ValueError:
+        payload = {}
+    if not response.ok:
+        raise WorkbookAccessError(google_api_failure(response.status_code, payload))
+    return payload
 
 
 def records(tabs, tab, *columns):
@@ -157,9 +183,12 @@ def main():
     args = parser.parse_args()
     if not args.workbook_id:
         parser.error("set MNTREES_MASTER_SHEET_ID or pass --workbook-id")
-    values = (json.loads(args.values_json.read_text(encoding="utf-8"))
-              if args.values_json else read_workbook(args.workbook_id))
-    snapshot = make_snapshot(values, args.workbook_id)
+    try:
+        values = (json.loads(args.values_json.read_text(encoding="utf-8"))
+                  if args.values_json else read_workbook(args.workbook_id))
+        snapshot = make_snapshot(values, args.workbook_id)
+    except WorkbookAccessError as exc:
+        raise SystemExit(f"Workbook connection reason: {exc}") from None
     args.output.parent.mkdir(parents=True, exist_ok=True)
     with NamedTemporaryFile(mode="w", encoding="utf-8", dir=args.output.parent, delete=False) as pending:
         json.dump(snapshot, pending, ensure_ascii=False)
