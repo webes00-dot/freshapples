@@ -1,0 +1,26 @@
+name: Scanner V2 scheduled pilot
+
+on:
+  schedule:
+    - cron: '0 8,20 * * *'
+      timezone: 'America/Chicago'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/scanner-v2-scheduled-pilot.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: scanner-v2-scheduled-pilot
+  cancel-in-progress: false
+
+jobs:
+  pilot:
+    uses: webes00-dot/freshapples/.github/workflows/scanner-v2-pilot.yml@scanner-v2-recovery
+    with:
+      scanner_ref: scanner-v2-recovery
+    secrets:
+      GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
