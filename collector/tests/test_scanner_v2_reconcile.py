@@ -29,6 +29,16 @@ def card(title, brand="", price=45):
 
 
 class ScannerV2ReconcileTests(unittest.TestCase):
+    def test_explicit_producer_line_can_supply_brand_omitted_from_title(self):
+        evidence = dict(card("Guava Flower 3.5g"), raw_product_title="Guava Flower 3.5g")
+        evidence["card_text"] = "Sativa Dominant\nFlower by Campfire Cannabis\nGuava Flower 3.5g\n$45.00"
+        captured, holds = capture_rendered(snap(evidence))
+        self.assertFalse(holds)
+        parsed, = reconcile(captured, MASTER, BRANDS)
+        self.assertEqual(parsed["brand"], "Campfire Cannabis")
+        self.assertEqual(parsed["resolution_evidence"]["brand"]["sources"], ["card_brand"])
+        self.assertEqual(parsed["identity_status"], "ready")
+
     def test_guava_size_and_brand_do_not_pollute_strain(self):
         captured, holds = capture_rendered(snap(
             card("Campfire Cannabis Guava 3.5g Flower", "Campfire Cannabis")))

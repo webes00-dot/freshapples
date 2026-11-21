@@ -18,7 +18,8 @@ PER_100 = re.compile(r"(?i)\b\d+(?:\.\d+)?\s*(?:mg|milligrams?)\b")
 LEADING_BADGE = re.compile(r"(?i)^\s*(?:(?:staff pick|on sale|sale|deal)(?:\b|!)\s*[!:|–-]*\s*)+")
 TRAIL = re.compile(r"(?i)\b(?:spend more|offer conditions apply|add to cart)\b.*$")
 CARD_BRAND = re.compile(
-    r"(?im)(?:\bbrand\s*[:|]|^[ \t]*(?:(?:made|grown|produced) )?by\s+)"
+    r"(?im)(?:\bbrand\s*[:|]|^[ \t]*(?:(?:made|grown|produced|"
+    r"flower|pre[- ]?rolls?|vapes?|concentrates?) )?by[ \t]+)"
     r"\s*([^\r\n|$]+)")
 NON_TARGET = re.compile(
     r"(?i)(?:/(?:edibles?|beverages?|drinks?|topicals?|tinctures?|accessories)/|"

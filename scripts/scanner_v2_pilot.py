@@ -41,8 +41,9 @@ READ_CARDS = r"""() => {
     '[data-testid*="product"]', '[data-testid*="menu-item"]',
   ].join(',');
   const text = node => (node?.innerText || '').trim().replace(/\s+/g, ' ');
+  const cardText = node => (node?.innerText || '').trim().replace(/[^\S\r\n]+/g, ' ');
   return Array.from(document.querySelectorAll(selector), element => ({
-    text: text(element),
+    text: cardText(element),
     href: element.closest('a[href]')?.href || element.querySelector('a[href]')?.href,
     title: text(element.querySelector('[data-testid*="product-name"],[class*="product-name"],[class*="productName"],h2,h3,h4')),
     brand: text(element.querySelector('[data-testid*="brand"],[class*="product-brand"],[class*="productBrand"]')),
