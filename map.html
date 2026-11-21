@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#004b20"><meta name="description" content="Browse Minnesota cannabis retailers by location.">
+<title>MNtrees | Retailer Map</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"><link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+<style>.business-tags{display:inline-flex;flex-wrap:wrap;gap:4px;margin:5px 0}.business-tag{display:inline-block;padding:3px 7px;background:#e8f2e8;color:#185a31;border-radius:999px;font-size:10px;font-weight:700}
+.map-page{max-width:none;margin-left:190px;padding:26px clamp(18px,3vw,46px);min-height:100vh}
+.map-header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding-bottom:20px;border-bottom:1px solid #dfe7dc}
+.map-header h1{font-size:clamp(26px,3vw,38px);letter-spacing:-.9px;margin:0 0 5px}
+.map-header p,.map-intro{color:#657c6c;font-size:12px;line-height:1.5}
+.map-dashboard{display:grid;grid-template-columns:minmax(265px,350px) minmax(0,1fr);gap:14px;margin-top:18px;align-items:start}
+.map-directory,.map-view{background:white;border:1px solid #dfe7dc;border-radius:7px;overflow:hidden;box-shadow:0 1px 5px #143c2008}
+.map-controls{padding:16px;border-bottom:1px solid #e7ede7}
+.map-controls h2{font-size:15px;margin:0 0 5px}.map-controls p{font-size:10px;color:#6a816e;margin:0 0 12px}
+.map-controls input,.map-controls select{width:100%;padding:10px;border:1px solid #d9e4d9;border-radius:5px;color:#1b402b;background:white;font:inherit;font-size:12px}
+.map-controls label{display:block;font-size:10px;font-weight:700;color:#5b7463;margin:10px 0 5px}
+.map-results{overflow-y:auto;max-height:calc(100vh - 280px);min-height:290px}
+.map-place{display:block;width:100%;text-align:left;padding:13px 16px;border:0;border-bottom:1px solid #e8eee9;background:white;color:#193b27}
+.map-place:hover,.map-place:focus-visible{background:#f0f7f1}
+.map-place.selected{background:#e8f5eb;border-left:3px solid #007b36;padding-left:13px}
+.map-place strong{display:block;font-size:12px;margin-bottom:5px}.map-place small{display:block;font-size:10px;color:#687e6c;line-height:1.5}
+.map-status{display:inline-block;color:#547563;font-size:9px;font-weight:700;margin-top:6px}
+.map-view{position:sticky;top:20px}
+.map-view-head{display:flex;justify-content:space-between;align-items:start;gap:12px;padding:15px 17px;border-bottom:1px solid #e7ede7}
+.map-view-head strong{font-size:15px}.map-view-head p{margin:5px 0 0;color:#738375;font-size:11px;line-height:1.5}
+.map-view #store-map{display:block;width:100%;height:min(70vh,740px);min-height:440px;background:#edf4ee}.map-view .leaflet-container{font-family:inherit}.map-view .leaflet-popup-content{font-size:12px;line-height:1.5}.map-view .leaflet-popup-content strong{font-size:13px}.map-view .leaflet-control-attribution{font-size:9px}.map-view .marker-cluster-small,.map-view .marker-cluster-medium,.map-view .marker-cluster-large{background:rgba(7,102,58,.23)}.map-view .marker-cluster-small div,.map-view .marker-cluster-medium div,.map-view .marker-cluster-large div{background:#0b6440;color:#fff;font-weight:750}.map-pin{background:#0b6440;border:2px solid white;border-radius:50%;box-shadow:0 1px 6px #123a2c66;width:13px;height:13px}
+.map-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.map-toolbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:8px}.map-reset{border:1px solid #bdd3c3;background:#f0f6f1;color:#225b36;border-radius:4px;padding:9px 11px;font-size:11px;font-weight:700}
+.map-actions a,.map-back{display:inline-block;text-decoration:none;background:#006b30;color:white;border-radius:5px;padding:9px 12px;font-size:11px;font-weight:700}
+.map-actions a.secondary-action{background:#ebf4ec;color:#0b6231}
+.map-note{color:#667b6b;font-size:10px;line-height:1.6;margin:12px 0 0}
+.map-sidebar-links{display:flex;flex-direction:column;gap:8px;margin:16px 2px 0}
+.map-sidebar-links a{display:block;text-decoration:none;color:#e2f4e6;background:#ffffff16;padding:10px;border-radius:5px;font-size:11px}
+.map-sidebar-links a.active{background:#008239;color:white}
+.map-page .map-empty{padding:20px;color:#6b806e;font-size:12px}
+@media(max-width:1050px){.map-page{margin-left:158px;padding:20px}.map-dashboard{grid-template-columns:290px minmax(0,1fr)}}
+@media(max-width:800px){.map-dashboard{grid-template-columns:1fr}.map-view{position:static;order:1}.map-directory{order:2}.map-results{max-height:380px}.map-view #store-map{height:380px;min-height:320px}}
+@media(max-width:700px){.map-page{margin-left:0;padding:16px 14px}.map-header{align-items:start;flex-direction:column}.map-view #store-map{height:360px;min-height:290px}.top .topin{gap:8px}}
+
+/* 2026 retailer map visual refresh */
+.map-page{padding-top:34px;background:radial-gradient(ellipse at 100% 0%,#eaf5eb 0,transparent 48%)}
+.map-header{align-items:center;padding:0 0 24px;border-bottom:0}.map-header h1{font-size:clamp(30px,3.3vw,46px);font-weight:850;line-height:1.08;letter-spacing:-1.6px}.map-header p{font-size:14px;margin:10px 0 0;max-width:650px;color:#58705f}.map-kicker{display:inline-flex;align-items:center;gap:8px;color:#08733b;text-transform:uppercase;letter-spacing:1.5px;font-size:11px;font-weight:800;margin-bottom:11px}.map-kicker:before{content:'';height:8px;width:8px;border-radius:50%;background:#13a45d;box-shadow:0 0 0 4px #d8efdf}.map-back{border-radius:999px;padding:12px 17px;box-shadow:0 7px 20px #07542b18}
+.map-dashboard{grid-template-columns:minmax(285px,350px) minmax(0,1fr);gap:18px;margin-top:7px}.map-directory,.map-view{border-radius:18px;border-color:#dbe9dc;box-shadow:0 12px 38px #123b2010}.map-controls{padding:22px;background:linear-gradient(145deg,#fff,#f6faf6)}.map-controls h2{font-size:18px;letter-spacing:-.3px}.map-controls p{font-size:12px;line-height:1.6;margin:8px 0 17px}.map-controls label{font-size:11px;letter-spacing:.2px;margin:14px 0 7px}.map-controls input,.map-controls select{padding:13px 14px;border:1px solid #cddfd1;border-radius:10px;font-size:13px;outline-offset:3px}.map-controls input:focus,.map-controls select:focus{border-color:#098343;box-shadow:0 0 0 3px #d9efe0;outline:0}.map-results{max-height:calc(100vh - 335px)}.map-place{padding:16px 20px;transition:background .15s ease}.map-place strong{font-size:14px;letter-spacing:-.2px}.map-place small{font-size:11px}.map-place.selected{border-left:4px solid #098343;padding-left:16px;background:#edf8f0}.map-status{font-size:10px;margin-top:8px}.map-view{top:18px}.map-view-head{padding:20px 22px;align-items:center;background:#fff}.map-view-head strong{font-size:17px;letter-spacing:-.3px}.map-view-head p{font-size:12px}.map-view #store-map{height:min(73vh,760px);min-height:490px;background:#e8f0e8}.map-reset{padding:11px 14px;border-radius:999px;background:#f4f8f4}.map-actions a{padding:11px 14px;border-radius:999px}.map-note{font-size:11px;max-width:1000px;margin:17px 0 30px}.map-view .leaflet-control-zoom a{border-radius:7px!important;color:#0b6b3a}.map-view .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 10px 30px #143c2030}.map-view .marker-cluster-small div,.map-view .marker-cluster-medium div,.map-view .marker-cluster-large div{background:#087c43}.map-pin{width:16px;height:16px;border:3px solid white;background:#087c43;box-shadow:0 2px 8px #0b3b2c66}
+@media(max-width:1050px){.map-dashboard{grid-template-columns:290px minmax(0,1fr)}}@media(max-width:800px){.map-dashboard{grid-template-columns:1fr}.map-view{position:static;order:1}.map-directory{order:2}.map-results{max-height:370px}.map-view #store-map{height:430px;min-height:350px}}@media(max-width:700px){.map-page{padding:22px 14px}.map-header{gap:14px;align-items:flex-start}.map-header h1{font-size:31px}.map-header p{font-size:13px}.map-view-head{padding:16px;flex-direction:column;align-items:stretch}.map-toolbar{justify-content:space-between}.map-view #store-map{height:390px;min-height:320px}.map-controls{padding:18px}.map-place{padding:15px 17px}}
+ .business-tag.ownership-tag.corporate-tag{background:#e9ecef;color:#39434d}.business-tag.ownership-tag.tribal-tag{background:#ede5ff;color:#5a3189}.business-tag.sea-tag{background:#fff1ca;color:#76500a;border:1px solid #d9af48}
+/* Unified MNtrees classification badge system: one geometry, color only varies. */
+.business-tag,.ranking-name .business-tag,.ranking-name .cultivation-tag{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;box-sizing:border-box;font-size:10px;font-weight:700;line-height:1.2;padding:3px 8px;border:0;border-radius:999px;white-space:nowrap;box-shadow:none;}
+.business-tag.cultivation-tag[data-cultivation="Indoor"]{background:#dcefe1;color:#185a35;border:0;}
+.business-tag.cultivation-tag[data-cultivation="Outdoor"]{background:#f3e0c8;color:#754714;border:0;}
+.business-tag.ownership-tag.corporate-tag{background:#e8ebee;color:#47525c;border:0;}
+.business-tag.ownership-tag.tribal-tag{background:#e9e1f3;color:#603e80;border:0;}
+.business-tag.sea-tag{background:#dcecf0;color:#1d6170;border:0;}
+</style><link rel="icon" type="image/png" href="https://styles.redditmedia.com/t5_2til2/styles/communityIcon_9m76x8670eke1.png"><link rel="apple-touch-icon" href="https://styles.redditmedia.com/t5_2til2/styles/communityIcon_9m76x8670eke1.png"></head>
+<body>
+<header class="top"><div class="shell topin">
+<a class="brand" href="https://mntrees.co/" aria-label="MNtrees home at mntrees.co"><img class="subreddit-logo" src="https://styles.redditmedia.com/t5_2til2/styles/communityIcon_9m76x8670eke1.png" alt="" width="52" height="52" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'"><span class="mark logo-fallback" style="display:none" aria-hidden="true">MN<span>✳</span></span><span>MN<span class="green">trees</span><small>STRAIN FINDER</small></span></a>
+<nav class="site-sidebar-links" aria-label="MNtrees pages"><a href="./">Find Strains</a><a href="brands.html">Brands</a><a href="retailers.html">Retailers</a><a href="feedback.html">Submit Correction/Feedback</a></nav>
+<a class="community" href="https://www.reddit.com/r/MNtrees/" target="_blank" rel="noopener noreferrer">r/MNtrees ↗</a><div class="sidebar-credit"><strong class="rcwm-text-credit"><span>REDWOOD COUNTY</span><span>WEED MANAGEMENT</span></strong><span class="extension-office">EXTENSION OFFICE</span></div>
+</div></header>
+<main class="map-page"><header class="map-header"><div><span class="map-kicker">Explore Minnesota</span><h1>Minnesota retailer map</h1><p>Find a retailer, see its location and open its shop or published menu.</p></div><a class="map-back" href="./">← Strain finder</a></header>
+<div class="map-dashboard"><section class="map-directory" aria-label="Retailer directory"><div class="map-controls">
+<h2 id="map-count">Retailer locations</h2><p>Choose a retailer to show its street address directly in the map panel. Available directory locations appear below; pins on the overview may be approximate until geocoded.</p>
+<label for="map-search">Search name, city or address</label><input id="map-search" type="search" placeholder="Search stores across Minnesota…" autocomplete="off">
+<label for="map-filter">Menu availability</label><select id="map-filter"><option value="all">All tracked locations</option><option value="products">Product menu identified</option><option value="menu">Menu or shop link available</option></select>
+</div><div id="map-results" class="map-results" role="listbox" aria-label="Retailers"></div></section>
+<section class="map-view" aria-label="Minnesota retailer map"><div class="map-view-head"><div><strong id="selected-name">Minnesota retailers</strong><p id="selected-address">Showing all tracked retailers. Select a pin or retailer for details.</p></div><div class="map-toolbar"><button type="button" id="map-reset" class="map-reset">All Minnesota</button><div id="map-actions" class="map-actions"></div></div></div><div id="store-map" role="application" aria-label="Interactive Minnesota retailer map showing all stores"></div></section></div>
+<p class="map-note">Drag to pan the map. Scroll or use + / − to zoom; pinch to zoom on touchscreens. Pins use matched street-address coordinates, which may be interpolated along the street rather than at the storefront entrance. Unmatched stores open a Google street-address preview when selected; no ZIP-centroid pins are shown. Verify the location before visiting.</p>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script><script src="map.js"></script></body></html>
