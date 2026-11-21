@@ -7,6 +7,7 @@ import re
 from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from scanner_v2_capture import capture_rendered
 from scanner_v2_master import load_snapshot
@@ -68,6 +69,14 @@ def rendered_products(cards, menu_url):
 async def read_menu(page, url):
     from playwright.async_api import Error as BrowserError
 
+    embedded_errors = set()
+
+    def record_embedded_error(response):
+        host = urlsplit(response.url).hostname or ""
+        if (host == "dutchie.com" or host.endswith(".dutchie.com")) and response.status >= 400:
+            embedded_errors.add(response.status)
+
+    page.on("response", record_embedded_error)
     try:
         response = await page.goto(url, wait_until="domcontentloaded", timeout=30_000)
         if response and response.status >= 400:
@@ -88,10 +97,17 @@ async def read_menu(page, url):
             products = rendered_products(rendered, url)
             if products:
                 return "Cards captured", products
+            for code in (401, 403, 429):
+                if code in embedded_errors:
+                    return f"Embedded menu HTTP {code}", []
             if attempt < 5:
                 await asyncio.sleep(1)
     except BrowserError:
         return "Page unavailable", []
+    finally:
+        page.remove_listener("response", record_embedded_error)
+    if embedded_errors:
+        return f"Embedded menu HTTP {min(embedded_errors)}", []
     return "No product cards", []
 
 
@@ -108,7 +124,7 @@ async def capture_retailer(browser, name, urls, retailer_id):
                 if identity not in seen:
                     seen.add(identity)
                     products.append(card)
-            if status in {"Age gate", "Access limited", "HTTP 401", "HTTP 403", "HTTP 429"}:
+            if status in {"Age gate", "Access limited"} or status.endswith(("HTTP 401", "HTTP 403", "HTTP 429")):
                 break
     finally:
         await page.close()
