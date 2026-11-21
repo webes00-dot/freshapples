@@ -10,6 +10,8 @@ from collections import Counter
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from scanner_v2_master import load_snapshot
+
 ROOT = Path(__file__).resolve().parents[1]
 SECONDARY = (
     "leafly.com", "weedmaps.com", "jointcommerce.com",
@@ -85,10 +87,13 @@ def discover_plan(stores):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--retailers", default=str(ROOT / "data/retailer_locations.json"))
+    source = ap.add_mutually_exclusive_group()
+    source.add_argument("--retailers", type=Path, default=ROOT / "data/retailer_locations.json")
+    source.add_argument("--master-snapshot", type=Path)
     ap.add_argument("--output", default=str(ROOT / "reports/scanner_v2_source_plan.json"))
     args = ap.parse_args()
-    stores = json.loads(Path(args.retailers).read_text(encoding="utf-8"))
+    stores = (load_snapshot(args.master_snapshot)["retailers"] if args.master_snapshot
+              else json.loads(args.retailers.read_text(encoding="utf-8")))
     plan = discover_plan(stores)
     if len(plan) != len({p["retailer_id"] for p in plan}):
         raise ValueError("Duplicate retailer/location ID in V2 source registry")

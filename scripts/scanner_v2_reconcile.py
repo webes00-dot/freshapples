@@ -13,6 +13,7 @@ from pathlib import Path
 from scanner_v2_observation import identity_input
 from unified_scan_rules import infer_category, normalize_observation
 from scanner_v2_elimination import rerank
+from scanner_v2_master import load_snapshot
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -91,18 +92,25 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", default=str(ROOT / "reports/scanner_v2_captured.json"))
     parser.add_argument("--output", default=str(ROOT / "reports/scanner_v2_reconciled.json"))
+    parser.add_argument("--master-snapshot", type=Path)
     args = parser.parse_args()
     source = json.loads(Path(args.input).read_text(encoding="utf-8"))
-    strains = json.loads((ROOT / "data/strain_master.json").read_text(encoding="utf-8"))
-    brands = json.loads((ROOT / "data/brands.json").read_text(encoding="utf-8"))
-    approved_index = json.loads((ROOT / "data/brand_master_index_v2.json").read_text(encoding="utf-8"))
-    authority = json.loads((ROOT / "config/authority.json").read_text(encoding="utf-8"))
-    if strains.get("source_spreadsheet_id") != authority["spreadsheet"]["id"]:
-        raise ValueError("Stale strain master authority")
-    if approved_index.get("authority_spreadsheet_id") != authority["spreadsheet"]["id"]:
-        raise ValueError("Brand approval index does not match canonical workbook")
+    if args.master_snapshot:
+        master = load_snapshot(args.master_snapshot)
+        strains = master["strain_master"]
+        brands = approved_brands = master["brands"]
+    else:
+        strains = json.loads((ROOT / "data/strain_master.json").read_text(encoding="utf-8"))
+        brands = json.loads((ROOT / "data/brands.json").read_text(encoding="utf-8"))
+        approved_index = json.loads((ROOT / "data/brand_master_index_v2.json").read_text(encoding="utf-8"))
+        authority = json.loads((ROOT / "config/authority.json").read_text(encoding="utf-8"))
+        if strains.get("source_spreadsheet_id") != authority["spreadsheet"]["id"]:
+            raise ValueError("Stale strain master authority")
+        if approved_index.get("authority_spreadsheet_id") != authority["spreadsheet"]["id"]:
+            raise ValueError("Brand approval index does not match canonical workbook")
+        approved_brands = approved_index["brands"]
     observations = source.get("observations") or []
-    rows = reconcile(observations, strains, brands, approved_brands=approved_index["brands"])
+    rows = reconcile(observations, strains, brands, approved_brands=approved_brands)
     counts = Counter(x["identity_status"] for x in rows)
     first = Counter(x["first_pass_status"] for x in rows)
     gains = sum(x["first_pass_status"] != "ready" and x["identity_status"] == "ready" for x in rows)
@@ -112,7 +120,7 @@ def main():
         "schema_version": 2,
         "purpose": "v2_shadow_identity_reconciliation_not_publication",
         "observations": len(rows),
-        "approved_brand_names": len(approved_index["brands"]),
+        "approved_brand_names": len(approved_brands),
         "first_pass_ready": first.get("ready", 0),
         "second_pass_new_ready": gains,
         "ready": counts.get("ready", 0),
