@@ -16,16 +16,34 @@ BRANDS=[{"name":"Campfire Cannabis","aliases":["Campfire"]},
 
 
 def run(title, url="https://shop.example/rec/flower",
-        brand="", category_hint="", card_text=""):
+        brand="", category_hint="", card_text="", source_category=""):
     old={"identity_status":"needs_review","identity_reasons":["missing_brand","strain_not_in_master"],
          "brand":"","strain":title,"package_g":None,"category":""}
     raw={"raw_title":title,"product_url":url,"source_url":url,
-         "source_brand_text":brand,
+         "source_brand_text":brand,"source_category_text":source_category,
          "source_metadata":{"category_hint_unverified":category_hint,"card_text":card_text}}
     return rerank(old,raw,MASTER,BRANDS)
 
 
 class EliminationPassTests(unittest.TestCase):
+    def test_explicit_category_field_resolves_format(self):
+        row = run("Grasslandz Guava 1g", url="", source_category="Vapes")
+        self.assertEqual(row["category"], "Vape")
+        self.assertEqual(row["identity_status"], "ready")
+        self.assertEqual(row["resolution_evidence"]["category_basis"], "source_category_field")
+
+    def test_explicit_category_field_overrides_conflicting_title(self):
+        row = run("Grasslandz Guava Flower 1g", source_category="Pre-Rolls")
+        self.assertEqual(row["category"], "Preroll")
+        self.assertEqual(row["identity_status"], "ready")
+        self.assertEqual(row["resolution_evidence"]["title_category"], "Flower")
+
+    def test_unrecognized_category_does_not_promote_adapter_hint(self):
+        row = run("Grasslandz Guava 1g", url="", source_category="Uncategorized",
+                  category_hint="Vape")
+        self.assertEqual(row["category"], "Vape")
+        self.assertIn("category_only_adapter_hint", row["identity_reasons"])
+
     def test_observed_float_alias_and_count_first_pack(self):
         row = run("Float 1x1g Pre Rolls Cap Junky Preroll THC: 27.2%")
         self.assertEqual((row["brand"], row["strain"], row["package_g"], row["pack_count"]),

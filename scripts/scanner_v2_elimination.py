@@ -331,26 +331,32 @@ def rerank(row, observation, master, brands, approved_brands=None):
     else:
         candidate = re.sub(r"\b(?:hybrid|indica|sativa)(?:\s*/\s*(?:hybrid|indica|sativa))?\b", " ", POTENCY.sub(" ", raw), flags=re.I)
         proposed["strain"] = clean_candidate(candidate, brand or "").strip(" -|/")
-    # Category from product form + context, NOT generic retailer identity.
+    # A dedicated source category takes precedence over inferred product form.
     form_title = re.sub(r"\b(?:in|add to) cart\b", " ", raw, flags=re.I)
-    category = infer_category(form_title, product_url, "", source_url)
     explicit_form = infer_category(form_title, "", "", "")
-    if not explicit_form and re.search(r"/cartsvapes(?:/|$)", urlsplit(product_url).path, re.I):
-        category = "Vape"
-        evidence["category_basis"] = "product_url_category"
-    elif not explicit_form and re.search(r"\bdeli[- ]style\b|\bpre[- ]pack(?:aged)?\s*\(popcorn\)", raw, re.I):
-        category = "Flower"
-        evidence["category_basis"] = "flower_product_descriptor"
-    if not category:
-        hint = str(metadata.get("category_hint_unverified") or "")
-        if hint.lower() in ("flower", "preroll", "vape", "concentrates"):
-            category = infer_category("", product_url, hint, source_url)
-            evidence["category_hint"] = "adapter_hint_needs_corrob"
-    if re.search(r"\bdistillate\b", raw, re.I) and not infer_category(form_title, "", "", ""):
-        category = "Vape" if category == "Vape" else "Concentrates"
-        evidence.pop("category_hint", None)
-    if initially_ready and not evidence.get("category_basis") and not re.search(r"\bdistillate\b", raw, re.I) and not infer_category(form_title, "", "", ""):
-        category = row.get("category") or category
+    category = infer_category("", explicit=observation.get("source_category_text"))
+    if category:
+        evidence["category_basis"] = "source_category_field"
+        if explicit_form and explicit_form != category:
+            evidence["title_category"] = explicit_form
+    else:
+        category = infer_category(form_title, product_url, "", source_url)
+        if not explicit_form and re.search(r"/cartsvapes(?:/|$)", urlsplit(product_url).path, re.I):
+            category = "Vape"
+            evidence["category_basis"] = "product_url_category"
+        elif not explicit_form and re.search(r"\bdeli[- ]style\b|\bpre[- ]pack(?:aged)?\s*\(popcorn\)", raw, re.I):
+            category = "Flower"
+            evidence["category_basis"] = "flower_product_descriptor"
+        if not category:
+            hint = str(metadata.get("category_hint_unverified") or "")
+            if hint.lower() in ("flower", "preroll", "vape", "concentrates"):
+                category = infer_category("", product_url, hint, source_url)
+                evidence["category_hint"] = "adapter_hint_needs_corrob"
+        if re.search(r"\bdistillate\b", raw, re.I) and not explicit_form:
+            category = "Vape" if category == "Vape" else "Concentrates"
+            evidence.pop("category_hint", None)
+        if initially_ready and not evidence.get("category_basis") and not re.search(r"\bdistillate\b", raw, re.I) and not explicit_form:
+            category = row.get("category") or category
     if category:
         proposed["category"] = category
     package_g, count, weight_status = package_size(raw, metadata, category, product_url)
