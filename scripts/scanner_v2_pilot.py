@@ -4,7 +4,7 @@ import argparse
 import asyncio
 import json
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -149,6 +149,38 @@ async def capture_pilot(master):
             await browser.close()
 
 
+def review_summary(results, capture_holds, rows, validated):
+    retailers = {result["id"]: result["retailer"] for result in results}
+    rows_by_id = {row["observation_id"]: row for row in rows}
+    accepted = Counter(row["retailer_id"] for row in validated["accepted"])
+    held = Counter()
+    reasons = defaultdict(Counter)
+    for item in capture_holds:
+        reasons[item["retailer_id"]][("Capture", item["reason"])] += 1
+    for item in validated["holds"]:
+        for observation_id in item.get("observation_ids", [item.get("observation_id")]):
+            row = rows_by_id[observation_id]
+            retailer_id = row["retailer_id"]
+            held[retailer_id] += 1
+            for reason in row["identity_reasons"] or item["reasons"]:
+                reasons[retailer_id][("Validation", reason)] += 1
+    lines = [
+        "", "| Retailer | Validated offers | Held observations |",
+        "| --- | ---: | ---: |",
+    ]
+    for retailer_id, name in retailers.items():
+        lines.append(f"| {name} | {accepted[retailer_id]} | {held[retailer_id]} |")
+    lines.extend([
+        "", "An observation may have more than one hold reason.", "",
+        "| Retailer | Stage | Hold reason | Count |",
+        "| --- | --- | --- | ---: |",
+    ])
+    for retailer_id, name in retailers.items():
+        for (stage, reason), count in reasons[retailer_id].most_common():
+            lines.append(f"| {name} | {stage} | {reason.replace('_', ' ')} | {count} |")
+    return lines
+
+
 def summarize(results, master):
     captured, capture_holds = capture_rendered({"results": results})
     lines = [
@@ -164,7 +196,8 @@ def summarize(results, master):
     ])
     if master and captured:
         brands = master["brands"]
-        validated = validate(reconcile(captured, master["strain_master"], brands, approved_brands=brands))
+        rows = reconcile(captured, master["strain_master"], brands, approved_brands=brands)
+        validated = validate(rows)
         categories = Counter(row["category"] for row in validated["accepted"])
         lines.extend([
             "", f"Validated offers: {len(validated['accepted'])}. "
@@ -175,6 +208,7 @@ def summarize(results, master):
                 f"{name} {count}" for name, count in sorted(categories.items())
             ) or "none") + ".",
         ])
+        lines.extend(review_summary(results, capture_holds, rows, validated))
     elif not master:
         lines.extend(["", "Master workbook snapshot unavailable. Identity validation was skipped."])
     return "\n".join(lines) + "\n", bool(captured)
