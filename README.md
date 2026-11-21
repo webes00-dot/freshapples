@@ -1,12 +1,12 @@
-# MNtrees — Minnesota Strain Finder
+# MNtrees — Minnesota Apple Variety Finder
 
 **Current developer entry point (2026-11-20):**
 [Developer handoff: architecture, sources, rules, and remaining gaps](docs/DEVELOPER_HANDOFF_2026-11-20.md).
 
-Read the consolidated [RULEBOOK](docs/RULEBOOK_2026-11-20.md), [operations](docs/OPERATIONS.md), [unified snapshot architecture](docs/UNIFIED_DATA.md), and [strain scan policy](docs/STRAIN_SCAN_APPROVAL_POLICY.md) before changing any import. The Google workbook Rules Master (R01–R32) is the editorial rule register.
+Read the consolidated [RULEBOOK](docs/RULEBOOK_2026-11-20.md), [operations](docs/OPERATIONS.md), [unified snapshot architecture](docs/UNIFIED_DATA.md), and variety scan policy before changing any import. The Google workbook Rules Master (R01–R32) is the editorial rule register.
 
-- Editorial source: [Consolidated MNtrees Google Sheet](https://docs.google.com/spreadsheets/d/1sTqBuJ2eFHwhLlYHIlXhh6HqgMhcBmVb7o70pvwRtV8/edit), specifically the Brand, Retailer, Strain, Rules, Alias, and Corrections masters.
-- Source repository: `rcwm56283/mntrees`, branch `main`.
+- Editorial source: [Consolidated MNtrees Google Sheet](https://docs.google.com/spreadsheets/d/1sTqBuJ2eFHwhLlYHIlXhh6HqgMhcBmVb7o70pvwRtV8/edit), specifically the Brand, Retailer, Variety, Rules, Alias, and Corrections masters.
+- Source repository: `webes00-dot/freshapples`, branch `main`.
 - Operational flow: scanner observations -> exact-source-ID corrections and catalog normalization -> `dist/data/catalog.json` -> `dist/data/site-data.json` -> UI.
 - Machine-readable authority: `config/authority.json`; Python consumers import `scripts/master_config.py`.
 - Mandatory build release audit: `scripts/audit_release.py` -> non-public `reports/release_quality.json`.
