@@ -1,0 +1,1298 @@
+{
+  "source": "Historical copy of the publicly served MNtrees retailer directory, matched against the pre-V2 backup",
+  "source_url": "https://mntrees.co/data/retailer_locations.json",
+  "retailers": [
+    {
+      "name": "Legacy Cannabis Woodbury",
+      "address": "9891 Hudson Place Woodbury MN 55125",
+      "menu_url": "https://legacycannabismn.com/store"
+    },
+    {
+      "name": "MN THC Co — Lakeville",
+      "address": "16085 Buck Hill Road Lakeville MN 55019",
+      "menu_url": "https://shop.mnthc.co/lakeville/"
+    },
+    {
+      "name": "MN THC Co — Dundas",
+      "address": "396 Schilling Drive Suite #300 Dundas MN 55019",
+      "menu_url": "https://shop.mnthc.co/dundas/"
+    },
+    {
+      "name": "Canna Corners",
+      "address": "321 Main Ave North Thief River Falls MN 56721",
+      "menu_url": "https://shop.trf.cannacorners.com/"
+    },
+    {
+      "name": "DISPO - Rochester",
+      "address": "108 First Avenue SW Rochester MN 55902",
+      "menu_url": "https://dispostore.com/stores/dispo-rochester"
+    },
+    {
+      "name": "DISPO - Minneapolis",
+      "address": "4423 Nicollet Avenue Minneapolis MN 55419",
+      "menu_url": "https://dispostore.com/stores/dispo-minneapolis"
+    },
+    {
+      "name": "Fort Road Cannabis",
+      "address": "899 Randolph Avenue Saint Paul MN 55102",
+      "menu_url": "https://fortroadcannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Green Duck Dispensary",
+      "address": "3390 Coachman Road Suite# 210 Eagan MN 55121",
+      "menu_url": "https://shop.greenduckgo.com/"
+    },
+    {
+      "name": "Jazz Cabbage",
+      "address": "249 7th Street E Saint Paul MN 55101",
+      "menu_url": "https://jazz-cabbage.com/shop"
+    },
+    {
+      "name": "Lucky Strains — New Brighton",
+      "address": "151 NW Silver Lake Rd. New Brighton MN 55112",
+      "menu_url": "https://luckystrains-newbrighton.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Waconia Dispensary",
+      "address": "212 W Main Street Waconia MN 55387",
+      "menu_url": "https://waconiadispensary.com/shop"
+    },
+    {
+      "name": "Altitude Dispensary — Monticello",
+      "address": "220 Sandberg Rd Monticello MN 55362",
+      "menu_url": "https://altitudedispensarymn.com/shop/"
+    },
+    {
+      "name": "American Made Cannabis",
+      "address": "162 E 3rd Street Winona MN 55987",
+      "menu_url": "https://americanmadecannabis.us/cart"
+    },
+    {
+      "name": "Black Bear Dispensary · Owatonna",
+      "address": "209 W Bridge Street Owatonna MN 55060",
+      "menu_url": "https://blackbeardispensary.com/owatonna/"
+    },
+    {
+      "name": "CannaJoy",
+      "address": "4753 Chicago Avenue S. Minneapolis MN 55407",
+      "website_url": "https://cannajoymn.com/",
+      "menu_url": "https://cannajoymn.com/"
+    },
+    {
+      "name": "Coastless",
+      "address": "1202 S Kniss Avenue Luverne MN 56156",
+      "menu_url": "https://www.coastlesscannabis.com/"
+    },
+    {
+      "name": "Flipside Dispensary and Music — Minneapolis",
+      "address": "901 W 36th St. Minneapolis MN 55408",
+      "website_url": "https://flipsideflipside.dispensary.shop/rec/menu",
+      "menu_url": "https://flipsideflipside.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Flowerz Cannabis Co. — Saint Paul",
+      "address": "1464 Saint Clair Ave Suite #102 Saint Paul MN 55105",
+      "menu_url": "https://shop.flowerzdispensary.com/rec/menu"
+    },
+    {
+      "name": "Grazzhopper",
+      "address": "16484 149th Street SE Big Lake MN 55309",
+      "menu_url": "https://grazzhopper.com/store/"
+    },
+    {
+      "name": "Green 2 Go",
+      "address": "2103 Vermillion St Hastings MN 55033",
+      "menu_url": "https://green-2-go.com/"
+    },
+    {
+      "name": "Green Rose — Minneapolis",
+      "address": "514 E 60th Street Minneapolis MN 55419",
+      "website_url": "https://greenrosemn.com/",
+      "menu_url": "https://greenrosemn.com/"
+    },
+    {
+      "name": "Irie Cannabis Dispensary — Minneapolis",
+      "address": "5 E 38th Street Minneapolis MN 55409",
+      "website_url": "https://iriecannabisdispensary.com/",
+      "menu_url": "https://iriecannabisdispensary.com/"
+    },
+    {
+      "name": "MnLooN — Minneapolis",
+      "address": "2801 Lyndale Ave S Minneapolis MN 55408",
+      "website_url": "https://themnloon.com/",
+      "menu_url": "https://themnloon.com/"
+    },
+    {
+      "name": "MnLooN — St. Paul",
+      "address": "608 Snelling Ave S. St. Paul MN 55116",
+      "website_url": "https://themnloon.com/",
+      "menu_url": "https://themnloon.com/"
+    },
+    {
+      "name": "MnLooN — Lakeville",
+      "address": "8337 210th Street W Lakeville MN 55044",
+      "menu_url": "https://themnloon.com/"
+    },
+    {
+      "name": "Northern Crown Cannabis — Isanti",
+      "address": "108 E MAIN Street Ste 400 Isanti MN 55040",
+      "website_url": "https://northerncrowncannabis.com/",
+      "menu_url": "https://northerncrowncannabis.com/"
+    },
+    {
+      "name": "Northern Sky Cannabis",
+      "address": "2202 1st Avenue Hibbing MN 55746",
+      "menu_url": "https://northernskycannabis.com/store/"
+    },
+    {
+      "name": "Northern Sky Cannabis",
+      "address": "2223 Highway 10 E Moorhead MN 56560",
+      "menu_url": "https://rosebudscannabiscompany.com/store/"
+    },
+    {
+      "name": "Spark Minnesota",
+      "address": "205 Central Avenue N Milaca MN 56353",
+      "menu_url": "https://www.sparkmn.com/"
+    },
+    {
+      "name": "Sweetleaves — Minneapolis",
+      "address": "905 N Washington Ave. Minneapolis MN 55401",
+      "website_url": "https://sweetleaves.co/",
+      "menu_url": "https://sweetleaves.co/"
+    },
+    {
+      "name": "Theory Wellness",
+      "address": "1915 Suburban Avenue Saint Paul MN 55119",
+      "menu_url": "https://theorywellness.org/minnesota-dispensary/"
+    },
+    {
+      "name": "Trailhead Cannabis Company",
+      "address": "17951 State Highway 371 Brainerd MN 56401",
+      "menu_url": "https://trailheadmn.com/menu"
+    },
+    {
+      "name": "North Blume Cannabis - Rogers",
+      "address": "21753 S Diamond Lake Road Rogers MN 55374",
+      "menu_url": "https://weedbuddylink.com/dispensaries/north-blume-cannabis-co/"
+    },
+    {
+      "name": "Legacy Cannabis — Duluth",
+      "address": "1906 W Superior St. Duluth MN 55806",
+      "menu_url": "https://legacycannabisduluth.com/"
+    },
+    {
+      "name": "Legacy Cannabis Minneapolis",
+      "address": "2930 Lyndale Avenue South Minneapolis MN 55347",
+      "menu_url": "https://legacycannabismn.com/"
+    },
+    {
+      "name": "5D Dispensary",
+      "address": "18447 Highway 65 NE Cedar MN 55011",
+      "menu_url": "https://5ddispensary.com/shop/flower"
+    },
+    {
+      "name": "Big Dream Organics",
+      "address": "1039 S Broadway Ave. Albert Lea MN 56007",
+      "menu_url": "https://bigdreamorganics.com/"
+    },
+    {
+      "name": "Blaine Dispensary",
+      "address": "1536 NE 125th Avenue Blaine MN 55449",
+      "menu_url": "https://www.blainedispensary.com/menu/flower"
+    },
+    {
+      "name": "Bloom Wellness Dispensary St. Paul",
+      "address": "550 Vandalia St Suite #175 St. Paul MN 55114",
+      "menu_url": "https://bloom-wellness.com/stores/bloom-wellness-st-paul"
+    },
+    {
+      "name": "Blooming Buds Dispensary",
+      "address": "710 County Road 75 E Unit 6 Saint Joseph MN 56374",
+      "menu_url": "https://bloomingbudsdispensary.com/"
+    },
+    {
+      "name": "Cabin Fever Cannabis",
+      "address": "517 Minnesota Avenue W Walker MN 56484",
+      "menu_url": "https://cabinfevercannabis.com/"
+    },
+    {
+      "name": "Canna Gemz",
+      "address": "5005 University Ave NE Columbia Heights MN 55421",
+      "menu_url": "https://cannagemz.com/"
+    },
+    {
+      "name": "Deep Roots",
+      "address": "250 N Medina Street Loretta MN 55357",
+      "menu_url": "https://www.deeprootscannabismn.com/"
+    },
+    {
+      "name": "Dirty Flamingo Cannabis Company",
+      "address": "3094 White Bear Avenue Maplewood MN 55109",
+      "menu_url": "https://www.dirtyflamingocannabis.com/locations/maplewood"
+    },
+    {
+      "name": "Duluth Cannabis Company",
+      "address": "12 N Lake Avenue Duluth MN 55802",
+      "menu_url": "https://duluthcannabiscompany.com/"
+    },
+    {
+      "name": "Eagan Canna",
+      "address": "2075 Cliff Road Eagan MN 55122",
+      "menu_url": "https://eagancanna.com/"
+    },
+    {
+      "name": "Farmer's Cannabis Company",
+      "address": "124 Minnesota Ave N Aitkin MN 56431",
+      "menu_url": "https://farmerscannabisco.com/"
+    },
+    {
+      "name": "Feelin' MN — Little Canada",
+      "address": "75 Little Canada Road W Little Canada MN 55117",
+      "website_url": "https://feelinmn.com/store/little-canada-mn/",
+      "menu_url": "https://feelinmn.com/store/little-canada-mn/"
+    },
+    {
+      "name": "Full Spectrum Dispensary",
+      "address": "235 E Frazee Avenue Vergas MN 56587",
+      "menu_url": "https://fullspectrumdispo.com/"
+    },
+    {
+      "name": "Go4 Cannabis Co.",
+      "address": "7114 Otter Lake Road Lino Lakes MN 55038",
+      "menu_url": "https://go4cannabis.com/"
+    },
+    {
+      "name": "Green Grass",
+      "address": "206 West Main Street Luverne MN 56156",
+      "menu_url": "https://www.hfcannabis.com/"
+    },
+    {
+      "name": "Green Leafs",
+      "address": "2021 S Broadway Street Suite #202 New Ulm MN 56087",
+      "menu_url": "https://greenleafscannabis.com/"
+    },
+    {
+      "name": "Edina Canna",
+      "address": "7145 S France Avenue Edina MN 55435",
+      "menu_url": "https://edinacanna.com/stores/edina-canna/products/flower"
+    },
+    {
+      "name": "MN Roots Crosslake",
+      "address": "34443 County Road 3 Crosslake MN 56442",
+      "menu_url": "https://mnrootsdispensary.com/stores/mn-roots-crosslake"
+    },
+    {
+      "name": "High 10 Dispensary — Ramsey",
+      "address": "6111 N.W. Highway 10 Unit#500 Ramsey MN 55303",
+      "menu_url": "https://weedmaps.com/dispensaries/high-10-dispensary"
+    },
+    {
+      "name": "HighRx — Fridley",
+      "address": "8300 University Avenue NE Suite#22 Fridley MN 55432",
+      "website_url": "https://highrx.co/",
+      "menu_url": "https://highrx.co/"
+    },
+    {
+      "name": "MN Roots Jenkins",
+      "address": "34212 Highway 371 Suite #2 Jenkins MN 56472",
+      "menu_url": "https://mnrootsdispensary.com/stores/mn-roots-jenkins"
+    },
+    {
+      "name": "Huff and Puff Smoke Shop",
+      "address": "1142 County Road E Vadnais Heights MN 55110",
+      "menu_url": "https://huffandpuffdispensarymn.com/"
+    },
+    {
+      "name": "Kodjo's Dispensary",
+      "address": "446 University Avenue W Saint Paul MN 55103",
+      "menu_url": "https://kodjos.dispensary.shop/"
+    },
+    {
+      "name": "Lake Daze Dispensary — Hopkins",
+      "address": "502 Mainstreet Hopkins MN 55343"
+    },
+    {
+      "name": "Lake of the Woods Cannabis Company",
+      "address": "3263 NW Fishery Road Baudette MN 56623",
+      "menu_url": "https://lowcanco.com/"
+    },
+    {
+      "name": "Lake Superior Dispensary — Duluth",
+      "address": "1019 W Central Entrance Duluth MN 55811",
+      "website_url": "https://lakesuperiordispensary.org/",
+      "menu_url": "https://lakesuperiordispensary.org/"
+    },
+    {
+      "name": "RISE Dispensary — Eagan",
+      "address": "1340 Town Centre Dr. Eagan MN 55123",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/eagan/6455/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — Baxter",
+      "address": "14091 Baxter Dr. Suite #108 Baxter MN 56425",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/baxter/6466/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — Willmar",
+      "address": "1413 1st St. Wilmar MN 56201",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/willmar/6457/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — Mankato",
+      "address": "201 Sioux Rd. Suite #100 Mankato MN 56001",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/mankato/6454/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — St. Paul",
+      "address": "2239 Ford Parkway St Paul MN 55116",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/st-paul/6456/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — St. Cloud",
+      "address": "3800 3rd St. St. Cloud MN 56303",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/st-cloud/6458/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — New Hope",
+      "address": "7700 42nd Ave. Suite A New Hope MN 55427",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/new-hope/6460/recreational-menu/"
+    },
+    {
+      "name": "RISE Dispensary — Brooklyn Park",
+      "address": "8016 Brooklyn Blvd. Brooklyn Park MN 55445",
+      "menu_url": "https://risecannabis.com/dispensaries/minnesota/brooklyn-park/6459/recreational-menu/"
+    },
+    {
+      "name": "Legit Cannabis",
+      "address": "120 W Superior Street Duluth MN 55802"
+    },
+    {
+      "name": "Frostbite Dispensary — Roseville",
+      "address": "2218 W County D Road Roseville MN 55112",
+      "website_url": "https://frostbitedispensary.com/",
+      "menu_url": "https://frostbitedispensary.com/"
+    },
+    {
+      "name": "Dinky Dope",
+      "address": "1319 4th Street SE Minneapolis MN 55414",
+      "menu_url": "https://shop.dinkydope.com/dinkytown"
+    },
+    {
+      "name": "Green Apple",
+      "address": "73 Minnesota Avenue Breckenridge MN 56520",
+      "menu_url": "https://greenapplecannabis.dispensary.shop"
+    },
+    {
+      "name": "Levitated Dispensaries",
+      "address": "4145 Hiawatha Avenue Minneapolis MN 55406",
+      "menu_url": "https://levitateddispensary.dispensary.shop"
+    },
+    {
+      "name": "Blue Ox Cannabis Company",
+      "address": "1112 Jackson Avenue Detroit Lakes MN 56501",
+      "menu_url": "https://blueox.dispensary.shop"
+    },
+    {
+      "name": "Twin Cities Cannabis",
+      "address": "6625 S Penn Ave. Richfield MN 55423",
+      "menu_url": "https://twincitiescannabis.dispensary.shop"
+    },
+    {
+      "name": "Green Leaf Depot",
+      "address": "4126 Egan Dr. Savage MN 55378",
+      "menu_url": "https://greenleafdepot.dispensary.shop"
+    },
+    {
+      "name": "Green Canopy Craft Dispensary — Lakeland Shores",
+      "address": "177 S Saint Croix Trail Lakeland Shores MN 55043",
+      "menu_url": "https://greencanopymn.dispensary.shop"
+    },
+    {
+      "name": "Unwind Dispensary — Moorhead",
+      "address": "3505 8th Street S Moorhead MN 56560",
+      "menu_url": "https://unwindmn.dispensary.shop"
+    },
+    {
+      "name": "In-Dispensary",
+      "address": "250 2nd Ave S. Suite #245A Minneapolis MN 55401",
+      "menu_url": "https://in-dispensary.dispensary.shop"
+    },
+    {
+      "name": "Winona Dispensary — Winona",
+      "address": "173 East 2nd St Winona MN 55987",
+      "menu_url": "https://shop.thewinonadispensary.com"
+    },
+    {
+      "name": "DNA Dispensary",
+      "address": "1559 Randolph Ave. Saint Paul MN 55105",
+      "menu_url": "https://dnadispensary.wm.store/"
+    },
+    {
+      "name": "Anoka Cannabis Company",
+      "address": "839 East River Road Anoka MN 55303",
+      "menu_url": "https://anokacannabisco.wm.store/"
+    },
+    {
+      "name": "Higherplace — Chaska",
+      "address": "103 W 2nd Street Chaska MN 55318",
+      "menu_url": "https://higherplace.dispensary.shop"
+    },
+    {
+      "name": "Do Be Kind",
+      "address": "215 S Chestnut Street La Crescent, MN 55947",
+      "menu_url": "https://dobekind.dispensary.shop"
+    },
+    {
+      "name": "Black Bear Dispensary · Winona",
+      "address": "104 E 4th Street Winona MN 55987",
+      "menu_url": "https://blackbear.dispensary.shop"
+    },
+    {
+      "name": "Tranquil Gardens",
+      "address": "79 W 3rd Street Winona MN 55987",
+      "menu_url": "https://tranquilgardens.dispensary.shop"
+    },
+    {
+      "name": "10000 Lakes Cannabis Company",
+      "address": "202 S Minnesota Avenue Saint Peter MN 56082",
+      "menu_url": "https://10000lakescannabisco.dispensary.shop"
+    },
+    {
+      "name": "ABC Cannabis Co.",
+      "address": "1124 3rd Avenue E Alexandria MN 56308",
+      "menu_url": "https://abccannabisco.dispensary.shop"
+    },
+    {
+      "name": "Waabigwan Mashkiki — Mahnomen",
+      "address": "515 E Jefferson Ave Mahnomen MN 56557",
+      "menu_url": "https://waabigwan.com/stores/waabigwan-mashkiki2"
+    },
+    {
+      "name": "Waabigwan Mashkiki — Moorhead",
+      "address": "2902 US-10 Moorhead MN 56560",
+      "menu_url": "https://waabigwan.com/stores/waabigwan-mashkiki-moorhead"
+    },
+    {
+      "name": "Waabigwan Mashkiki — Saint Cloud",
+      "address": "141 33rd Ave S Saint Cloud MN 56301",
+      "menu_url": "https://waabigwan.com/stores/waabigwan-mashkiki-saint-cloud"
+    },
+    {
+      "name": "Waabigwan Mashkiki — East Grand Forks",
+      "address": "926 Central Avenue NE East Grand Forks MN 56721",
+      "menu_url": "https://waabigwan.com/stores/waabigwan-mashkiki-east-grand-forks"
+    },
+    {
+      "name": "Waabigwan Mashkiki — Chanhassen",
+      "address": "951 W 78th St Chanhassen MN 55317",
+      "menu_url": "https://waabigwan.com/stores/waabigwan-mashkiki-chanhassen"
+    },
+    {
+      "name": "Green Goods — Blaine",
+      "address": "672 County Highway 10 Blaine MN 55434",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6496/featured"
+    },
+    {
+      "name": "Green Goods — Bloomington",
+      "address": "5232 W 84th Street Bloomington MN 55437",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6498/featured"
+    },
+    {
+      "name": "Green Goods — Burnsville",
+      "address": "14334 Burnhaven Drive Suite 14334 Burnsville MN 55306",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6495/featured"
+    },
+    {
+      "name": "Green Goods — Hermantown",
+      "address": "4960 Miller Trunk Highway Suite 300 Hermantown MN 55811",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6494/featured"
+    },
+    {
+      "name": "Green Goods — Minneapolis",
+      "address": "207 S 9th Street Minneapolis MN 55402",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6499/featured"
+    },
+    {
+      "name": "Green Goods — Moorhead",
+      "address": "800 30th Avenue S Moorhead MN 56560",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6500/featured"
+    },
+    {
+      "name": "Green Goods — Rochester",
+      "address": "3456 East Circle Drive NE Rochester MN 55906",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6497/featured"
+    },
+    {
+      "name": "Green Goods — Woodbury",
+      "address": "803 Bielenberg Drive Building F5 Suite 101 Woodbury MN 55125",
+      "menu_url": "https://visitgreengoods.com/shop-minnesota/store/6493/featured"
+    },
+    {
+      "name": "BlooMN Cannabis Company",
+      "address": "2514 Central Ave NE Minneapolis MN 55418",
+      "menu_url": "https://bloomncannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Wildflower — Northeast Minneapolis",
+      "address": "326 Central Ave SE Minneapolis MN 55414",
+      "website_url": "https://wildflower.cc/locations/northeast-minneapolis/",
+      "menu_url": "https://wildflower.cc/locations/northeast-minneapolis/"
+    },
+    {
+      "name": "Wildflower North Loop",
+      "address": "212 N 2nd St Suite 103 Minneapolis MN 55401",
+      "menu_url": "https://wildflower.cc/locations/north-loop/"
+    },
+    {
+      "name": "DankZ — St. Cloud",
+      "address": "3105 1st St S Saint Cloud MN 56301",
+      "menu_url": "https://weedmaps.com/dispensaries/dankz-1/flower"
+    },
+    {
+      "name": "Green Box Cannabis — Lakeville",
+      "address": "16350 Kenrick Loop Ste D Lakeville MN 55044",
+      "menu_url": "https://weedmaps.com/dispensaries/green-box-cannabis"
+    },
+    {
+      "name": "Fullmelt Factory — Maple Grove",
+      "address": "13777 Grove Dr Maple Grove MN 55311",
+      "website_url": "https://www.fullmeltfactory.com/",
+      "menu_url": "https://www.fullmeltfactory.com/"
+    },
+    {
+      "name": "Healing Harvest — St. Peter",
+      "address": "1123 S Minnesota Ave Suite B Saint Peter MN 56082",
+      "menu_url": "https://twincitycannabis.com/dispensaries/healing-harvest/"
+    },
+    {
+      "name": "The Flower Shop MN — Luverne",
+      "address": "706 S Kniss Ave Luverne MN 56156",
+      "menu_url": "https://twincitycannabis.com/dispensaries/the-flower-shop-mn-llc/"
+    },
+    {
+      "name": "Off The Path Cannabis — Morton",
+      "address": "39365 County Road 24 Morton MN 56270",
+      "website_url": "https://offthepathcannabis.com/",
+      "menu_url": "https://offthepathcannabis.com/"
+    },
+    {
+      "name": "NativeCare — West St. Paul",
+      "address": "2067 S Robert St West Saint Paul MN 55118",
+      "website_url": "https://nativecare.com/",
+      "menu_url": "https://nativecare.com/"
+    },
+    {
+      "name": "Lake Leaf Dispensary — Hinckley",
+      "address": "699 Lucky Trail Hinckley MN 55037",
+      "website_url": "https://lakeleafretail.com/",
+      "menu_url": "https://lakeleafretail.com/"
+    },
+    {
+      "name": "Hopkins Dispensary — Hopkins",
+      "address": "415 17th Ave N Suite 108 Hopkins MN 55343"
+    },
+    {
+      "name": "Minne Organix — Victoria",
+      "address": "1900 80th Street Victoria MN 55386"
+    },
+    {
+      "name": "The Cannabis Co. — St. Michael",
+      "address": "12246 42nd St NE Saint Michael MN 55376"
+    },
+    {
+      "name": "Two Harbors Cannabis — Two Harbors",
+      "address": "629 7th Ave Two Harbors MN 55616"
+    },
+    {
+      "name": "Beezwax Dispensary — Moorhead",
+      "address": "423 Main Avenue S Moorhead MN 56560",
+      "menu_url": "https://www.jointcommerce.com/dispensaries/beezwax-dispensary"
+    },
+    {
+      "name": "Anang Native Cannabis Co. — Cloquet",
+      "address": "1508 Big Lake Rd Cloquet MN 55720",
+      "menu_url": "https://www.jointcommerce.com/dispensaries/anang-native-cannabis-co"
+    },
+    {
+      "name": "North Shore Dispensary — Duluth",
+      "address": "2033 W Superior St Duluth MN 55806"
+    },
+    {
+      "name": "NativeCare — Red Lake",
+      "address": "24400 State Hwy 1 Red Lake MN 56671"
+    },
+    {
+      "name": "10K Leaves",
+      "address": "14303 60th Street N Oak Park Heights MN 55082"
+    },
+    {
+      "name": "4 North",
+      "address": "4 N Minnesota St New Ulm MN 56073"
+    },
+    {
+      "name": "5th Sun Gardens",
+      "address": "111 Coffee Street E Suite 2 Lanesboro MN 55949"
+    },
+    {
+      "name": "Aeroflower",
+      "address": "208 S Sewell Street Bldg# 208 Welcome MN 56181"
+    },
+    {
+      "name": "Aficionados ?",
+      "address": "206 E Main Street Albert Lea MN 56007"
+    },
+    {
+      "name": "Highnorth",
+      "address": "8711 E. Point Douglas Road S. Unit #108 Cottage Grove MN 55016"
+    },
+    {
+      "name": "Black Husky",
+      "address": "2706 Ekko Ave. Albert Lea MN 56007"
+    },
+    {
+      "name": "Blom Inc",
+      "address": "4024 Peavey Road Chaska MN 55318"
+    },
+    {
+      "name": "Bloom Wellness Coon Rapids",
+      "address": "2740 Main Street NW Coon Rapids MN 55448"
+    },
+    {
+      "name": "Bud & J's Dispensary",
+      "address": "8265 179th Street NW Clearwater MN 55320"
+    },
+    {
+      "name": "CANNA BUDDHA",
+      "address": "517 Duluth Avenue S Thief River Falls MN 56701"
+    },
+    {
+      "name": "Chaska Creek Cannabis",
+      "address": "722 N Chestnut St Chaska MN 55318"
+    },
+    {
+      "name": "Chillwater Cannabis Shop",
+      "address": "4016 Shoreline Drive Spring Park MN 55384"
+    },
+    {
+      "name": "Cloud Nine Farms",
+      "address": "1425 South 1st Street Willmar MN 56201"
+    },
+    {
+      "name": "Cuyuna Cannabis",
+      "address": "2 E Main Street Crosby MN 56441"
+    },
+    {
+      "name": "Da Spot Dispensary & Wellness",
+      "address": "2313 W 50th Street Minneapolis MN 55410",
+      "menu_url": "https://shop.daspotcannabis.com/shop/"
+    },
+    {
+      "name": "Dabney's Cannabis Co.",
+      "address": "5152 Hiawatha Avenue Minneapolis MN 55417",
+      "menu_url": "https://dabneys.dispensary.shop/rec/all-products/nb/kef"
+    },
+    {
+      "name": "Dankz",
+      "address": "3105 1st Street S Saint Cloud MN 56301"
+    },
+    {
+      "name": "DL Dispensary",
+      "address": "2673 US-10 Detroit Lakes MN 56501"
+    },
+    {
+      "name": "Flor Oscura",
+      "address": "330 El Dorado Drive Jordan MN 55352"
+    },
+    {
+      "name": "Fridley Dispensary",
+      "address": "7315 NE Hwy 65 Fridley MN 55432",
+      "menu_url": "https://fridleydispensary.com/shop/"
+    },
+    {
+      "name": "Gopher State Ganja",
+      "address": "209 Nokomis Street Alexandria MN 56308"
+    },
+    {
+      "name": "Gras",
+      "address": "104 7th Street S Moorhead MN 56560"
+    },
+    {
+      "name": "Great Cannabis",
+      "address": "14275 Bank Street Becker MN 55308",
+      "website_url": "https://greatcannabisllc.com/",
+      "menu_url": "https://greatcannabisllc.com/"
+    },
+    {
+      "name": "Great Northern Greens",
+      "address": "1100 Riverwood Drive Burnsville MN 55337",
+      "menu_url": "https://www.shop.greatnortherngreens.com/store/"
+    },
+    {
+      "name": "Green Walker Dispensary",
+      "address": "776 E 7TH Street Suite #1 St. Paul MN 55106"
+    },
+    {
+      "name": "Grounded Gardens",
+      "address": "45 N Main Street Hutchinson MN 55350"
+    },
+    {
+      "name": "Hazy Bear",
+      "address": "40 State Highway 6 NE Suite# B Outing MN 56662"
+    },
+    {
+      "name": "Healing Harvest",
+      "address": "1123 S Minnesota Avenue St. Peter MN 56082",
+      "menu_url": "https://healingharvestmn.com/store/"
+    },
+    {
+      "name": "Hempire",
+      "address": "3135 Superior Drive NW Rochester MN 55901"
+    },
+    {
+      "name": "Hi Cloud",
+      "address": "300 Belgrade Ave North Mankato MN 56003"
+    },
+    {
+      "name": "Hidden Gardens Micro",
+      "address": "24000 218 Highway N Austin MN 55912"
+    },
+    {
+      "name": "Higher Plains Cannabis Co",
+      "address": "1015 3rd Avenue Worthington MN 56187",
+      "menu_url": "https://higherplainscannabis.com/shop/"
+    },
+    {
+      "name": "Hinckley Sales",
+      "address": "38812 State Highway 48 Hinckley MN 55037"
+    },
+    {
+      "name": "Kaine Collective",
+      "address": "3920 Old Shakopee Road W Bloomington MN 55437"
+    },
+    {
+      "name": "KK Green Discovery",
+      "address": "221 28th Street SE Suite# 400-500 Rochester MN 55904"
+    },
+    {
+      "name": "Legit Cannabis",
+      "address": "951 E Hennepin Avenue Minneapolis MN 55414"
+    },
+    {
+      "name": "Lifted North",
+      "address": "26 W 1st St. Duluth MN 55802"
+    },
+    {
+      "name": "Lindstrom Canna",
+      "address": "13185 St Croix Avenue Lindstrom MN 55045"
+    },
+    {
+      "name": "Litt Dispensaries",
+      "address": "14029 Round Lake Blvd. Andover MN 55304"
+    },
+    {
+      "name": "Litt Fullmelt Factory",
+      "address": "13777 N GROVE Drive Maple Grove MN 55311"
+    },
+    {
+      "name": "LIV CANNABIS",
+      "address": "1960 Cliff Lake Road Unit# 123 Eagan MN 55122"
+    },
+    {
+      "name": "Loon Leaf",
+      "address": "8700 NE University Ave. Blaine MN 55434",
+      "menu_url": "https://loonleafmn.com/shop"
+    },
+    {
+      "name": "Loon Lettuce Inc",
+      "address": "603 Esch Dr. Caledonia MN 55912",
+      "menu_url": "https://treehuggercannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Loonatixz Genetixz",
+      "address": "201 NW 4th Street Grand Rapids MN 55744"
+    },
+    {
+      "name": "LOTW Dispensary",
+      "address": "418 STATE Avenue Warroad MN 56763",
+      "menu_url": "https://shop.lotwdispensary.com/shop/"
+    },
+    {
+      "name": "Marawanna",
+      "address": "5491 Adams Street Suite# 100 Mounds View MN 55112",
+      "menu_url": "https://marawanna.com/menu/"
+    },
+    {
+      "name": "Marvel Experience",
+      "address": "8045 County Line Road SE Suite B Delano MN 55328"
+    },
+    {
+      "name": "Marvin's Garden Minneapolis",
+      "address": "726 Central Avenue NE Suite# 111 Minneapolis MN 55414"
+    },
+    {
+      "name": "Mary Jane Hut",
+      "address": "121 Union Street S Mora MN 55051"
+    },
+    {
+      "name": "Matchbox Farms MN",
+      "address": "2316 Hendrickson Rd. Albert Lea MN 56007",
+      "menu_url": "https://www.matchboxfarms.com/homemn"
+    },
+    {
+      "name": "Midway Cannabis",
+      "address": "1607 University Avenue W St. Paul MN 55104"
+    },
+    {
+      "name": "Midwest Craft Cannabis",
+      "address": "26 N Main Street Sherburn MN 56171"
+    },
+    {
+      "name": "Minnesota Canna",
+      "address": "5125 Edina Industrial Blvd Suite 300 Edina MN 55439",
+      "menu_url": "https://minnesotacanna.com/stores/minnesota-canna/products/flower"
+    },
+    {
+      "name": "MN Roots Elk River",
+      "address": "18157 Carson Course NW Suite# B Elk River MN 55330",
+      "menu_url": "https://mnrootsdispensary.com/stores/mn-roots-elk-river"
+    },
+    {
+      "name": "MN Roots Hutchinson",
+      "address": "48 Main Street S Hutchinson MN 55350",
+      "menu_url": "https://mnrootsdispensary.com/stores/mn-roots-hutchinson"
+    },
+    {
+      "name": "MnLoon - St. Cloud",
+      "address": "3299 Roosevelt Road Saint Cloud MN 56301"
+    },
+    {
+      "name": "Munch Cannabis Company",
+      "address": "25246 Rice Road Hinckley MN 55037"
+    },
+    {
+      "name": "MUNCHIEZ CANNABIS MN",
+      "address": "1670 White Bear Avenue N Saint Paul MN 55106",
+      "menu_url": "https://www.leafly.com/dispensary-info/munch-cannabis-co"
+    },
+    {
+      "name": "My Dealer",
+      "address": "243 3rd St N Bayport MN 55003",
+      "website_url": "https://mydealermn.com/",
+      "menu_url": "https://mydealermn.com/"
+    },
+    {
+      "name": "Nineteen Pines",
+      "address": "4323 State Hwy. 23 Brook Park MN 55007"
+    },
+    {
+      "name": "No Coast Wellness",
+      "address": "501 1st Avenue NE Minneapolis MN 55413"
+    },
+    {
+      "name": "No Coast Wellness",
+      "address": "293 Como Avenue Suite #107 St. Paul MN 55103"
+    },
+    {
+      "name": "Norse Canna Co",
+      "address": "2982 Rainbow Street Mora MN 55051"
+    },
+    {
+      "name": "Northern Illusion",
+      "address": "1423 Rice Street Saint Paul MN 55117"
+    },
+    {
+      "name": "Nuggets dispensary",
+      "address": "30581 Patriot Avenue Suite 1 Pequot Lakes MN 56472"
+    },
+    {
+      "name": "O'Buds",
+      "address": "700 E Norway Drive Suite #105 Annandale MN 55302",
+      "menu_url": "https://obudsmn.com/shop"
+    },
+    {
+      "name": "La Canna",
+      "address": "1570 61 US-14 La Crescent MN 55947",
+      "website_url": "https://lacanna.co",
+      "menu_url": "https://lacanna.co/stores/la-canna"
+    },
+    {
+      "name": "Potshotz MN",
+      "address": "1549 University Avenue W Saint Paul MN 55104"
+    },
+    {
+      "name": "PUR NORTH",
+      "address": "7980 36th Avenue N New Hope MN 55427",
+      "menu_url": "https://purnorthmn.com/newhope"
+    },
+    {
+      "name": "Really Dope",
+      "address": "162 Dale Street N Saint Paul MN 55102",
+      "menu_url": "https://www.really-dope.com/st-paul"
+    },
+    {
+      "name": "Rick's Dispensary",
+      "address": "640 Railroad Drive Suite #700 Young America MN 55368"
+    },
+    {
+      "name": "Rosemont Greens",
+      "address": "12019 Business Park Boulevard N Champlin MN 55316"
+    },
+    {
+      "name": "Terrace High",
+      "address": "6211 Upper 51 Street N Oakdale MN 55128"
+    },
+    {
+      "name": "THCHOUSE",
+      "address": "2100 W Old Shakopee Road Bloomington MN 55431"
+    },
+    {
+      "name": "The Bridge MN",
+      "address": "366 Bench Street Taylors Falls MN 55084",
+      "menu_url": "https://www.thebridgemn.com/rec/menu"
+    },
+    {
+      "name": "The Flower Shop MN",
+      "address": "706 S Kniss Avenue Luverne MN 56156",
+      "menu_url": "https://dutchie.com/embedded-menu/69447b2b59020a2ed20af5d5"
+    },
+    {
+      "name": "The Grass Station",
+      "address": "103 W Main Street Bldg# 103 Belle Plaine MN 56011"
+    },
+    {
+      "name": "The Grey Area",
+      "address": "1330 Grand Avenue, Saint Paul MN 55105",
+      "menu_url": "https://greyareacannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "The Herbal Care",
+      "address": "1506 11th Street N Moorhead MN 56560",
+      "menu_url": "https://theherbalcaremn.com/shop/"
+    },
+    {
+      "name": "The Joint Dispensary",
+      "address": "3496 Shoreline Drive Wayzeta MN 55391",
+      "menu_url": "https://thejointdispensary.com/menu/"
+    },
+    {
+      "name": "The Lakes Dispensary",
+      "address": "1599 E County Road E White Bear Lake MN 55110",
+      "website_url": "https://www.thelakesdispensary.com/",
+      "menu_url": "https://www.thelakesdispensary.com/"
+    },
+    {
+      "name": "The Smoke Shop Cannabis Dispensary",
+      "address": "11135 61st Street NE Albertville MN 55301"
+    },
+    {
+      "name": "The Smoking Tree",
+      "address": "2719 Bridge Ave. Albert Lea MN 56007"
+    },
+    {
+      "name": "The Stash & Co",
+      "address": "1220 W 4th St Rush City MN 55069",
+      "menu_url": "https://weedmaps.com/dispensaries/the-stash-co/flower"
+    },
+    {
+      "name": "Wildflower North Loop",
+      "address": "212 N 2nd Street Suite#103 Minneapolis MN 55401",
+      "menu_url": "https://wildflower.cc/store/north-loop/"
+    },
+    {
+      "name": "The Vault",
+      "address": "4110 Main Street Saint Bonifacius MN 55375"
+    },
+    {
+      "name": "The Village Muni Cannabis Local",
+      "address": "2700 Highway 88 Suite 200 Saint Anthony MN 55418"
+    },
+    {
+      "name": "The Warriors Garden Hemp & Wellness",
+      "address": "282 6th Street E Suite# 102 Saint Paul MN 55101"
+    },
+    {
+      "name": "THE ZEN POT",
+      "address": "403 Highway 55 NE Suite A Buffalo MN 55313"
+    },
+    {
+      "name": "Tippy's Dispensary",
+      "address": "217 Ramsey Street Hastings MN 55033"
+    },
+    {
+      "name": "Traditional Market",
+      "address": "513 Central Avenue NE Minneapolis MN 55413"
+    },
+    {
+      "name": "Green Genie",
+      "address": "1321 Center Avenue Moorhead MN 56560",
+      "menu_url": "https://greengeniemn.com/shop/"
+    },
+    {
+      "name": "Wildflower Northeast",
+      "address": "326 SE Central Minneapolis MN 55414",
+      "menu_url": "https://wildflower.cc/store/northeast/"
+    },
+    {
+      "name": "Twilight Sun",
+      "address": "1439 W Lake Street Minneapolis MN 55408"
+    },
+    {
+      "name": "Twin Cities Green",
+      "address": "205 262 7th Street W Saint Paul MN 55102"
+    },
+    {
+      "name": "Twin Cities High",
+      "address": "7702 Olson Memorial Highway Golden Valley MN 55427"
+    },
+    {
+      "name": "Unanimous Cannabis",
+      "address": "2835 Hennepin Ave S Suite C Minneapolis MN 55408",
+      "menu_url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/info"
+    },
+    {
+      "name": "URBAN GREEN Dispensary",
+      "address": "9326 Zane Ave N Brooklyn Park MN 55443",
+      "website_url": "https://www.urbangreenmn.com/",
+      "menu_url": "https://www.urbangreenmn.com/"
+    },
+    {
+      "name": "Velvet Leaf",
+      "address": "3324 Hwy 10 E Moorhead MN 56560",
+      "menu_url": "https://dutchie.com/dispensary/beezwax-moorehead-2"
+    },
+    {
+      "name": "Verist Fields",
+      "address": "911 W. 50th St. Minneapolis MN 55419",
+      "menu_url": "https://veristfields.com/store/50th-bryant/"
+    },
+    {
+      "name": "Vibes",
+      "address": "1080 W County Road E Shoreview MN 55126"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "672 County Hwy 1 Blaine MN 55434",
+      "menu_url": "https://visitgreengoods.com/locations/blaine-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "5232 84th St. Bloomington MN 55437",
+      "menu_url": "https://visitgreengoods.com/locations/bloomington-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "803 Bielenberg Dr. Bldg 5 Woodbury MN 55125",
+      "menu_url": "https://visitgreengoods.com/locations/woodbury-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "207 9th St. Minneapolis MN 55402",
+      "menu_url": "https://visitgreengoods.com/locations/minneapolis-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "3456 E Circle Dr. Rochester MN 55906",
+      "menu_url": "https://visitgreengoods.com/locations/rochester-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "14334 Burnhaven Dr. Suite #14334 Burnsville MN 55306",
+      "menu_url": "https://visitgreengoods.com/locations/burnsville-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "800 30th Ave South Moorhead MN 56550",
+      "menu_url": "https://visitgreengoods.com/locations/moorhead-mn/"
+    },
+    {
+      "name": "Vireo Health of Minnesota",
+      "address": "4960 Miller Trunk Suite #300 Hermantown MN 55811",
+      "menu_url": "https://visitgreengoods.com/locations/duluth-hermantown-mn/"
+    },
+    {
+      "name": "Voyager Cannabis Co.",
+      "address": "1889 Madison Ave. Mankato MN 56001",
+      "menu_url": "https://voyager-mankato.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Watchtower Dispensary",
+      "address": "3400 University Avenue SE Minneapolis MN 55414",
+      "website_url": "https://watchtowerdispensary.com/",
+      "menu_url": "https://watchtowerdispensary.com/"
+    },
+    {
+      "name": "Weed Wishes Company",
+      "address": "21st Street SE Cook MN 55723",
+      "menu_url": "https://weedwishesdispensary.com/store/cook-minnesota/"
+    },
+    {
+      "name": "Wild River Dispensary",
+      "address": "4628 Isanti Trail North Branch MN 55056",
+      "menu_url": "https://wildrivercannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Wildflower Cannabis",
+      "address": "520 N Broadway, Pelican Rapids MN 56572",
+      "menu_url": "https://wildflowercannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Zenith Horizon",
+      "address": "110 W Main Street B Le Roy MN 55951",
+      "menu_url": "https://zhdispensary.com/store/le-roy/"
+    },
+    {
+      "name": "B & D Cannabis",
+      "address": "410 Main Street W Suite 100 New Prague MN 56071",
+      "menu_url": "https://banddcannabis.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Cali Cannabis",
+      "address": "2945 Hennepin Avenue Minneapolis MN 55408",
+      "menu_url": "https://calimn.com/shop"
+    },
+    {
+      "name": "Coconut Cannabis",
+      "address": "13371 Irvine Avenue NW Suite# 1 Bemidji MN 56601",
+      "menu_url": "https://coconutcannabis.net/store/recreational/"
+    },
+    {
+      "name": "Pipestone Dispensary",
+      "address": "112 Main Street W Pipestone MN 56164",
+      "menu_url": "https://dutchie.com/dispensary/serene-acres"
+    },
+    {
+      "name": "Holy Smokes",
+      "address": "7424 Lyndale Ave S Richfield MN 55423",
+      "menu_url": "https://dutchie.com/stores/holy-smokes-cannabis"
+    },
+    {
+      "name": "Green Box Cannabis",
+      "address": "16350 Kendrick Loop Suite #D Lakeville MN 55044",
+      "menu_url": "https://greenboxcannabis.wm.store/discover"
+    },
+    {
+      "name": "Mary Pot'ins",
+      "address": "12990 1st Street Becker MN 55308",
+      "menu_url": "https://marypotinsdispensary.com/shop/"
+    },
+    {
+      "name": "MN Grass Hero",
+      "address": "1331 105th St NW Rice MN 56367"
+    },
+    {
+      "name": "Aurora Cannabis",
+      "address": "16535 Anna Trail SE Prior Lake MN 55372",
+      "menu_url": "https://priorlakedispo.dispensary.shop/rec/menu"
+    },
+    {
+      "name": "Randolph's Cannabis Reserve",
+      "address": "675 Randolph Avenue Saint Paul MN 55102",
+      "menu_url": "https://randolphsreserve.com/order-online/"
+    },
+    {
+      "name": "Silver Therapeutics Cannabis Company",
+      "address": "1778 Greeley Street S. Stillwater MN 55082",
+      "menu_url": "https://silver-therapeutics.com/"
+    },
+    {
+      "name": "Stinky Petes",
+      "address": "134 Sheridan Street W Ely MN 55731",
+      "menu_url": "https://stinkypetesely.dispensary.shop/"
+    },
+    {
+      "name": "St. Louis Park Canna",
+      "address": "5690 W 36th Street St. St. Louis Park MN 55416",
+      "menu_url": "https://stlouisparkcanna.com/"
+    },
+    {
+      "name": "LMNO Dispensary",
+      "address": "102 E Grove Street Caledonia MN 55921",
+      "menu_url": "https://store.lmnodispensary.com/rec/menu"
+    },
+    {
+      "name": "Sugarleaf",
+      "address": "72 E 3rd Street Winona MN 55987",
+      "menu_url": "https://sugarleafmn.netlify.app/"
+    },
+    {
+      "name": "HWS Cannabis Company",
+      "address": "499 Arrowhead Lane Moose Lake MN 55767",
+      "menu_url": "https://sweede.io/dispensary/moose-lake-mn-55767-holistic-wellness-services/menu"
+    },
+    {
+      "name": "The Greenhouse Cannabis Company",
+      "address": "508 Lake Street S Forest Lake MN 55025",
+      "menu_url": "https://thegreenhousecannabisco.com/mn/forestlake"
+    },
+    {
+      "name": "Cheeky Winona",
+      "address": "850 Menard Road Winona MN 55987",
+      "menu_url": "https://www.cheekywinona.com/menu"
+    },
+    {
+      "name": "Mary Jane's Dispensary",
+      "address": "21564 MN-78 Battle Lake MN 56515"
+    },
+    {
+      "name": "New Brighton Dispensary",
+      "address": "455 Old Highway 8 NW New Brighton MN 55112",
+      "menu_url": "https://www.mndispensaryco.com/menu"
+    },
+    {
+      "name": "Northern Dispensary",
+      "address": "8101 34th Avenue S Suite 100 Bloomington MN 55425",
+      "menu_url": "https://www.northerndispensary.co/stores/northern-dispensary"
+    },
+    {
+      "name": "Pot Mamas",
+      "address": "4528 France Ave. S Edina MN 55410",
+      "menu_url": "https://www.pot-mamas.com/edina-menu"
+    },
+    {
+      "name": "Pot Mamas",
+      "address": "1155 Centre Point Dr. Suite #6 Mendota Heights MN 55120",
+      "menu_url": "https://www.pot-mamas.com/mendota-menu"
+    },
+    {
+      "name": "Pot Mamas",
+      "address": "6445 Lake Road Terrace Unit 100 Woodbury MN 55125",
+      "menu_url": "https://www.pot-mamas.com/woodbury-menu"
+    },
+    {
+      "name": "Sota Sown",
+      "address": "22321 Highway 10 Hawley MN 56549",
+      "menu_url": "https://www.sotasown.com/rec/menu"
+    },
+    {
+      "name": "Spring Lake Park Dispensary",
+      "address": "8478 Central Avenue NE Spring Lake Park MN 55432",
+      "menu_url": "https://www.springlakeparksdispensary.com/"
+    },
+    {
+      "name": "St. Paul Cannabis",
+      "address": "193 Snelling Ave N. St. Paul MN 55104",
+      "menu_url": "https://www.stpaulcannabis.com/"
+    },
+    {
+      "name": "Strains of the Earth",
+      "address": "415 Broadway Street South Jordan MN 55352",
+      "menu_url": "https://www.strainsoftheearth.com/"
+    },
+    {
+      "name": "Simply Kind",
+      "address": "109 W 6th Street Starbuck MN 56381"
+    },
+    {
+      "name": "SPACE OUT THC",
+      "address": "7610 University Avenue NE Fridley MN 55432"
+    },
+    {
+      "name": "Splitrock Farms",
+      "address": "11991 Business Park Boulevard Champlin MN 55316"
+    },
+    {
+      "name": "Stoner's Choice",
+      "address": "317 Central Avenue N Faribault MN 55021"
+    }
+  ]
+}
