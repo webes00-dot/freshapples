@@ -1,6 +1,11 @@
 name: Scanner V2 live pilot
 
 on:
+  workflow_call:
+    inputs:
+      scanner_ref:
+        required: true
+        type: string
   push:
     branches:
       - scanner-v2-recovery
@@ -20,6 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.scanner_ref || github.sha }}
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -49,5 +55,8 @@ jobs:
           args=(--summary "$GITHUB_STEP_SUMMARY")
           if [[ -s "$RUNNER_TEMP/v2-master.json" ]]; then
             args+=(--master-snapshot "$RUNNER_TEMP/v2-master.json")
+          elif [[ -n "${{ inputs.scanner_ref }}" ]]; then
+            echo "::error::Scheduled reconciliation requires the master workbook."
+            exit 1
           fi
           python3 scripts/scanner_v2_pilot.py "${args[@]}"
