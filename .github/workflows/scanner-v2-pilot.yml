@@ -1,0 +1,52 @@
+name: Scanner V2 live pilot
+
+on:
+  push:
+    branches:
+      - scanner-v2-recovery
+    paths:
+      - '.github/workflows/scanner-v2-pilot.yml'
+      - 'scripts/scanner_v2_*.py'
+      - 'scripts/unified_scan_rules.py'
+      - 'collector/tests/test_scanner_v2_*.py'
+
+permissions:
+  contents: read
+
+jobs:
+  pilot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test scanner
+        run: python3 -m unittest discover -s collector/tests
+      - name: Install capture dependencies
+        run: |
+          python3 -m pip install playwright google-auth requests
+          python3 -m playwright install --with-deps chromium
+      - name: Read the master workbook
+        env:
+          MNTREES_MASTER_SHEET_ID: ${{ vars.MNTREES_MASTER_SHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          if [[ -z "$MNTREES_MASTER_SHEET_ID" || -z "$GOOGLE_SERVICE_ACCOUNT_JSON" ]]; then
+            echo "Workbook connection: runner configuration missing." >> "$GITHUB_STEP_SUMMARY"
+          elif python3 scripts/scanner_v2_master.py --output "$RUNNER_TEMP/v2-master.json" >"$RUNNER_TEMP/v2-master.log" 2>&1; then
+            echo "Workbook connection: read succeeded." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "::warning::The runner could not read the configured master workbook."
+            echo "Workbook connection: read failed." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Capture and review the pilot menus
+        run: |
+          args=(--summary "$GITHUB_STEP_SUMMARY")
+          if [[ -s "$RUNNER_TEMP/v2-master.json" ]]; then
+            args+=(--master-snapshot "$RUNNER_TEMP/v2-master.json")
+          fi
+          python3 scripts/scanner_v2_pilot.py "${args[@]}"
