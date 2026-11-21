@@ -6,6 +6,9 @@ on:
       scanner_ref:
         required: true
         type: string
+    secrets:
+      GOOGLE_SERVICE_ACCOUNT_JSON:
+        required: true
   push:
     branches:
       - scanner-v2-recovery
@@ -51,11 +54,13 @@ jobs:
             grep -m1 -xE 'Workbook connection reason: (invalid_service_account_json|token_exchange_failed|google_network_error|sheets_api_disabled|google_http_[0-9]{3})' "$RUNNER_TEMP/v2-master.log" | tee -a "$GITHUB_STEP_SUMMARY" || true
           fi
       - name: Capture and review the pilot menus
+        env:
+          SCANNER_REF: ${{ inputs.scanner_ref }}
         run: |
           args=(--summary "$GITHUB_STEP_SUMMARY")
           if [[ -s "$RUNNER_TEMP/v2-master.json" ]]; then
             args+=(--master-snapshot "$RUNNER_TEMP/v2-master.json")
-          elif [[ -n "${{ inputs.scanner_ref }}" ]]; then
+          elif [[ -n "$SCANNER_REF" ]]; then
             echo "::error::Scheduled reconciliation requires the master workbook."
             exit 1
           fi
