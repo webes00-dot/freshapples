@@ -10,7 +10,8 @@ function typeOf(o){
  // Kodjo's MAC V2 five-pack is a 2.5g preroll multipack despite its Flower menu category.
  if(String(o.id||"")==="b922017567392166d488" || /kodjos\.dispensary\.shop\/rec\/flower\/pdp\/mac-v2-5pck-/i.test(String(o.url||"")))return "Preroll";
  const c=simplify(o.category);
- if(/\b(edible|edibles|gummy|gummies|chocolate|beverage|drink|tincture|topical)\b/.test(c))return null;
+ if(/\b(edible|edibles|gummy|gummies|chocolate|beverage|drink|tincture|topical|battery|batteries|accessory|accessories|charger|lighter|grinder|merchandise|gear)\b/.test(c))return null;
+ if(c.includes("vape")||c.includes("disposable")||c.includes("cartridge"))return "Vape";
  if(c.includes("flower")||c==="bud"||c==="buds")return "Flower";
  if(c.includes("preroll")||c.includes("pre roll")||c.includes("joint")||c.includes("blunt"))return "Preroll";
  return "Concentrates";
@@ -336,7 +337,8 @@ function cleanStrain(o){
   if(stripped)return cleanStrain({...o,strain:stripped,product_name:stripped});
  }
  const sourceName=String(o.strain||o.product_name||"").trim();
- if(/^mendo\s+breath\s+auto$/i.test(sourceName))return "Mendo Breath Auto";
+ if(/^mendo\s+breath\s+auto$/i.test(sourceName))return "Mendo Breath";
+ if(/^guava\s+3[.]?5(?:\s*g)?$/i.test(sourceName) && Number(o.package_g)===3.5 && /flower/i.test(String(o.category||"")))return "Guava";
  if(/^mendo\s+breath(?:e)?$/i.test(sourceName))return "Mendo Breath";
  if(/^mimosa\s+ice(?:\s+3\.5(?:\s*g)?)?$/i.test(sourceName))return "Mimosa Ice";
  if(/^night\s*hawk$/i.test(sourceName))return "Night Hawk";
@@ -411,7 +413,7 @@ function cleanStrain(o){
  if(/\bcap\s*junky\b/.test(aliasCandidate))return "Cap Junky";
  if(/\bsunset\s+tea\b/.test(aliasCandidate))return "Sunset Tea";
  if(/\bla\s+gueaga\b/.test(aliasCandidate))return "La Gueaga";
- if(/\bmendo\s+breath\s+auto\b/.test(aliasCandidate))return "Mendo Breath Auto";
+ if(/\bmendo\s+breath\s+auto\b/.test(aliasCandidate))return "Mendo Breath";
  if(/\bmendo\s+breath\b/.test(aliasCandidate))return "Mendo Breath";
  if(/\bhyperion(?:\s+f1)?\b/.test(aliasCandidate) && /\bhyperion\b/.test(aliasCandidate))return "Hyperion F1";
  if(/\bjelly\s+breath\b/.test(aliasCandidate))return "Jelly Breath";
@@ -488,6 +490,7 @@ function cleanStrain(o){
 }
 function canonicalBrand(name){
  const raw=String(name||"").trim(),key=simplify(raw);
+ if(/^(?:feelin ?mn|feel n mn)$/.test(key))return "Feelin' MN";
  if(key==="popcorn"||key==="zips"||key==="zips cannabis")return "Zips";
  if(key==="avio supply co"||key==="avio supply company")return "Avio";
  if(key==="northpark cannabis co"||key==="northpark cannabis company")return "Northpark";
@@ -601,6 +604,11 @@ function canonicalSkywalker(value){
 }
 function canonicalPublishedHeading(value){
  const name=String(value||"").trim().replace(/\s+/g," ");
+ // Canonical strain names; Mr. Birch is a Verist packaging line and percentages are lab data.
+ const birch=name.match(/^mr\.?\s*birch\s+(?:big\s+stick|little\s+sticks?)\s*[-–]?\s*(uptown\s+tart|double\s+sour\s+grapes?|valley\s+frost)(?:\s+pre[- ]?rolls?)?$/i);
+ if(birch){const n=birch[1].toLowerCase();return n.startsWith("uptown")?"Uptown Tart":n.startsWith("double")?"Double Sour Grape":"Valley Frost";}
+ if(/^purple\s+octane\s+\d+(?:\.\d+)?%$/i.test(name))return "Purple Octane";
+ if(/^turtle\s+taffy\s+mn\s+roots$/i.test(name))return "Turtle Taffy";
  // Rewind is a brand, never a cultivar prefix. Resolve only explicit
  // owner-approved product titles, not arbitrary words after "Rewind".
  const rewind=name.match(/^rewind\s+(aloha\s+sugar|daily\s+grape|kanobi\s+sunset|killer\s+cupcake)$/i);
@@ -800,6 +808,10 @@ function groupOffers(input){
   // Canonicalize after master_strain fallback: legacy published names must
   // not create duplicate cards when an approved alias already exists.
   o.displayStrain=canonicalPublishedHeading(o.displayStrain);
+  // Same Looner 1g disposable is labeled Sweet Orange/Sweet Oranges across retailers.
+  if(/^sweet\s+oranges?$/i.test(o.displayStrain) &&
+     /^(?:looner|looner cannabis)$/i.test(String(o.displayBrand||original.brand||"").trim()))
+    o.displayStrain="Sweet Orange";
   // Unrecognized Highnorth-prefixed labels are not proven cultivars and
   // must not appear as invented strain cards. Exact known names are mapped
   // above, and source observations remain available for review.

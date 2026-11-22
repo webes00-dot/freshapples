@@ -105,7 +105,7 @@ const aliases=[
  ['Unbound','Mac V2 5pck #1','MAC V2'],
  ['Marawanna','marawanna Live Rosin Dulce De Fresa','Dulce de Fresa'],
  ['Marawanna','marawanna Live Rosin Tropic Fresa','Tropic Fresa'],
- ['Avion','Mendo Breath Auto','Mendo Breath Auto'],
+ ['Avion','Mendo Breath Auto','Mendo Breath'],
  ['Minny Grown','Night Hawk | 2-Pack | 1.5gm','Night Hawk'],
  ['Dizgo','Nighthawk 3.5g','Night Hawk'],
  ['Emerald Farms','Planet of the Grapes','Planet of the Grapes'],

@@ -967,3 +967,19 @@ body > .catalog-banner-shell {
 .top-classification-tribal{background:#ede5ff;color:#5a3189}
 .top-classification-indoor{background:#e4f0e7;color:#164d30}
 .top-classification-outdoor{background:#fce8c7;color:#70420b}
+
+
+/* 2026-11-20: tighter desktop search/filter rail; preserve legible controls. */
+@media(min-width:701px){
+ .top .topin{padding:12px 10px 13px!important}
+ .top .brand{min-height:40px!important;padding:0 2px 11px!important;margin:0 0 11px!important}
+ .top .sidebar-searchbox{padding:0 1px 11px!important}
+ .top .sidebar-searchbox .searchfield{min-height:36px!important;border-radius:8px!important}
+ .top .sidebar-searchbox .searchfield input{min-height:34px!important;padding:7px 0!important;font-size:11px!important}
+ .top .sidebar-searchbox .filters{gap:7px!important;margin-top:9px!important}
+ .top .sidebar-searchbox .filters label{gap:3px!important;font-size:10px!important;line-height:1.2!important}
+ .top .sidebar-searchbox .filters select{height:34px!important;min-height:34px!important;padding:6px 9px!important;font-size:11px!important;border-radius:7px!important}
+ .top .sidebar-searchbox #reset{min-height:30px!important;margin-top:1px!important;padding:6px!important;font-size:10px!important}
+ .top .site-sidebar-links{margin-top:11px!important;gap:5px!important}
+ .top .site-sidebar-links a{min-height:35px!important;padding:8px 10px!important}
+}

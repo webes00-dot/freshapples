@@ -113,7 +113,7 @@ function renderComparisons(input){
  $('comparisonCount').textContent=priceSorted ? retailerLink.label+' · Lowest advertised price first' : groups.filter(g=>new Set(g.offers.filter(active).map(o=>o.retailer)).size>1).length+' strains listed at multiple retailers';
  const cards=groups.map(g=>{
   const offers=[...g.offers].sort((a,b)=>Number(!active(a))-Number(!active(b))||a.price-b.price||a.retailer.localeCompare(b.retailer));
-  const subtype=g.type==='Preroll'?'Pre-Rolls':g.type==='Flower'?'Flower':g.type==='Mixed forms'?'Multiple forms':'Concentrates';
+  const subtype=g.type==='Preroll'?'Pre-Rolls':g.type==='Flower'?'Flower':g.type==='Mixed forms'?'Multiple forms':g.type==='Vape'?'Vapes':'Concentrates';
   const detail=g.size;
   const renderOffer=o=>{
     let offerTrend='';
@@ -365,7 +365,7 @@ function renderTopRetailers(enriched, selectedBrand) {
  }
  const ranked=[...byStore.values()].sort((a,b)=>b.skus.size-a.skus.size||a.name.localeCompare(b.name)).slice(0,10);
  if(!ranked.length){target.innerHTML='<p class="muted">No published retailer SKUs available for this brand.</p>';return;}
- target.innerHTML='<ol class="top-strains-ranking">'+ranked.map((item,index)=>'<li class="top-strains-item"><span class="top-strains-rank">'+(index+1)+'</span><button type="button" class="top-strains-link" data-top-retailer="'+esc(item.name)+'" aria-label="Show '+esc(selectedBrand)+' products at '+esc(item.name)+'">'+esc(item.name)+'</button>'+retailerClassification(item.retailerId,item.name)+'<span class="top-strains-count">'+item.skus.size+' '+(item.skus.size===1?'SKU':'SKUs')+'</span></li>').join('')+'</ol>';
+ target.innerHTML='<ol class="top-strains-ranking">'+ranked.map((item,index)=>'<li class="top-strains-item"><span class="top-strains-rank">'+(index+1)+'</span><button type="button" class="top-strains-link" data-top-retailer="'+esc(item.name)+'" data-top-retailer-id="'+esc(item.retailerId)+'" aria-label="View all cataloged products at '+esc(item.name)+'">'+esc(item.name)+'</button>'+retailerClassification(item.retailerId,item.name)+'<span class="top-strains-count">'+item.skus.size+' '+(item.skus.size===1?'SKU':'SKUs')+'</span></li>').join('')+'</ol>';
 }
 function renderTopBrands(enriched, selectedRetailer) {
  const target=$('topStrainsList');
@@ -387,7 +387,7 @@ function renderTopBrands(enriched, selectedRetailer) {
  }
  const ranked=[...byBrand.values()].sort((a,b)=>b.skus.size-a.skus.size||b.strains.size-a.strains.size||a.name.localeCompare(b.name)).slice(0,10);
  if(!ranked.length){target.innerHTML='<p class="muted">No named brands in the published offers for this retailer.</p>';return;}
- target.innerHTML='<ol class="top-strains-ranking">'+ranked.map((item,index)=>'<li class="top-strains-item"><span class="top-strains-rank">'+(index+1)+'</span><button type="button" class="top-strains-link" data-top-brand="'+esc(item.name)+'" aria-label="Show '+esc(item.name)+' offers at this retailer">'+esc(item.name)+'</button>'+brandClassification(item.name)+'<span class="top-strains-count">'+item.skus.size+' '+(item.skus.size===1?'SKU':'SKUs')+' <small>· '+item.strains.size+' '+(item.strains.size===1?'strain':'strains')+'</small></span></li>').join('')+'</ol>';
+ target.innerHTML='<ol class="top-strains-ranking">'+ranked.map((item,index)=>'<li class="top-strains-item"><span class="top-strains-rank">'+(index+1)+'</span><a class="top-strains-link" href="./?brand='+encodeURIComponent(item.name)+'#compareTitle" aria-label="View all cataloged products for '+esc(item.name)+'">'+esc(item.name)+'</a>'+brandClassification(item.name)+'<span class="top-strains-count">'+item.skus.size+' '+(item.skus.size===1?'SKU':'SKUs')+' <small>· '+item.strains.size+' '+(item.strains.size===1?'strain':'strains')+'</small></span></li>').join('')+'</ol>';
 }
 function renderTopStrains(enriched){
  const target=$('topStrainsList');
@@ -414,16 +414,23 @@ $('topStrainsList').addEventListener('click',event=>{
  if(retailerButton){
   const store=retailerButton.dataset.topRetailer||'';
   if(!store)return;
-  clearRetailerLink();
-  $('store').value=store;
-  render();
-  $('comparisonGroups').scrollIntoView({behavior:'smooth',block:'start'});
+  const retailerId=retailerButton.dataset.topRetailerId||'';
+  // Show every published offer at this location, not only the selected brand.
+  const params=new URLSearchParams({retailer:store});
+  if(retailerId)params.append('storeId',retailerId);
+  params.append('store',store);
+  window.location.assign('./?'+params.toString()+'#compareTitle');
   return;
  }
  const brandButton=event.target.closest('button[data-top-brand]');
  if(brandButton){
   const brand=brandButton.dataset.topBrand||'';
   if(!brand)return;
+  // Open the brand's entire catalog, not just offers at the selected store.
+  clearRetailerLink();
+  $('search').value='';
+  $('comparisonSearch').value='';
+  ['category','store','size','strainType'].forEach(id=>$(id).value='');
   $('brand').value=brand;
   render();
   $('comparisonGroups').scrollIntoView({behavior:'smooth',block:'start'});
@@ -457,8 +464,8 @@ function render(){
  for(const o of enriched)o.displayStrainType=['Flower','Preroll'].includes(o.displayType)?strainTypeFor(o,consensus):'';
 
  const category=$("category"),selectedCategory=category.value;
- category.replaceChildren(new Option("All types",""),...["Flower","Preroll","Concentrates"].map(x=>new Option(x,x)));
- category.value=["Flower","Preroll","Concentrates"].includes(selectedCategory)?selectedCategory:"";
+ category.replaceChildren(new Option("All types",""),...["Flower","Preroll","Concentrates","Vape"].map(x=>new Option(x,x)));
+ category.value=["Flower","Preroll","Concentrates","Vape"].includes(selectedCategory)?selectedCategory:"";
  choices('brand',enriched.map(x=>x.displayBrand));
  if(brandDeepLinkPending && enriched.length){
   const normalizeBrand=x=>String(x||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLocaleLowerCase();

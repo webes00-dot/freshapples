@@ -51,7 +51,7 @@ const siteData = fetch('data/site-data.json', {cache: 'no-store'}).then(async re
  return data;
 });
 const brandDirectory = siteData.then(data => data.brands).then(data => {
- const aliases = new Map([['auroracannabisllc','Aurora'],['auroracannabis','Aurora'],['auroras','Aurora'],['danbey','Dabney\'s Cannabis Co.'],['danbeys','Dabney\'s Cannabis Co.'],['dabneys','Dabney\'s Cannabis Co.'],['valhalla','Valhalla Cannabis'],['vahalla','Valhalla Cannabis'],['valhallacannabisco','Valhalla Cannabis'],['valhallacannabiscompany','Valhalla Cannabis'],['valhallaconfections','Valhalla Cannabis'],['popcorn','Zips']]);
+ const aliases = new Map([['auroracannabisllc','Aurora'],['auroracannabis','Aurora'],['auroras','Aurora'],['danbey','Dabney\'s Cannabis Co.'],['danbeys','Dabney\'s Cannabis Co.'],['dabneys','Dabney\'s Cannabis Co.'],['valhalla','Valhalla Cannabis'],['vahalla','Valhalla Cannabis'],['valhallacannabisco','Valhalla Cannabis'],['valhallacannabiscompany','Valhalla Cannabis'],['valhallaconfections','Valhalla Cannabis'],['popcorn','Zips'],['feelinmn',"Feelin' MN"],['feelnmn',"Feelin' MN"]]);
  const keyOf = name => norm(name).replace(/[^a-z0-9]/g, '');
  const merged = new Map();
  for (const entry of data) { const canonical = aliases.get(keyOf(entry.name)) || entry.name; const key = keyOf(canonical); const prior = merged.get(key); if (!prior) merged.set(key, {...entry,name:canonical}); else merged.set(key,{...entry,...prior,name:canonical,aliases:[...new Set([...(prior.aliases||[]),...(entry.aliases||[]),entry.name])],url:prior.url||entry.url,summary:prior.summary||entry.summary}); }
@@ -123,7 +123,7 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
     const width = Math.max(3, Math.min(100, brand.avg / max * 100)).toFixed(1);
     return `<div class="ranking-item">
      <span class="ranking-number">${rank + 1}</span>
-     <span class="ranking-name">${esc(brand.name)}${cultivationBadge(brand.name)}${businessBadges(brand.name)}<small>${brand.count} qualifying ${brand.count === 1 ? 'offer' : 'offers'}</small></span>
+     <span class="ranking-name"><a class="ranking-brand-link" href="./?brand=${encodeURIComponent(brand.name)}#compareTitle" aria-label="View cataloged products for ${esc(brand.name)}">${esc(brand.name)}</a>${cultivationBadge(brand.name)}${businessBadges(brand.name)}<small>${brand.count} qualifying ${brand.count === 1 ? 'offer' : 'offers'}</small></span>
      <span class="ranking-price">${money(brand.avg)}/g</span>
      <div class="ranking-track"><span class="ranking-fill" style="width:${width}%"></span></div>
     </div>`;
@@ -134,7 +134,7 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
  function render() {
   const type = select.value;
   expanded = false;
-  minimumOffers = type === 'Concentrates' ? 0 : 5;
+  minimumOffers = type === 'Concentrates' ? 0 : 10;
   const groups = new Map();
   for (const offer of catalog) {
    if (classify(offer) !== type) continue;
@@ -162,7 +162,7 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
    }))
    .sort((a, b) => a.avg - b.avg || a.name.localeCompare(b.name));
   drawRankings();
-  note.textContent = ranked.length + ' qualifying brands for '+type.toLowerCase()+'. Rankings are mean advertised $/g (not a median or cheapest offer). One product offered in several stores may contribute several observations. Price, potency, grade and package-size differences are not controlled; these are menu snapshots, not verified stock.';
+  note.textContent = ranked.length + ' qualifying brands for '+type.toLowerCase()+'. '+(minimumOffers ? 'Minimum '+minimumOffers+' distinct qualifying offers per brand. ' : '')+'Rankings are mean advertised $/g (not a median or cheapest offer). One product offered in several stores may contribute several observations. Price, potency, grade and package-size differences are not controlled; these are menu snapshots, not verified stock.';
  }
 
  panels.forEach(panel => {
