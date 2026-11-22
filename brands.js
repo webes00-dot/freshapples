@@ -99,7 +99,7 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
   list: document.getElementById('ranking-' + direction)
  }));
  const money = n => '$' + n.toFixed(2);
- const classify=o=>{const c=String(o.category||'').toLowerCase();if(/edible|gummy|vape|cartridge|disposable|tincture|beverage/.test(c))return null;if(/pre.?roll|joint|blunt/.test(c))return 'Preroll';if(/flower|bud/.test(c))return 'Flower';if(/concentrate|extract|rosin|resin|wax|shatter|badder|budder|hash|diamonds|crumble/.test(c))return 'Concentrates';return null};
+ const classify = offer => MNtreesCatalog.typeOf(offer);
  let catalog = [];
  let ranked = [];
  let minimumOffers = 0;

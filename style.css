@@ -984,3 +984,5 @@ body > .catalog-banner-shell {
  .top .site-sidebar-links{margin-top:11px!important;gap:5px!important}
  .top .site-sidebar-links a{min-height:35px!important;padding:8px 10px!important}
 }
+
+.compact-offer-section h4{margin:0;padding:8px 14px;background:#edf5ef;color:#175a39;font-size:12px}

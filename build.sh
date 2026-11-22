@@ -24,7 +24,7 @@ from pathlib import Path
 
 for page, script in (
     ('index.html', 'catalog-model.js'), ('index.html', 'app.js'),
-    ('retailers.html', 'retailers.js'), ('brands.html', 'brands.js'),
+    ('retailers.html', 'catalog-model.js'), ('retailers.html', 'retailers.js'), ('brands.html', 'brands.js'),
     ('brands.html', 'catalog-model.js'), ('map.html', 'map.js'),
 ):
     html = Path('dist', page)

@@ -4,6 +4,9 @@
 const simplify=s=>String(s||"").normalize("NFKD").toLowerCase().replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
 const CATEGORY={flower:"Flower",preroll:"Preroll",concentrate:"Concentrates"};
 const numeric=n=>Number.isFinite(Number(n))&&Number(n)>0?Number(n):null;
+const prerollForm=/\b(?:pre ?rolls?|joints?|blunts?|hash holes?)\b/;
+const vapeForm=/\b(?:vapes?|vaporizers?|disposables?|cartridges?|carts?|aio)\b/;
+const concentrateForm=/\b(?:concentrates?|extracts?|rosin|resin|wax|hash|shatter|badder|budder|diamonds|crumble|distillate|sauce|sugar|kief|dabs?|rso)\b/;
 function typeOf(o){
  // Owner-confirmed: Kodjo's Dizgo Cherry Kush 1g listing is a preroll despite menu category.
  if(String(o.id||"")==="2e7da1544f83ac7cc0f1" || /kodjos\.dispensary\.shop\/rec\/flower\/pdp\/cherry-kush\//i.test(String(o.url||"")))return "Preroll";
@@ -11,10 +14,16 @@ function typeOf(o){
  if(String(o.id||"")==="b922017567392166d488" || /kodjos\.dispensary\.shop\/rec\/flower\/pdp\/mac-v2-5pck-/i.test(String(o.url||"")))return "Preroll";
  const c=simplify(o.category);
  if(/\b(edible|edibles|gummy|gummies|chocolate|beverage|drink|tincture|topical|battery|batteries|accessory|accessories|charger|lighter|grinder|merchandise|gear)\b/.test(c))return null;
- if(c.includes("vape")||c.includes("disposable")||c.includes("cartridge"))return "Vape";
+ if(prerollForm.test(c))return "Preroll";
+ if(vapeForm.test(c))return "Vape";
  if(c.includes("flower")||c==="bud"||c==="buds")return "Flower";
- if(c.includes("preroll")||c.includes("pre roll")||c.includes("joint")||c.includes("blunt"))return "Preroll";
- return "Concentrates";
+ // Older imports sometimes used Concentrates for any product containing an extract.
+ if(!o.reviewed_identity){
+  const title=simplify(o.raw_scanned_product_name||o.product_name);
+  if(prerollForm.test(title))return "Preroll";
+  if(vapeForm.test(title))return "Vape";
+ }
+ return concentrateForm.test(c)?"Concentrates":null;
 }
 function packOf(o){
  const text=String(o.raw_scanned_product_name||o.product_name||o.strain||"");

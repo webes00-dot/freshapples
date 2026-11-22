@@ -5,7 +5,7 @@
  const flowerPriced=flower.filter(x=>Number.isFinite(x.package_g)&&x.package_g>0&&Number.isFinite(x.price)&&x.price>0);
  const eighth=flower.filter(x=>x.package_g===3.5);
  const ounce=flower.filter(x=>x.package_g===28);
- const preroll=active.filter(x=>/pre.?roll/i.test(x.category)&&x.package_g===1);
+ const preroll=active.filter(x=>catalog.typeOf(x)==='Preroll'&&x.package_g===1);
  const concentrates=active.filter(x=>catalog.typeOf(x)==='Concentrates'&&Number.isFinite(x.package_g)&&x.package_g>0&&Number.isFinite(x.price)&&x.price>0);
  const effective=x=>Number.isFinite(x.analytics_price)&&x.analytics_price>0?x.analytics_price:x.price;
  const avg=a=>a.length?a.reduce((v,x)=>v+effective(x),0)/a.length:null;
@@ -112,7 +112,11 @@ function renderComparisons(input){
  $('checked').textContent=input.length.toLocaleString()+' advertised retailer offers across '+groups.length+' strain cards';
  $('comparisonCount').textContent=priceSorted ? retailerLink.label+' · Lowest advertised price first' : groups.filter(g=>new Set(g.offers.filter(active).map(o=>o.retailer)).size>1).length+' strains listed at multiple retailers';
  const cards=groups.map(g=>{
-  const offers=[...g.offers].sort((a,b)=>Number(!active(a))-Number(!active(b))||a.price-b.price||a.retailer.localeCompare(b.retailer));
+  const offersByForm=new Map();
+  for(const offer of g.offers){
+   if(!offersByForm.has(offer.displayType))offersByForm.set(offer.displayType,[]);
+   offersByForm.get(offer.displayType).push(offer);
+  }
   const subtype=g.type==='Preroll'?'Pre-Rolls':g.type==='Flower'?'Flower':g.type==='Mixed forms'?'Multiple forms':g.type==='Vape'?'Vapes':'Concentrates';
   const detail=g.size;
   const renderOffer=o=>{
@@ -145,12 +149,20 @@ function renderComparisons(input){
    (summary.withParents?'<span>Lineage</span> '+esc([summary.withParents.parent1,summary.withParents.parent2].filter(Boolean).join(' × ')):
    summary.related?'<span>Related strain</span> '+esc(summary.related.strain)+'*':
    '<span>Origin</span> Possible custom cross / locally bred variation')+'</div>';
-  const visibleOffers=offers.slice(0,3).map(renderOffer).join('');
-  const extraOffers=offers.length>3?'<details class="more-stores"><summary><span class="more-plus" aria-hidden="true">+</span><span class="more-label">Show '+(offers.length-3)+' more '+(offers.length-3===1?'offer':'offers')+'</span><span class="more-less">Show fewer offers</span></summary><div class="more-stores-content">'+offers.slice(3).map(renderOffer).join('')+'</div></details>':'';
+  const formOrder=['Flower','Preroll','Concentrates','Vape'];
+  const offerSections=formOrder.filter(form=>offersByForm.has(form)).map(form=>{
+   const offers=offersByForm.get(form).sort((a,b)=>Number(!active(a))-Number(!active(b))||a.price-b.price||a.retailer.localeCompare(b.retailer));
+   const visibleOffers=offers.slice(0,3).map(renderOffer).join('');
+   const extraCount=offers.length-3;
+   const extraOffers=extraCount>0?'<details class="more-stores"><summary><span class="more-plus" aria-hidden="true">+</span><span class="more-label">Show '+extraCount+' more '+(extraCount===1?'offer':'offers')+'</span><span class="more-less">Show fewer offers</span></summary><div class="more-stores-content">'+offers.slice(3).map(renderOffer).join('')+'</div></details>':'';
+   if(offersByForm.size===1)return visibleOffers+extraOffers;
+   const label={Flower:'Flower',Preroll:'Pre-rolls',Concentrates:'Concentrates',Vape:'Vapes'}[form];
+   return '<section class="compact-offer-section"><h4>'+label+'</h4>'+visibleOffers+extraOffers+'</section>';
+  }).join('');
    const brands=[...new Set(g.offers.map(o=>o.displayBrand).filter(x=>x!=='Brand not confirmed'))];
    const brandSummary=brands.length>1?brands.length+' brands · ':'';
    const redwoodProfile = hasRedwoodReference ? ' data-redwood-profile' : '';
-   return '<article class="compact-card"><div class="compact-card-header"><div class="compact-brand">STRAIN</div><h3>'+(genericProfile?'<span class="strain-name-static">'+esc(g.strain)+'</span>':'<button type="button" class="strain-profile-trigger" data-strain-name="'+esc(g.strain)+'"'+redwoodProfile+' aria-label="View genetics and strain profile for '+esc(g.strain)+'">'+esc(g.strain)+' <span aria-hidden="true">↗</span></button>')+strainCardBadge(g.strain,g.offers)+'</h3><p>'+esc(brandSummary+subtype+' / '+detail)+'</p></div>'+geneticsHtml+'<div class="compact-offers">'+visibleOffers+extraOffers+'</div></article>';
+   return '<article class="compact-card"><div class="compact-card-header"><div class="compact-brand">STRAIN</div><h3>'+(genericProfile?'<span class="strain-name-static">'+esc(g.strain)+'</span>':'<button type="button" class="strain-profile-trigger" data-strain-name="'+esc(g.strain)+'"'+redwoodProfile+' aria-label="View genetics and strain profile for '+esc(g.strain)+'">'+esc(g.strain)+' <span aria-hidden="true">↗</span></button>')+strainCardBadge(g.strain,g.offers)+'</h3><p>'+esc(brandSummary+subtype+' / '+detail)+'</p></div>'+geneticsHtml+'<div class="compact-offers">'+offerSections+'</div></article>';
  });
  if(priceSorted&&cards.length){
    $('alphabetNav').replaceChildren();
