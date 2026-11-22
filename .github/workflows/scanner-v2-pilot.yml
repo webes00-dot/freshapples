@@ -57,7 +57,7 @@ jobs:
         env:
           SCANNER_REF: ${{ inputs.scanner_ref }}
         run: |
-          args=(--summary "$GITHUB_STEP_SUMMARY")
+          args=(--summary "$GITHUB_STEP_SUMMARY" --holds-csv "$RUNNER_TEMP/scanner-v2-holds.csv")
           if [[ -s "$RUNNER_TEMP/v2-master.json" ]]; then
             args+=(--master-snapshot "$RUNNER_TEMP/v2-master.json")
           elif [[ -n "$SCANNER_REF" ]]; then
@@ -65,3 +65,11 @@ jobs:
             exit 1
           fi
           python3 scripts/scanner_v2_pilot.py "${args[@]}"
+      - name: Save row-level holds
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: scanner-v2-holds
+          path: ${{ runner.temp }}/scanner-v2-holds.csv
+          retention-days: 14
+          if-no-files-found: ignore

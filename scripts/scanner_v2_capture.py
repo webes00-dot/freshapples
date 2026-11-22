@@ -90,7 +90,11 @@ def capture_rendered(data):
         if prior and prior["evidence_sha256"] != item["evidence_sha256"]:
             holds.append({"retailer_id": item["retailer_id"],
                           "reason": "conflicting_same_product_identity",
-                          "observation_id": item["observation_id"]})
+                          "observation_id": item["observation_id"],
+                          "raw_product_title": item["raw_title"],
+                          "brand_candidate": item["source_brand_text"],
+                          "raw_card": item["source_metadata"]["card_text"],
+                          "source_url": item["product_url"]})
         elif not prior:
             observed_ids[item["observation_id"]] = item
             unique.append(item)

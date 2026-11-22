@@ -2,6 +2,7 @@
 """Capture and review public menu evidence from the three pilot retailers."""
 import argparse
 import asyncio
+import csv
 import json
 import re
 from collections import Counter, defaultdict
@@ -182,8 +183,51 @@ def review_summary(results, capture_holds, rows, validated):
     return lines
 
 
-def summarize(results, master):
+def write_holds(path, results, captured, capture_holds, rows, validated):
+    retailers = {result["id"]: result for result in results}
+    evidence = {item["observation_id"]: item for item in captured}
+    normalized = {row["observation_id"]: row for row in rows}
+
+    def cell(value):
+        if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")):
+            return "'" + value
+        return value
+
+    with path.open("w", encoding="utf-8-sig", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(["Stage", "Retailer", "Retailer ID", "Observation ID", "Observed at",
+                         "Raw product title", "Reported brand", "Canonical brand",
+                         "Canonical strain", "Category", "Package weight g", "Pack count",
+                         "Source price", "Product URL", "Menu URL", "Identity hold reasons",
+                         "Validation hold reasons", "Raw card"])
+
+        def write(values):
+            writer.writerow([cell(value) for value in values])
+
+        for hold in capture_holds:
+            retailer_id = hold["retailer_id"]
+            result = retailers[retailer_id]
+            card = result["products"][hold["card_index"]] if "card_index" in hold else hold
+            write(["Capture", result["retailer"], retailer_id, hold.get("observation_id"), result["scanned_at"],
+                   card.get("raw_product_title"), card.get("brand_candidate"),
+                   "", "", "", "", "", "", hold.get("source_url"), result["menu_url"],
+                   "", hold["reason"], hold.get("raw_card")])
+        for hold in validated["holds"]:
+            for observation_id in hold.get("observation_ids", [hold.get("observation_id")]):
+                row, item = normalized[observation_id], evidence[observation_id]
+                retailer_id = row["retailer_id"]
+                write(["Validation", retailers[retailer_id]["retailer"], retailer_id,
+                       observation_id, row["observed_at"], row["raw_title"],
+                       item.get("source_brand_text"), row["brand"], row["strain"],
+                       row["category"], row["package_g"], row["pack_count"], row["price"],
+                       row["product_url"], row["source_url"],
+                       " | ".join(row["identity_reasons"]), " | ".join(hold["reasons"]),
+                       (item.get("source_metadata") or {}).get("card_text")])
+
+
+def summarize(results, master, holds_csv=None):
     captured, capture_holds = capture_rendered({"results": results})
+    rows, validated = [], {"holds": []}
     lines = [
         "## Scanner V2 live pilot", "",
         "| Retailer | Menu result | Raw cards |",
@@ -212,6 +256,8 @@ def summarize(results, master):
         lines.extend(review_summary(results, capture_holds, rows, validated))
     elif not master:
         lines.extend(["", "Master workbook snapshot unavailable. Identity validation was skipped."])
+    if holds_csv:
+        write_holds(holds_csv, results, captured, capture_holds, rows, validated)
     return "\n".join(lines) + "\n", bool(captured)
 
 
@@ -219,12 +265,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--master-snapshot", type=Path)
     parser.add_argument("--summary", type=Path, required=True)
+    parser.add_argument("--holds-csv", type=Path)
     args = parser.parse_args()
     master = load_snapshot(args.master_snapshot) if args.master_snapshot else None
     if master and not PILOT_MENUS.keys() <= {row["name"] for row in master["retailers"]}:
         raise SystemExit("One or more pilot retailers are missing from the master snapshot")
     results = asyncio.run(capture_pilot(master))
-    summary, has_observations = summarize(results, master)
+    summary, has_observations = summarize(results, master, args.holds_csv)
     with args.summary.open("a", encoding="utf-8") as output:
         output.write(summary)
     print(summary)
