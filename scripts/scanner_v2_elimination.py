@@ -232,8 +232,9 @@ def rerank(row, observation, master, brands, approved_brands=None):
         "Valhalla": "Valhalla Cannabis", "Emerald Fire": "Emerald Farms",
         "Elevate": "Elevate Botanicals",
     }
-    if re.search(r"\bbig dogs?\b", text) and re.search(r"\bpre[- ]?roll", text) and re.search(r"(?<!\d)0?\.75\s*g", text):
-        product_labels.update({"Big Dog": "Dogwalkers", "Big Dogs": "Dogwalkers"})
+    dogwalkers_brand = master_brands.get("Dogwalkers")
+    if dogwalkers_brand and re.search(r"\bbig dogs?\b", text) and re.search(r"\bpre[- ]?roll", text) and re.search(r"(?<!\d)0?\.75\s*g", text):
+        product_labels.update({"Big Dog": dogwalkers_brand, "Big Dogs": dogwalkers_brand})
     if re.search(r"\bcured resin\b", text):
         product_labels["Sappy Pappy"] = "Verist Fields"
     canonical_names = set(master_brands.values())
@@ -245,7 +246,15 @@ def rerank(row, observation, master, brands, approved_brands=None):
         # A bare 'Float' can also be a flavor or a beverage name.
         title_brands = {alias: name for alias, name in master_brands.items()
                         if not (alias.casefold() == "float" and name == "Float Cannabis")}
+    declared = observation.get("source_brand_text") or ""
     brand_found = entity_matches(text, title_brands)
+    dogwalkers_hit = brand_found.get(dogwalkers_brand)
+    if (declared and dogwalkers_hit and ascii_words(dogwalkers_hit[2]) in
+            (["dogwalker"], ["dog", "walker"])
+            and dogwalkers_brand not in entity_matches(declared, master_brands)):
+        # Retail titles also use singular dogwalker as a preroll descriptor.
+        # An explicit different source label needs stronger producer evidence.
+        brand_found.pop(dogwalkers_brand)
     retailer_names = set(entity_matches(observation.get("retailer", ""), master_brands))
     retailer_names.update({"Unwind", "Feelin' MN"})
     for name in retailer_names:
@@ -259,7 +268,6 @@ def rerank(row, observation, master, brands, approved_brands=None):
         proposed["brand"] = ""
     title_brand, brand_status = best_match(brand_found, text)
     sources = {"title": title_brand} if title_brand else {}
-    declared = observation.get("source_brand_text") or ""
     card_brands = CARD_BRAND.findall(str(metadata.get("card_text") or ""))
     source_matches = []
     slug = product_slug(product_url)
@@ -305,7 +313,7 @@ def rerank(row, observation, master, brands, approved_brands=None):
         token = "popcorn" if name == "Zips" else "little stick"
         if brand == name and re.search(r"\b" + token + r"\b", text):
             proposed["product_line"] = label
-    if brand == "Dogwalkers" and re.search(r"\bbig dogs?\b", text):
+    if brand and brand == dogwalkers_brand and re.search(r"\bbig dogs?\b", text):
         proposed["product_line"] = "Big Dog"
     if brand == "Verist Fields" and "sappy pappy" in text:
         proposed["product_line"] = "Sappy Pappy"

@@ -110,6 +110,21 @@ class EliminationPassTests(unittest.TestCase):
         row = rerank(old, {"raw_title": "Big Dog Guava Flower 3.5g"}, MASTER, brands)
         self.assertFalse(row.get("brand"))
 
+    def test_good_green_group_aliases_preserve_dogwalkers_product_line(self):
+        brands = [{"name": "Good Green",
+                   "aliases": ["Good Greens", "Dogwalkers", "Dogwalker", "Dog Walker", "Dog Walkers"]}]
+        for source in ("Good Green", "Good Greens", "Dogwalkers", "Dogwalker", "Dog Walker", "Dog Walkers"):
+            with self.subTest(source=source):
+                row = rerank({}, {"raw_title": "Good Green Guava Flower 3.5g",
+                                  "source_brand_text": source}, MASTER, brands)
+                self.assertEqual(row["brand"], "Good Green")
+                self.assertEqual(row["identity_status"], "ready")
+        row = rerank({}, {"raw_title": "Big Dog Guava .75g Preroll"}, MASTER, brands)
+        self.assertEqual((row["brand"], row["product_line"]), ("Good Green", "Big Dog"))
+        row = rerank({}, {"raw_title": "Fog Dog Dogwalker .75g Preroll",
+                          "source_brand_text": "Watchtower"}, MASTER, brands)
+        self.assertIn("missing_or_conflicting_approved_brand", row["identity_reasons"])
+
     def test_brand_in_middle_and_cultivar_bounded(self):
         z=run("THC: 28.8% CAMPFIRE CANNABIS Guava - 3.5g - Campfire Cannabis 1/8 oz")
         self.assertEqual((z["brand"],z["strain"],z["package_g"],z["category"]),
