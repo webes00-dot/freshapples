@@ -26,7 +26,8 @@ PILOT_MENUS = {
 }
 PRICE = re.compile(r"\$\s*(\d{1,5}(?:,\d{3})*(?:\.\d{2})?)")
 AGE_GATE = re.compile(
-    r"verify (?:your )?age|are you (?:over |at least )?21|enter your date of birth",
+    r"(?:verify|confirm) (?:your )?age|age verification|are you (?:over |at least )?21"
+    r"|enter your date of birth|you must be (?:at least )?21|\b21\s*(?:\+|or older|years of age)",
     re.IGNORECASE,
 )
 ACCESS_LIMITED = re.compile(
@@ -43,13 +44,50 @@ READ_CARDS = r"""() => {
   ].join(',');
   const text = node => (node?.innerText || '').trim().replace(/\s+/g, ' ');
   const cardText = node => (node?.innerText || '').trim().replace(/[^\S\r\n]+/g, ' ');
-  return Array.from(document.querySelectorAll(selector), element => ({
+  return Array.from(document.querySelectorAll(selector))
+    .filter(element => element.getClientRects().length && element.checkVisibility({checkVisibilityCSS: true}))
+    .map(element => ({
     text: cardText(element),
     href: element.closest('a[href]')?.href || element.querySelector('a[href]')?.href,
     title: text(element.querySelector('[data-testid*="product-name"],[class*="product-name"],[class*="productName"],h2,h3,h4')),
     brand: text(element.querySelector('[data-testid*="brand"],[class*="product-brand"],[class*="productBrand"]')),
     productId: element.getAttribute('data-product-id') || '',
   })).filter(card => card.text.length >= 12 && card.text.length <= 750 && card.text.includes('$'));
+}"""
+
+AGE_CONFIRM_CONTROL = r"""() => {
+  const prompt = /(?:verify|confirm) (?:your )?age|age verification|are you (?:over |at least )?21|you must be (?:at least )?21|\b21\s*(?:\+|years? (?:of age|old)|or older|and older)/i;
+  const restricted = /date of birth|birth date|upload (?:an? |your )?(?:id|identification)|government[- ]issued|verify (?:your )?identity|sign in|log in|captcha|verify (?:that )?you are human/i;
+  const explicitYes = /^(?:yes[,.!\s]+)?(?:i(?: am|['’]m) (?:at least |over )?21(?:\s*(?:\+|or older|years old))?|21\s*\+)[.!]?$/i;
+  const shortYes = /^(?:yes(?:[,.!\s]+i am)?|enter(?: (?:site|website|store))?|continue|confirm(?: age)?)[.!]?$/i;
+  const negative = /^(?:no\b|exit\b|leave\b|(?:i am |i['’]m )?(?:under|not) 21\b)/i;
+  const selector = 'button, a[href], [role="button"], input[type="button"], input[type="submit"]';
+  const fields = 'input:not([type="hidden"],[type="button"],[type="submit"]), select, textarea';
+  const requiresVerification = node => restricted.test(node.innerText || '') || node.querySelector(fields);
+  const visible = node => node.getClientRects().length && node.checkVisibility({checkVisibilityCSS: true});
+  const label = node => (node.getAttribute('aria-label') || node.innerText || node.value || '')
+    .replace(/\s+/g, ' ').trim();
+  const matching = [];
+  for (const control of document.querySelectorAll(selector)) {
+    if (!visible(control) || control.matches(':disabled,[aria-disabled="true"]')) continue;
+    const name = label(control);
+    if (!explicitYes.test(name) && !shortYes.test(name)) continue;
+    const widget = control.closest('form, dialog, [role="dialog"], [aria-modal="true"]');
+    if (widget && requiresVerification(widget)) continue;
+    for (let container = control.parentElement; container && container !== document.body;
+         container = container.parentElement) {
+      const text = container.innerText || '';
+      if (text.length > 1500 || requiresVerification(container)) break;
+      if (!prompt.test(text.replace(control.innerText || name, ''))) continue;
+      const hasNegative = Array.from(container.querySelectorAll(selector))
+        .some(other => other !== control && visible(other) && negative.test(label(other)));
+      if (explicitYes.test(name) || hasNegative) {
+        matching.push(control);
+        break;
+      }
+    }
+  }
+  return matching.length === 1 ? matching[0] : null;
 }"""
 
 
@@ -72,6 +110,8 @@ async def read_menu(page, url):
     from playwright.async_api import Error as BrowserError
 
     embedded_errors = set()
+    age_prompt_seen = False
+    age_prompt_clicked = False
 
     def record_embedded_error(response):
         host = urlsplit(response.url).hostname or ""
@@ -85,23 +125,45 @@ async def read_menu(page, url):
             return f"HTTP {response.status}", []
         for attempt in range(6):
             rendered = []
+            age_frames = []
+            access_limited = False
             for frame in page.frames:
                 try:
                     body = await frame.locator("body").inner_text(timeout=2_000)
-                    if AGE_GATE.search(body[:2500]):
-                        return "Age gate", []
+                    if AGE_GATE.search(body):
+                        age_frames.append(frame)
                     if ACCESS_LIMITED.search(body[:1200]):
-                        return "Access limited", []
+                        if frame == page.main_frame:
+                            return "Access limited", []
+                        access_limited = True
+                        continue
                     rendered.extend(await frame.evaluate(READ_CARDS))
                 except BrowserError:
                     if frame == page.main_frame and attempt == 5:
                         return "Page unavailable", []
             products = rendered_products(rendered, url)
             if products:
-                return "Cards captured", products
+                return ("Cards captured after age prompt" if age_prompt_clicked else "Cards captured"), products
             for code in (401, 403, 429):
                 if code in embedded_errors:
                     return f"Embedded menu HTTP {code}", []
+            if access_limited:
+                return "Access limited", []
+            age_prompt_seen |= bool(age_frames)
+            if not age_prompt_clicked and attempt < 5:
+                for frame in age_frames:
+                    try:
+                        handle = await frame.evaluate_handle(AGE_CONFIRM_CONTROL)
+                        try:
+                            control = handle.as_element()
+                            if control is not None:
+                                await control.click(timeout=2_000)
+                                age_prompt_clicked = True
+                                break
+                        finally:
+                            await handle.dispose()
+                    except BrowserError:
+                        continue
             if attempt < 5:
                 await asyncio.sleep(1)
     except BrowserError:
@@ -110,6 +172,8 @@ async def read_menu(page, url):
         page.remove_listener("response", record_embedded_error)
     if embedded_errors:
         return f"Embedded menu HTTP {min(embedded_errors)}", []
+    if age_prompt_seen:
+        return "Age gate", []
     return "No product cards", []
 
 

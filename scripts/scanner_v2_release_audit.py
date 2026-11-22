@@ -214,10 +214,12 @@ def write_capture_report(output, batch):
         "menu_targets": sum(row["targets"] for row in batch["batches"]),
         "finished_targets": sum(row["finished"] for row in batch["batches"]),
         "locations_with_cards": sum(bool(result["products"]) for result in batch["results"]),
+        "locations_captured_after_age_prompt": sum(
+            "Cards captured after age prompt" in result["statuses"] for result in batch["results"]),
         "raw_cards": sum(len(result["products"]) for result in batch["results"]),
         "skipped": dict(Counter(reason for _, reason in batch["skipped"])),
         "limitations": dict(Counter(status for result in batch["results"] for status in set(result["statuses"])
-                                    if status != "Cards captured")),
+                                    if not status.startswith("Cards captured"))),
         "missing_results": len(batch["missing"]),
         "batches": batch["batches"],
     }
@@ -288,7 +290,7 @@ def main():
         "locations_with_cards": sum(bool(result["products"]) for result in results),
         "skipped": dict(Counter(reason for _, reason in skipped)),
         "limitations": dict(Counter(status for result in results for status in set(result["statuses"])
-                                    if status != "Cards captured")),
+                                    if not status.startswith("Cards captured"))),
         "observations": len(captured), "capture_holds": len(capture_holds),
         "accepted": len(validated["accepted"]), "validation_holds": len(validated["holds"]),
         "deduplicated": len(validated["duplicates_suppressed"]),

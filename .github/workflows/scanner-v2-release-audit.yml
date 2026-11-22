@@ -6,6 +6,8 @@ on:
     branches: [scanner-v2-recovery]
     paths:
       - '.github/workflows/scanner-v2-release-audit.yml'
+      - 'scripts/scanner_v2_browser_check.py'
+      - 'scripts/scanner_v2_pilot.py'
       - 'scripts/scanner_v2_release_audit.py'
 
 permissions:
@@ -14,7 +16,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
         with:
@@ -24,6 +26,11 @@ jobs:
           python-version: '3.12'
       - name: Verify normalization and audit rules
         run: python3 -m unittest discover -s collector/tests
+      - name: Verify browser capture against menu fixtures
+        run: |
+          python3 -m pip install playwright
+          python3 -m playwright install --with-deps chromium
+          python3 scripts/scanner_v2_browser_check.py
 
   capture:
     name: Capture batch ${{ matrix.batch }}
