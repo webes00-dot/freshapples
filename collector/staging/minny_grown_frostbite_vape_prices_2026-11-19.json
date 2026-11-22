@@ -1,0 +1,322 @@
+{
+  "status": "research_staging_only_not_live_inventory",
+  "observed_date": "2026-11-19",
+  "notes": "Prices are observed advertised prices, not guaranteed live stock. Some source snapshots conflict; verify before production import. Do not classify vapes as dabbable concentrates. 0.5g weight is actual product weight.",
+  "offers": [
+    {
+      "retailer": "Dirty Flamingo Cannabis Company",
+      "brand": "Minny Grown",
+      "strain": "AK-47",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 60,
+      "source_url": "https://budalerts.com/cannabis/vaporizers/minnesota/1g"
+    },
+    {
+      "retailer": "Dirty Flamingo Cannabis Company",
+      "brand": "Minny Grown",
+      "strain": "Blue Dream",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 60,
+      "source_url": "https://budalerts.com/cannabis/vaporizers/minnesota/1g"
+    },
+    {
+      "retailer": "Dirty Flamingo Cannabis Company",
+      "brand": "Minny Grown",
+      "strain": "Northern Lights",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 60,
+      "source_url": "https://budalerts.com/cannabis/vaporizers/minnesota/1g"
+    },
+    {
+      "retailer": "Dirty Flamingo Cannabis Company",
+      "brand": "Minny Grown",
+      "strain": "OG Kush",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 60,
+      "source_url": "https://budalerts.com/cannabis/vaporizers/minnesota/1g"
+    },
+    {
+      "retailer": "Dirty Flamingo Cannabis Company",
+      "brand": "Minny Grown",
+      "strain": "Maui Wowie",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 60,
+      "source_url": "https://budalerts.com/cannabis/vaporizers/minnesota/1g"
+    },
+    {
+      "retailer": "Dirty Flamingo Cannabis Company",
+      "brand": "Minny Grown",
+      "strain": "Granddaddy Purp",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 60,
+      "source_url": "https://budalerts.com/cannabis/vaporizers/minnesota/1g"
+    },
+    {
+      "retailer": "Coastless Luverne",
+      "brand": "Minny Grown",
+      "strain": "Maui Wowie",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 70,
+      "source_url": "https://twincitycannabis.com/brands/minnygrown/"
+    },
+    {
+      "retailer": "Coastless Luverne",
+      "brand": "Minny Grown",
+      "strain": "Granddaddy Purp",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 70,
+      "source_url": "https://twincitycannabis.com/brands/minnygrown/"
+    },
+    {
+      "retailer": "Coastless Luverne",
+      "brand": "Minny Grown",
+      "strain": "Blue Dream",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 70,
+      "source_url": "https://twincitycannabis.com/brands/minnygrown/"
+    },
+    {
+      "retailer": "Coastless Luverne",
+      "brand": "Minny Grown",
+      "strain": "OG Kush",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 70,
+      "source_url": "https://twincitycannabis.com/brands/minnygrown/"
+    },
+    {
+      "retailer": "Coastless Luverne",
+      "brand": "Minny Grown",
+      "strain": "Northern Lights",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 70,
+      "source_url": "https://twincitycannabis.com/brands/minnygrown/"
+    },
+    {
+      "retailer": "Coastless Luverne",
+      "brand": "Minny Grown",
+      "strain": "AK-47",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 80,
+      "source_url": "https://twincitycannabis.com/brands/minnygrown/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Minny Grown",
+      "strain": "OG Kush",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 79.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Minny Grown",
+      "strain": "Northern Lights",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 79.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Highnorth Cottage Grove",
+      "brand": "Minny Grown",
+      "strain": "AK-47",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 80.24,
+      "source_url": "https://highnorthcg.dispensary.shop/rec/menu"
+    },
+    {
+      "retailer": "Highnorth Cottage Grove",
+      "brand": "Minny Grown",
+      "strain": "Blue Dream",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 80.24,
+      "source_url": "https://highnorthcg.dispensary.shop/rec/menu"
+    },
+    {
+      "retailer": "Highnorth Cottage Grove",
+      "brand": "Minny Grown",
+      "strain": "Grandaddy Purp",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 80.24,
+      "source_url": "https://highnorthcg.dispensary.shop/rec/menu"
+    },
+    {
+      "retailer": "Highnorth Cottage Grove",
+      "brand": "Minny Grown",
+      "strain": "Northern Lights",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 80.24,
+      "source_url": "https://highnorthcg.dispensary.shop/rec/menu"
+    },
+    {
+      "retailer": "Highnorth Cottage Grove",
+      "brand": "Minny Grown",
+      "strain": "OG Kush",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 80.24,
+      "source_url": "https://highnorthcg.dispensary.shop/rec/menu"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Nebula",
+      "strain": "Guava Galaxy",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 74.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Nebula",
+      "strain": "Strawberry Jelly",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 74.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Grasslandz",
+      "strain": "Citrus Slushy",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 74.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Grasslandz",
+      "strain": "Grape Moscato",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Grasslandz",
+      "strain": "Citrus Slushy",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Northpark Cannabis Co",
+      "strain": "Granddaddy Purple",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Northpark Cannabis Co",
+      "strain": "Super Sour Diesel",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "D'ope",
+      "strain": "Orion",
+      "format": "live resin disposable",
+      "package_g": 1,
+      "price_usd": 74.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "D'ope",
+      "strain": "Lemon Medusa",
+      "format": "live resin disposable",
+      "package_g": 1,
+      "price_usd": 74.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Dizgo",
+      "strain": "Mixed",
+      "format": "rosin cartridge",
+      "package_g": 0.5,
+      "price_usd": 59.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Float Cannabis",
+      "strain": "Limesickle",
+      "format": "live rosin disposable",
+      "package_g": 0.5,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Unbound",
+      "strain": "Maui Wowie",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Unbound",
+      "strain": "Grand Daddy Purple",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Unbound",
+      "strain": "Zelato",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Unbound",
+      "strain": "Super Lemon Haze",
+      "format": "cartridge",
+      "package_g": 1,
+      "price_usd": 69.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    },
+    {
+      "retailer": "Frostbite Dispensary",
+      "brand": "Lakeside Canna",
+      "strain": "Lemonade Stand",
+      "format": "disposable",
+      "package_g": 1,
+      "price_usd": 74.99,
+      "source_url": "https://frostbitedispensary.com/shop/categories/vapes/"
+    }
+  ]
+}
