@@ -1,0 +1,219 @@
+{
+  "retailer": "Edina Canna",
+  "city": "Edina",
+  "address": "7145 S France Avenue Edina MN 55435",
+  "store_id": "MICRO-L25-000519-02-AUR",
+  "source_url": "https://edinacanna.com/stores/edina-canna/products/flower",
+  "source_observed": "Web-indexed official-menu snapshot encountered 2026-11-18; prices must be revalidated on current storefront before publication",
+  "status": "staging_not_published",
+  "currency": "USD",
+  "offers": [
+    {
+      "strain": "Rosanna",
+      "brand": "Unbound",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Chem n Cookies",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Froot by the Foot",
+      "brand": "Mischief Cannabis",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Lime Glow",
+      "brand": "Mischief Cannabis",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Orion",
+      "brand": "Dizgo Collective",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "OMG",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Cherry Lady Slipper",
+      "brand": "Trailhead Cannabis Company",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Gastronaut",
+      "brand": "Trailhead Cannabis Company",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Evercrisp",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Gogurtz",
+      "brand": "RYTHM",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Lavender Gelato",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Mendo Breath",
+      "brand": "Mischief Cannabis",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "popcorn",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Mendo Breath",
+      "brand": "Mischief Cannabis",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "whole flower",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Fog Dog",
+      "brand": "Mischief Cannabis",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "popcorn",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Octane Mintz",
+      "brand": "Trailhead Cannabis Company",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Turtle Taffy",
+      "brand": "Trawa",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Animal Scout",
+      "brand": "RYTHM",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Bubba Fett",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Mystic Mint",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Animal Face",
+      "brand": "RYTHM",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Orangeade",
+      "brand": "Unbound",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 30,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Jack's Delight",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    },
+    {
+      "strain": "Watermelon Pound Cake",
+      "brand": "Unbound",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 42,
+      "variant": "not_specified",
+      "stock_status": "not_verified"
+    }
+  ]
+}
