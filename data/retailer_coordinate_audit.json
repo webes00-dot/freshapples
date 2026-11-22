@@ -1,0 +1,284 @@
+{
+  "checked_at": "2026-11-18T22:31:57+00:00",
+  "source": "US Census Public_AR_Current (street-range interpolation, not rooftop GPS)",
+  "retailers": 277,
+  "results": {
+    "matched": 232,
+    "unmatched_or_ambiguous": 43,
+    "rejected_street_type_mismatch": 2
+  },
+  "renderable_street_geocodes": 232,
+  "unresolved": [
+    {
+      "id": "DIS-L24-000396-01-AUR",
+      "name": "MN THC Co — Lakeville",
+      "address": "16085 Buck Hill Road Lakeville MN 55019",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "DIS-L24-000396-02-AUR",
+      "name": "MN THC Co — Dundas",
+      "address": "396 Schilling Drive Suite #300 Dundas MN 55019",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001007-01-AUR",
+      "name": "Canna Corners",
+      "address": "321 Main Ave North Thief River Falls MN 56721",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "DIS-L25-000080-02-AUR",
+      "name": "DISPO - Rochester",
+      "address": "108 First Avenue SW Rochester MN 55902",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000572-01-AUR",
+      "name": "Northern Crown Cannabis — Isanti",
+      "address": "108 E MAIN Street Ste 400 Isanti MN 55040",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MEZZO-L24-000306-02-AUR",
+      "name": "Legacy Cannabis Minneapolis",
+      "address": "2930 Lyndale Avenue South Minneapolis MN 55347",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000584-01-AUR",
+      "name": "5D Dispensary",
+      "address": "18447 Highway 65 NE Cedar MN 55011",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000407-01-AUR",
+      "name": "Blooming Buds Dispensary",
+      "address": "710 County Road 75 E Unit 6 Saint Joseph MN 56374",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000427-01-AUR",
+      "name": "Green Leafs",
+      "address": "2021 S Broadway Street Suite #202 New Ulm MN 56087",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000544-01-AUR",
+      "name": "MN Roots Jenkins",
+      "address": "34212 Highway 371 Suite #2 Jenkins MN 56472",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "TRIBAL-WAABIGWAN-MAHNOMEN",
+      "name": "Waabigwan Mashkiki — Mahnomen",
+      "address": "515 E Jefferson Ave Mahnomen MN 56557",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "RESEARCH-PRICED-129",
+      "name": "Off The Path Cannabis — Morton",
+      "address": "39365 County Road 24 Morton MN 56270",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "RESEARCH-PRICED-133",
+      "name": "Fridley Dispensary — Fridley",
+      "address": "7315 Hwy 65 NE Unit A Fridley MN 55432",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "RESEARCH-PRICED-136",
+      "name": "Lake Leaf Dispensary — Hinckley",
+      "address": "699 Lucky Trail Hinckley MN 55037",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000883-01-AUR",
+      "name": "Minne Organix — Victoria",
+      "address": "1900 80th Street Victoria MN 55386",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "TRIBAL-NATIVECARE-RED-LAKE",
+      "name": "NativeCare — Red Lake",
+      "address": "24400 State Hwy 1 Red Lake MN 56671",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001582-01-AUR",
+      "name": "DL Dispensary",
+      "address": "2673 US-10 Detroit Lakes MN 56501",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L24-000556-06-AUR",
+      "name": "Flor Oscura",
+      "address": "330 El Dorado Drive Jordan MN 55352",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001290-01-AUR",
+      "name": "Fridley Dispensary",
+      "address": "7315 NE Hwy 65 Fridley MN 55432",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000350-01-AUR",
+      "name": "Great Northern Greens",
+      "address": "1100 Riverwood Drive Burnsville MN 55337",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000522-01-AUR",
+      "name": "Loon Leaf",
+      "address": "8700 NE University Ave. Blaine MN 55434",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MEZZO-L24-000072-01-AUR",
+      "name": "Loon Lettuce Inc",
+      "address": "603 Esch Dr. Caledonia MN 55912",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001116-01-AUR",
+      "name": "LOTW Dispensary",
+      "address": "418 STATE Avenue Warroad MN 56763",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001156-01-AUR",
+      "name": "Marvin's Garden Minneapolis",
+      "address": "726 Central Avenue NE Suite# 111 Minneapolis MN 55414",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001202-01-AUR",
+      "name": "MnLoon - St. Cloud",
+      "address": "3299 Roosevelt Road Saint Cloud MN 56301",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000358-01-AUR",
+      "name": "Nineteen Pines",
+      "address": "4323 State Hwy. 23 Brook Park MN 55007",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001629-01-AUR",
+      "name": "Norse Canna Co",
+      "address": "2982 Rainbow Street Mora MN 55051",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001266-01",
+      "name": "Nuggets dispensary",
+      "address": "30581 Patriot Avenue Suite 1 Pequot Lakes MN 56472",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000752-01-AUR",
+      "name": "O'Buds",
+      "address": "700 E Norway Drive Suite #105 Annandale MN 55302",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "DIS-L24-000062-01-AUR",
+      "name": "OUIDHAUS",
+      "address": "1570 61 US-14 La Crescent MN 55947",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000394-01-AUR",
+      "name": "The Smoke Shop Cannabis Dispensary",
+      "address": "11135 61st Street NE Albertville MN 55301",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001530-01-AUR",
+      "name": "Twin Cities Green",
+      "address": "205 262 7th Street W Saint Paul MN 55102",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000615-01-AUR",
+      "name": "URBAN GREEN Dispensary",
+      "address": "9326 Zane Ave N. Brooklyn Park MN 55443",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MDCMB-L25-000002-01-AUR",
+      "name": "Vireo Health of Minnesota",
+      "address": "672 County Hwy 1 Blaine MN 55434",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MDCMB-L25-000002-07-AUR",
+      "name": "Vireo Health of Minnesota",
+      "address": "800 30th Ave South Moorhead MN 56550",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000345-01-AUR",
+      "name": "Weed Wishes Company",
+      "address": "21st Street SE Cook MN 55723",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L24-000293-02-AUR",
+      "name": "Green Box Cannabis",
+      "address": "16350 Kendrick Loop Suite #D Lakeville MN 55044",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L24-000018-02-AUR",
+      "name": "HWS Cannabis Company",
+      "address": "499 Arrowhead Lane Moose Lake MN 55767",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000908-01-AUR",
+      "name": "Cheeky Winona",
+      "address": "850 Menard Road Winona MN 55987",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001453-01-AUR",
+      "name": "Mary Jane's Dispensary",
+      "address": "21564 MN-78 Battle Lake MN 56515",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "DIS-L25-000045-03-AUR",
+      "name": "Pot Mamas",
+      "address": "6445 Lake Road Terrace Unit 100 Woodbury MN 55125",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-000998-01-AUR",
+      "name": "Sota Sown",
+      "address": "22321 Highway 10 Hawley MN 56549",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MICRO-L25-001298-01-AUR",
+      "name": "Spring Lake Park Dispensary",
+      "address": "8478 Central Avenue NE Spring Lake Park MN 55432",
+      "reason": "unmatched_or_ambiguous"
+    },
+    {
+      "id": "MEZZO-L24-000306-01-AUR",
+      "name": "Legacy Cannabis Woodbury",
+      "address": "9891 Hudson Place Woodbury MN 55125",
+      "reason": "Census returned Hudson Road instead of Hudson Place"
+    },
+    {
+      "id": "TRIBAL-WAABIGWAN-SAINT-CLOUD",
+      "name": "Waabigwan Mashkiki — Saint Cloud",
+      "address": "141 33rd Ave S Saint Cloud MN 56301",
+      "reason": "Census returned 33rd Street instead of 33rd Avenue"
+    }
+  ],
+  "postscan_review": "Two returned results rejected after street-suffix QA. Street addresses not verified rooftops."
+}
