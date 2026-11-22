@@ -36,3 +36,4 @@ jobs:
             exit 1
           fi
           npx --yes wrangler@4 deploy --env preview
+          echo 'MNtrees preview deployment command completed successfully.'
