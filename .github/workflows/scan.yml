@@ -28,7 +28,7 @@ jobs:
           import datetime,os
           from zoneinfo import ZoneInfo
           now=datetime.datetime.now(ZoneInfo("America/Chicago"))
-          eligible=os.environ["EVENT_NAME"]=="workflow_dispatch" or (now.hour in (8,20))
+          eligible=os.environ["EVENT_NAME"] in ("workflow_dispatch","push") or (now.hour in (8,20))
           with open(os.environ["GITHUB_OUTPUT"],"a") as f:
               f.write(f"run={'true' if eligible else 'false'}\n")
           print("Central time",now.isoformat(),"run",eligible)
