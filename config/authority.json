@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "project": "MNtrees Minnesota Strain Finder",
+  "status": "approved_single_workbook_source",
+  "spreadsheet": {
+    "id": "1sTqBuJ2eFHwhLlYHIlXhh6HqgMhcBmVb7o70pvwRtV8",
+    "title": "MNtrees - Consolidated Working Master - 2026-11-20",
+    "tabs": {
+      "strains": "Strain Master",
+      "genetics": "Strain Genetics",
+      "brands": "Brand Master",
+      "retailers": "Retailer Master",
+      "aliases": "Entity Aliases",
+      "rules": "Rules Master",
+      "corrections": "Corrections Master"
+    },
+    "strain_columns": {
+      "market_product_url": "E",
+      "review_status": "H",
+      "genetics_reference_url": "R"
+    },
+    "genetics_columns": {
+      "research_source_url": "H"
+    }
+  },
+  "authority": {
+    "canonical_strains": "spreadsheet:Strain Master",
+    "canonical_brands": "spreadsheet:Brand Master",
+    "licensed_retailers": "spreadsheet:Retailer Master",
+    "aliases": "spreadsheet:Entity Aliases",
+    "owner_policies": "spreadsheet:Rules Master",
+    "exact_source_id_corrections": "spreadsheet:Corrections Master + approved correction tabs",
+    "raw_offer_observations": "GitHub:data/*offers.json + collector/raw provenance",
+    "publication": "GitHub:scripts/build_catalog.py + scripts/build_site_data.py",
+    "historical_prices": "GitHub:data/market-price-history.json"
+  },
+  "outputs": {
+    "published_catalog": "dist/data/catalog.json",
+    "public_read_model": "dist/data/site-data.json",
+    "release_quality_report": "reports/release_quality.json",
+    "entity_review": "reports/entity_reconciliation.json",
+    "strain_review": "dist/data/strain_master_review.json"
+  },
+  "publication_policy": {
+    "unknown_strains": "preserve source and review; no speculative parentage",
+    "unverified_weights": "no estimated gram price",
+    "retail_stock": "never assert verified availability",
+    "classification": "blank unless owner or source verified",
+    "current_vs_history": "separate collections and units",
+    "rollbacks": "retain last successfully validated snapshot"
+  },
+  "automation_status": {
+    "sheet_to_github_retailer_sync": "implemented_read_only_requires_secret",
+    "brand_retailer_strain_discovery_writeback": "not_implemented",
+    "live_production": "requires_separate_verification",
+    "verified_ownership_graph": "not_implemented"
+  }
+}
