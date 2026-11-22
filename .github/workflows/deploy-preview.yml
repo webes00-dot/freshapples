@@ -3,6 +3,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'src/worker.js'
+      - 'wrangler.jsonc'
+      - 'catalog-test.html'
+      - 'build.sh'
       - 'market-prices.html'
       - 'market-prices.js'
       - 'market-prices.css'
@@ -21,6 +25,8 @@ jobs:
         run: bash build.sh
       - name: Validate pricing page
         run: |
+          test -s dist/catalog-test.html
+          node --check src/worker.js
           test -s dist/market-prices.html
           test -s dist/market-prices.js
           test -s dist/data/market-price-monthly.json
