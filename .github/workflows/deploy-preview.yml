@@ -1,0 +1,41 @@
+name: Deploy MNtrees storefront to Cloudflare preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'market-prices.html'
+      - 'market-prices.js'
+      - 'market-prices.css'
+      - 'data/market-price-monthly.json'
+      - '.github/workflows/deploy-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify and build current storefront
+        run: bash build.sh
+      - name: Validate pricing page
+        run: |
+          test -s dist/market-prices.html
+          test -s dist/market-prices.js
+          test -s dist/data/market-price-monthly.json
+          ! grep -q 'market-price-reference.png' dist/market-prices.html
+          ! grep -q 'history-details' dist/market-prices.html
+      - name: Deploy to existing Cloudflare preview Worker
+        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4 deploy --env preview
+      - name: Fail clearly if deployment credentials absent
+        if: ${{ env.CLOUDFLARE_API_TOKEN == '' }}
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo 'Missing CLOUDFLARE_API_TOKEN repository secret; preview not deployed.'
+          exit 1
