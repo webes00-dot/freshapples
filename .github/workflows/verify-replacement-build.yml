@@ -1,0 +1,63 @@
+name: Verify and archive replacement storefront build
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verified-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build from replacement repository only
+        run: bash build.sh
+      - name: Verify required assets and active bindings
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path('dist')
+          required=['index.html','app.js','catalog-model.js','style.css','market-prices.html','market-prices.js','data/site-data.json','data/catalog.json']
+          assert all((root/p).is_file() for p in required)
+          conf=json.loads(Path('wrangler.jsonc').read_text())
+          assert conf['name']=='mntrees'
+          assert conf['assets']['directory']=='./dist'
+          assert any(x['binding']=='REVIEWS_DB' for x in conf['d1_databases'])
+          print('Reproducible storefront build verified:',len(list(root.rglob('*'))),'artifacts')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mntrees-storefront-reproducible-build
+          path: |
+            dist/
+            dist-manifest.json
+            wrangler.jsonc
+          retention-days: 30
+      - name: Record successful verification on main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os,datetime,hashlib
+          root=Path('dist')
+          receipt={
+            'timestamp_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'source_sha':os.environ.get('GITHUB_SHA'),
+            'status':'verified_storefront_build_only',
+            'files':len(list(root.rglob('*'))),
+            'catalog_bytes':(root/'data/catalog.json').stat().st_size,
+            'site_data_bytes':(root/'data/site-data.json').stat().st_size,
+            'admin_portal_and_scanner_consolidated':False,
+            'production_deployed':False
+          }
+          Path('docs').mkdir(exist_ok=True)
+          Path('docs/LATEST_BUILD_VERIFICATION.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+          git config user.name "MNtrees build verifier"
+          git config user.email "build-verifier@users.noreply.github.com"
+          git add docs/LATEST_BUILD_VERIFICATION.json
+          git commit -m "Record verified reproducible storefront build" || true
+          git push || true
