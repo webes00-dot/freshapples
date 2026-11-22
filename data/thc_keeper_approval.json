@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "source": "THC Minnesota API",
+  "review_run_id": 44648059389,
+  "review_artifact": "thcminnesota-product-review",
+  "review_filename": "obvious_candidates.csv",
+  "sha256": "146587264b32af250573788ad3e4797521494f0652b9ac7edf6114906fb0b098",
+  "owner_approval_date": "2026-11-19",
+  "approval_scope": "These 139 observations are approved to proceed to verification; not approved as live retailer offers",
+  "expected_count": 139,
+  "category_counts": {
+    "flower": 65,
+    "pre-rolls": 59,
+    "concentrates": 15
+  },
+  "publication_allowed": false,
+  "requires": [
+    "storefront_verified",
+    "actual_package_weight_verified",
+    "canonical_brand_verified",
+    "canonical_strain_verified",
+    "first_party_menu_url_and_price_verified",
+    "valid_redistribution_rights",
+    "deduped_against_current_catalog"
+  ]
+}
