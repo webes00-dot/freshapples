@@ -42,9 +42,11 @@ function metrics(filtered){
  $('snapshotLabel').textContent=listings.length?'Based on '+data.visible.length.toLocaleString()+' matching menu listings · updates with filters':'Based on published advertised menu prices';
  $('trendHelp').textContent=comparable?'↑ Price increase · ↓ Price decrease · Compared with previous dated snapshot (this browser)':'Price trends appear after two dated, comparable metric snapshots.';
 }
+const profileKey=value=>String(value||'').trim().toLowerCase().replace(/^the soap$/, 'soap');
+const profileFields=['parent1','parent2','classification','indica_sativa','terpenes','children','breeder','source_url','flowering_time'];
+let strainProfileReferences=new Map();
 function geneticsFor(name){
- const key=value=>String(value||'').trim().toLowerCase().replace(/^the soap$/, 'soap');
- return strainGenetics.filter(entry=>key(entry.strain)===key(name));
+ return strainGenetics.filter(entry=>profileKey(entry.strain)===profileKey(name));
 }
 // Display-only approximate reference; never alters approved strain or retailer identities.
 function relatedGenetics(name){
@@ -68,9 +70,15 @@ function geneticsSummary(name){
  const entries=geneticsFor(name);
  const withParents=entries.find(x=>x.parent1||x.parent2);
  const related=withParents?null:relatedGenetics(name);
- return {entries,withParents,related};
+ return {entries,withParents,related,reference:strainProfileReferences.get(profileKey(name))};
 }
-publicSnapshot.then(data=>data.strain_genetics).then(rows=>{strainGenetics=Array.isArray(rows)?rows:[];render()}).catch(()=>{});
+publicSnapshot.then(data=>{
+ strainGenetics=Array.isArray(data.strain_genetics)?data.strain_genetics:[];
+ strainProfileReferences=new Map(Object.entries(data.strain_profile_references||{})
+  .filter(([,entry])=>typeof entry?.url==='string'&&/^https:\/\//i.test(entry.url))
+  .map(([name,entry])=>[profileKey(name),entry]));
+ render();
+}).catch(()=>{});
 const catalog=window.MNtreesCatalog;
 const redwoodBrand = 'Redwood County Weed Management';
 const redwoodLibrary = 'https://www.redwoodcoweed.com/strains';
@@ -142,10 +150,10 @@ function renderComparisons(input){
     return '<div class="compact-offer"><div class="compact-offer-meta">'+esc(o.displayBrand)+' · '+esc(o.displayType)+(o.product_variant?' · '+esc(o.product_variant):'')+'</div><div class="compact-offer-main"><div class="compact-retailer-wrap">'+locationPreview+coming+'</div><div class="compact-price">'+money(o.price)+offerTrend+'</div></div><div class="compact-offer-main compact-subline"><span>'+esc(o.city||'Minnesota')+(o.pack.total?' · '+esc(String(o.pack.total))+' g':' · weight not listed')+(o.reviewed_identity&&o.pack.packLabel?' · '+esc(o.pack.packLabel):'')+'</span><span>'+esc(ppg)+'</span></div>'+note+link+'</div>';
   };
   const summary=geneticsSummary(g.strain);
-  const hasGeneticsReference=summary.entries.some(x=>x.parent1||x.parent2||x.classification||x.indica_sativa||x.terpenes||x.children||x.breeder||x.source_url);
+  const hasGeneticsReference=summary.entries.some(x=>profileFields.some(field=>x[field]));
   const hasRedwoodReference=Boolean(redwoodStrains[redwoodKey(g.strain)]);
-  const genericProfile=!hasGeneticsReference&&!summary.related&&!hasRedwoodReference;
-  const geneticsHtml=genericProfile?'':'<div class="strain-genetics-brief">'+
+  const genericProfile=!hasGeneticsReference&&!summary.related&&!hasRedwoodReference&&!summary.reference;
+  const geneticsHtml=genericProfile||(!summary.withParents&&!summary.related&&summary.reference)?'':'<div class="strain-genetics-brief">'+
    (summary.withParents?'<span>Lineage</span> '+esc([summary.withParents.parent1,summary.withParents.parent2].filter(Boolean).join(' × ')):
    summary.related?'<span>Related strain</span> '+esc(summary.related.strain)+'*':
    '<span>Origin</span> Possible custom cross / locally bred variation')+'</div>';
@@ -225,7 +233,7 @@ document.addEventListener('click',event=>{
  const summary=geneticsSummary(name);
  const entries=summary.entries;
  const redwood=redwoodStrains[redwoodKey(name)]?renderRedwoodProfile(name):'';
- const displayEntries=entries.filter(x=>x.parent1||x.parent2||x.classification||x.indica_sativa||x.terpenes||x.children||x.breeder);
+ const displayEntries=entries.filter(x=>profileFields.some(field=>x[field]));
  const genetics=displayEntries.map(x=>{
   const parents=[x.parent1,x.parent2].filter(Boolean).join(' × ');
   const children=Array.isArray(x.children)?x.children.join(', '):x.children;
@@ -234,7 +242,8 @@ document.addEventListener('click',event=>{
  }).join('');
  const approximate=summary.related?'<section class="strain-profile-entry"><div class="strain-profile-grid">'+profileField('Related strain',summary.related.strain+'*')+profileField('Reported lineage',[summary.related.parent1,summary.related.parent2].filter(Boolean).join(' × '))+profileField('Flowering',floweringEstimate(name,entries))+'</div>'+'</section>':'';
  const placeholder='<section class="strain-profile-entry"><div class="strain-profile-grid">'+profileField('Origin','Possible custom cross / locally bred variation')+profileField('Flowering',floweringEstimate(name,entries))+'</div></section>';
- strainProfileDialog.innerHTML='<div class="strain-profile-heading"><div><span class="strain-profile-kicker">STRAIN PROFILE</span><h2>'+esc(name)+'</h2></div><button type="button" class="strain-profile-close" aria-label="Close strain profile">×</button></div>'+(redwood+genetics+(summary.withParents?'':approximate)||placeholder);
+ const reference=summary.reference?'<section class="strain-profile-entry"><p>Cultivar reference. The retailer’s cut has not been independently confirmed.</p><a href="'+esc(summary.reference.url)+'" target="_blank" rel="noopener noreferrer">Source: '+esc(summary.reference.source)+' ↗</a></section>':'';
+ strainProfileDialog.innerHTML='<div class="strain-profile-heading"><div><span class="strain-profile-kicker">STRAIN PROFILE</span><h2>'+esc(name)+'</h2></div><button type="button" class="strain-profile-close" aria-label="Close strain profile">×</button></div>'+(redwood+genetics+(summary.withParents?'':approximate)+reference||placeholder);
  strainProfileDialog.showModal();
 });
 strainProfileDialog.addEventListener('click',event=>{if(event.target===strainProfileDialog||event.target.closest('.strain-profile-close'))strainProfileDialog.close()});

@@ -28,6 +28,9 @@ def build_preserved_snapshot(path):
     with gzip.open(path, 'rt', encoding='utf-8') as archive:
         preserved = json.load(archive)
     data = preserved['site-data']
+    references = Path('data', 'strain-master-profile-references.json')
+    if references.is_file():
+        data['strain_profile_references'] = read(references.name)
     offers = data['catalog']
     if data['schema_version'] != 1 or not offers or not data['strain_genetics'] or not data['strain_types']:
         raise ValueError('The preserved production snapshot is incomplete')
