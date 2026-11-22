@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "project": "MNtrees",
+  "canonical_repository": "webes00-dot/freshapples",
+  "production": {
+    "hostname": "mntrees.co",
+    "worker": "mntrees",
+    "static_assets": "./dist",
+    "api_entrypoint": "src/worker.js",
+    "database_bindings": {
+      "REVIEWS_DB": "mntrees-reviews"
+    }
+  },
+  "admin": {
+    "worker": "mntrees-admin",
+    "database_bindings": {
+      "CATALOG_DB": "mntrees-catalog-staging"
+    },
+    "source_location": "private Cloudflare KV snapshot until secure source repository is established",
+    "must_not_commit_to_public_repo": true
+  },
+  "preview": {
+    "worker": "mntrees-recovery-preview",
+    "database_bindings": {
+      "REVIEWS_DB": "mntrees-recovery-preview-reviews"
+    }
+  },
+  "data_roles": {
+    "editor_master": "Cloudflare D1 mntrees-catalog-staging",
+    "public_catalog": "data/site-data.json and data/catalog.json, versioned GitHub release snapshots",
+    "scanner_source": "collector/ and scripts/ (recovered; unattended scheduling blocked until reconciliation)",
+    "public_pricing_history": "data/market-price-monthly.json",
+    "review_data": "Cloudflare D1 mntrees-reviews"
+  },
+  "recovery": {
+    "namespace": "mntrees-private-recovery-snapshots",
+    "catalog_restore_tool": "scripts/restore_catalog_from_kv.py",
+    "last_catalog_drill": "2026-11-22",
+    "independent_off_cloudflare_backup": "NOT_VERIFIED"
+  },
+  "release_gate": {
+    "public_static_source_recovered": true,
+    "catalog_restore_passed": true,
+    "scanner_integrated_and_validated": false,
+    "admin_code_in_secure_version_control": false,
+    "preview_parity_verified": false,
+    "production_promotion": false
+  },
+  "legacy_repository_dependencies": []
+}
