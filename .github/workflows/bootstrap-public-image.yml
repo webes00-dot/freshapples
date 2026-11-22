@@ -1,0 +1,26 @@
+name: Recover published MNtrees image asset
+on:
+  push:
+    paths:
+      - .github/workflows/bootstrap-public-image.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  capture:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          curl --fail --location --retry 3 --connect-timeout 20 "https://mntrees.co/market-price-reference.png" --output market-price-reference.png
+          file market-price-reference.png
+          test "$(wc -c < market-price-reference.png)" -gt 1000
+      - run: |
+          git config user.name "MNtrees recovery bot"
+          git config user.email "recovery@users.noreply.github.com"
+          git add market-price-reference.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Capture currently published static price reference image"
+            git push
+          fi
