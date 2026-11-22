@@ -1,3 +1,4 @@
+import { ingestScannerOffers } from './scanner-ingest.js';
 import { liveCatalog } from './live-catalog.js';
 import { onRequestPost, onRequestGet } from '../functions/api/feedback.js';
 import { onRequestGet as reviewsGet, onRequestPost as reviewsPost } from '../functions/api/reviews.js';
@@ -7,6 +8,9 @@ import { onRequestGet as moderationGet, onRequestPost as moderationPost } from '
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
+    if (url.pathname === '/api/internal/scanner-offers') {
+      return ingestScannerOffers(request, env.CATALOG_DB);
+    }
     if (url.pathname === '/api/feedback') {
       if (request.method === 'POST') return onRequestPost({request, env});
       if (request.method === 'GET') return onRequestGet();
