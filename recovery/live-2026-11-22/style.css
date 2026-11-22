@@ -1,0 +1,276 @@
+<html><head><meta name="color-scheme" content="light dark"></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;color:#17261e;background:#f7f8f5}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit}.shell{max-width:1170px;margin:auto;padding:0 24px}.top{background:#fff;border-bottom:1px solid #e5eae5}.topin{min-height:76px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-weight:800;font-size:23px;letter-spacing:-.8px;line-height:1}.brand small{display:block;font-size:9px;letter-spacing:2px;margin-top:5px}.green{color:#00732c}.mark{background:#00732c;color:white;border-radius:10px;padding:13px 8px;font-size:16px;letter-spacing:-1px}.mark span{font-size:13px}.community{font-size:14px;text-decoration:none;color:#00732c;font-weight:650}.hero{margin:30px 0 18px;background:#fff;border:1px solid #e6eae5;border-radius:17px;padding:38px;display:flex;justify-content:space-between;gap:28px}.hero h1{font-size:clamp(34px,4.4vw,60px);line-height:1.08;letter-spacing:-2px;margin:10px 0 16px}.hero h1 em{font-weight:500;color:#00732c}.hero p{max-width:620px;color:#526357;line-height:1.55}.eyebrow{letter-spacing:1.7px;font-size:11px;font-weight:850;color:#00732c}.hero-side{align-self:center;min-width:220px;padding:18px;border-radius:12px;background:#f0f7f0;display:flex;flex-direction:column;gap:11px;font-size:13px}.live-dot{width:9px;height:9px;background:#91a49a;border-radius:50%}.hero-stat{font-size:27px;font-weight:800}.muted,.hint{color:#607168;font-size:12px}.insights,.searchbox{background:white;border:1px solid #e6eae5;border-radius:16px;padding:24px;margin:16px 0}.sectionhead,.resultbar{display:flex;justify-content:space-between;gap:15px;align-items:center}.sectionhead h2{font-size:25px;margin:5px 0}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.metric{padding:18px;background:#f6f8f4;border:1px solid #e9eee7;border-radius:12px}.metric strong{display:block;font-size:26px;margin:9px 0}.metric span{font-size:12px;color:#607168}.insightfoot{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:#78827a}.searchline{display:flex;gap:12px}.searchfield{display:flex;align-items:center;gap:10px;flex:1;background:#f9faf8;border:1px solid #dfe6dd;padding:0 15px;border-radius:10px}.searchfield input{width:100%;border:0;outline:0;padding:14px 0;background:transparent}.secondary{border:1px solid #d5dfd3;background:white;border-radius:9px;padding:12px 18px;font-weight:650;color:#0f6830}.secondary:hover{background:#edf6ed}.filters{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:10px;margin-top:15px;align-items:end}.filters label{display:flex;flex-direction:column;font-size:12px;color:#5a685e;gap:6px}.filters select{width:100%;padding:11px 8px;border:1px solid #dfe6dd;background:#fafcf9;border-radius:8px;color:#243a2b}.textbtn{border:0;background:none;color:#00732c;font-weight:650;padding:12px 4px}.resultbar{margin:24px 3px 14px}.resultbar h2{margin:0 0 4px;font-size:21px}.resultbar p{margin:0;color:#607168;font-size:13px}.tools{display:flex;gap:14px}.results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.listing{background:white;border:1px solid #e3e9e0;padding:19px;border-radius:12px;min-width:0}.listing h3{font-size:19px;line-height:1.25;margin:8px 0}.listing .tag{font-size:10px;font-weight:800;color:#00732c;letter-spacing:.8px}.listing p{font-size:13px;color:#647067;line-height:1.5;margin:6px 0}.listing .price{font-size:24px;font-weight:800;margin:12px 0}.listing .link{color:#00732c;font-size:12px;font-weight:750;display:inline-block;margin-top:8px}.empty{grid-column:1/-1;text-align:center;padding:60px 20px;background:white;border:1px dashed #ccd7cd;border-radius:12px;color:#617168}.message{padding:12px 15px;border-radius:9px;background:#eaf5ed;color:#145b2c;margin-bottom:14px}.message[hidden]{display:none}.disclaimer{font-size:12px;color:#727e75;line-height:1.7;margin-top:20px}.coverage{background:#fff;border:1px solid #e6eae5;border-radius:12px;margin:22px 0}.coverage summary{padding:18px;cursor:pointer;font-weight:700}.detailsbody{padding:0 18px 18px;font-size:13px;color:#536459;line-height:1.65}.detailactions{display:flex;gap:10px;flex-wrap:wrap}.danger{color:#a23c32}footer{display:flex;justify-content:space-between;gap:20px;border-top:1px solid #dae2d9;padding:30px 0;margin-top:35px;font-size:12px;color:#68746a;line-height:1.8}.footerbrand{display:flex;gap:5px;flex-direction:column}.footerbrand strong{font-size:14px;color:#223b2a}@media(max-width:850px){.metrics{grid-template-columns:repeat(2,1fr)}.filters{grid-template-columns:repeat(3,1fr)}.results{grid-template-columns:repeat(2,1fr)}.hero{padding:26px;flex-direction:column}.hero-side{align-self:stretch}}@media(max-width:560px){.shell{padding:0 14px}.hero{padding:24px}.insights,.searchbox{padding:17px}.searchline{flex-direction:column}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.results{grid-template-columns:1fr}.insightfoot,.sectionhead,.resultbar,footer{flex-direction:column;align-items:flex-start}.tools{flex-wrap:wrap}.hero h1{letter-spacing:-1px}.metrics{gap:8px}.metric{padding:12px}.metric strong{font-size:21px}}
+/* Subreddit icon enhancement */
+.subreddit-logo{width:52px;height:52px;object-fit:cover;border-radius:50%;flex:none}.logo-fallback{display:none}
+
+.reviewqueue{margin-top:34px;padding:22px;border:1px solid #d8e5d8;border-radius:14px;background:#f2f7f1}.reviewintro{font-size:13px;color:#536459;line-height:1.7}.reviewfilter{display:inline-flex;align-items:center;gap:10px;margin:10px 0 18px;font-size:13px;font-weight:700}.reviewfilter select{border:1px solid #c7d5c7;border-radius:7px;padding:8px}.reviewstatus{font-size:12px;color:#8a5c25;font-weight:650}.reviewqueue .results{margin-top:4px}
+
+.reviewdecision{display:flex;flex-direction:column;gap:5px;margin:12px 0 8px;font-size:12px;font-weight:700;color:#405447}.reviewdecision select{width:100%;max-width:260px;padding:8px;border-radius:7px;border:1px solid #bacfbd;background:#fff}#reviewExportBtn{margin:8px 0 10px 14px}
+
+.comparison{margin:26px 0;padding:18px 20px;background:#fff;border:1px solid #e1e9df;border-radius:14px}.comparisongroups{display:grid;gap:10px}.comparegroup{border:1px solid #dbe5d9;border-radius:9px;background:#fafdfa;overflow:hidden}.comparegroup summary{padding:13px 15px;cursor:pointer;font-weight:750;color:#284633}.compareoverflow{overflow-x:auto}.comparegroup table{width:100%;border-collapse:collapse;font-size:12px}.comparegroup th,.comparegroup td{padding:10px 12px;text-align:left;border-top:1px solid #e6eee5;vertical-align:top}.comparegroup th{color:#526c58;background:#f0f7ef}.comparegroup a{color:#006b36}
+
+/* Strain-first price comparison: cultivator &gt; common strain &gt; retailer offers */
+.comparison{padding:0;border:0;background:transparent;margin:12px 0 28px}
+.comparisongroups{display:grid;gap:16px}
+.strain-card{background:#fff;border:1px solid #dce8da;border-radius:16px;overflow:hidden;box-shadow:0 3px 12px rgba(22,64,27,.035)}
+.strain-header{display:flex;justify-content:space-between;gap:24px;align-items:center;padding:22px 24px 18px}
+.strain-cultivator{display:block;font-size:12px;color:#167239;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.strain-header h3{font-size:25px;line-height:1.14;letter-spacing:-.5px;margin:7px 0}
+.strain-header p{font-size:13px;color:#637568;margin:0}
+.strain-pricehead{min-width:130px;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.strain-pricehead&gt;span:first-child{font-size:11px;color:#627466;font-weight:700}
+.strain-pricehead strong{font-size:26px;color:#133e21}
+.matched-weight,.mixed-weight{font-size:10px;color:#617b61;text-align:right}
+.mixed-weight{color:#925b2e}
+.retailer-columnheads,.retailer-offer{display:grid;grid-template-columns:minmax(210px,2.5fr) minmax(90px,.9fr) minmax(105px,1fr) minmax(96px,1fr);gap:15px;align-items:center}
+.retailer-columnheads{padding:9px 24px;background:#f2f7f0;color:#758379;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.retailer-offer{padding:13px 24px;border-top:1px solid #ecf0eb;font-size:13px}
+.retailer-offer:hover{background:#fafcf9}
+.retailer-main{min-width:0;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px}
+.retailer-main strong{font-size:14px;color:#203e29}
+.retailer-location{color:#7b897f;font-size:12px}
+.strain-variant{display:block;flex-basis:100%;font-size:11px;color:#6c786d}
+.retailer-package{color:#435449;font-weight:600}
+.retailer-price strong{display:block;font-size:19px;color:#14632d}
+.retailer-price small{display:block;font-size:11px;color:#849084}
+.retailer-source a{font-size:12px;font-weight:750;color:#087239;text-decoration:none}
+.retailer-source a:hover{text-decoration:underline}
+.retailer-offer.upcoming{background:#fbfaf5}
+.upcoming-tag{display:inline-block;border-radius:4px;padding:2px 5px;background:#f9eed9;color:#8a5d26;font-size:10px;font-weight:800}
+@media(max-width:670px){
+.strain-header{padding:17px;align-items:flex-start}
+.strain-header h3{font-size:21px}
+.strain-pricehead{min-width:90px}
+.strain-pricehead strong{font-size:22px}
+.retailer-columnheads{display:none}
+.retailer-offer{padding:13px 17px;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px}
+.retailer-main{grid-column:1;grid-row:1/3}
+.retailer-package{grid-column:2;grid-row:1;text-align:right}
+.retailer-price{grid-column:2;grid-row:2;text-align:right}
+.retailer-source{grid-column:1/-1}
+}
+
+
+/* Pilot-inspired MNtrees presentation: simple masthead, restrained insights,
+   clean search controls, and grouped strain-price comparisons. */
+:root{--mn-green:#116d35;--mn-ink:#1f3126;--mn-line:#e0e7de;--mn-paper:#f7f8f5}
+body{color:var(--mn-ink);background:var(--mn-paper)}
+.shell{max-width:1180px}
+.top{border-color:var(--mn-line)}
+.topin{min-height:70px}
+.brand{font-size:24px}
+.community{color:var(--mn-green)}
+.hero.intro{padding:27px 0 18px;margin:0;border:0;border-radius:0;background:transparent;align-items:center}
+.hero.intro h1{font-size:clamp(30px,3.3vw,46px);letter-spacing:-1.4px;line-height:1.12;margin:0 0 8px}
+.hero.intro h1 em{color:var(--mn-green);font-weight:500}
+.hero.intro p{margin:0;max-width:680px;font-size:14px;line-height:1.55}
+.hero.intro .hero-side{background:transparent;border-left:1px solid var(--mn-line);border-radius:0;padding:8px 0 8px 20px;gap:5px;min-width:190px}
+.hero.intro .hero-stat{font-size:25px}
+.insights{margin:6px 0 12px;padding:21px 22px;border-color:var(--mn-line);border-radius:12px}
+.insights .sectionhead h2{font-size:23px;letter-spacing:-.45px;margin:0}
+.metrics{margin:14px 0 13px}
+.metric{padding:15px;background:#f7faf6;border-color:#e6ece4}
+.metric strong{font-size:23px}
+.pilotnote{margin:12px 0;font-size:12px;color:#617064;line-height:1.5}
+.searchbox{margin:12px 0 14px;border-radius:12px;padding:18px 20px}
+.searchline{gap:8px}
+.searchfield{background:#fbfcfa}
+.searchfield input{font-size:15px}
+.filters{grid-template-columns:repeat(5,minmax(0,1fr)) auto;gap:9px;margin-top:12px}
+.filters select{padding:10px 8px;background:#fff}
+.filters label{font-weight:650}
+#reset{align-self:end}
+.resultbar{margin:19px 1px 9px}
+.resultbar h2{font-size:17px}
+.comparison{margin:10px 0 22px}
+.comparison&gt;.sectionhead{margin:0 0 7px}
+.comparison .sectionhead h2{font-size:22px;letter-spacing:-.45px}
+.comparison .reviewintro{margin:3px 0 16px;color:#68766b;font-size:12px}
+.comparisongroups{gap:12px}
+.strain-card{border-color:var(--mn-line);border-radius:12px;box-shadow:0 2px 7px rgba(19,55,28,.035)}
+.strain-header{padding:17px 20px 14px}
+.strain-header h3{font-size:22px;letter-spacing:-.45px;margin:3px 0 6px}
+.strain-header p{font-size:12px}
+.strain-cultivator{font-size:11px;letter-spacing:.65px;color:var(--mn-green)}
+.strain-pricehead strong{font-size:24px}
+.retailer-columnheads,.retailer-offer{grid-template-columns:minmax(170px,2.5fr) minmax(112px,.85fr) minmax(93px,.75fr) minmax(65px,.55fr);gap:12px}
+.retailer-columnheads{padding:8px 20px;background:#eff5ee}
+.retailer-offer{padding:11px 20px}
+.retailer-main strong{font-size:13px}
+.retailer-price strong{font-size:18px}
+.coverage{border-color:var(--mn-line)}
+footer{margin-top:24px;padding-top:23px}
+@media(max-width:850px){.filters{grid-template-columns:repeat(3,minmax(0,1fr))}.hero.intro{align-items:stretch}.hero.intro .hero-side{border-left:0;border-top:1px solid var(--mn-line);padding:10px 0 0;min-width:0}}
+@media(max-width:560px){.hero.intro{padding:20px 0 11px}.hero.intro h1{font-size:31px}.insights,.searchbox{padding:15px}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.retailer-columnheads{display:none}.retailer-offer{grid-template-columns:minmax(0,1fr) auto;padding:12px 15px}.strain-header{padding:15px}.strain-header h3{font-size:20px}.strain-pricehead strong{font-size:21px}}
+
+
+/* Retailer comparison boxes: visually distinct cards, never table rows. */
+.retailer-columnheads{display:none!important}
+.strain-card{padding-bottom:18px}
+.strain-header{border-bottom:1px solid #e8eee7}
+.retailer-offers.retailer-tile-grid{
+  display:grid!important;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))!important;
+  gap:12px!important;
+  padding:16px 20px 2px!important;
+  align-items:stretch;
+}
+.retailer-tile{
+  display:flex;flex-direction:column;min-width:0;gap:7px;
+  background:#f7faf6;border:1px solid #dce7db;
+  border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(18,61,25,.04);
+}
+.retailer-tile:hover{background:#fff;border-color:#9bc8a4;box-shadow:0 5px 16px rgba(18,61,25,.08)}
+.retailer-tile.upcoming{background:#fbf8f1;border-color:#e9dbc5}
+.retailer-tile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.retailer-tile-name{font-size:15px;line-height:1.3;color:#183c24;overflow-wrap:anywhere}
+.retailer-tile-city{font-size:12px;color:#6d7f71}
+.retailer-tile-price{font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.8px;color:#176b35;margin:8px 0 4px}
+.retailer-tile-details{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:#526755}
+.retailer-tile-status{display:inline-block;background:#f7ead5;color:#825a2f;border-radius:5px;padding:4px 6px;font-size:10px;font-weight:700}
+.retailer-tile-link{margin-top:auto;padding-top:12px;display:inline-block;font-size:12px;font-weight:750;color:#087239;text-decoration:none}
+.retailer-tile-link:hover{text-decoration:underline}
+@media(max-width:620px){.retailer-offers.retailer-tile-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr))!important;padding:12px!important;gap:9px!important}.retailer-tile{padding:13px}.retailer-tile-price{font-size:25px}}
+@media(max-width:390px){.retailer-offers.retailer-tile-grid{grid-template-columns:1fr!important}}
+
+
+/* MNtrees compact four-column strain cards â€” November 2026 */
+.comparisongroups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:start}
+.compact-card{min-width:0;background:#fff;border:1px solid #e3e8e2;border-radius:8px;overflow:hidden;box-shadow:0 1px 2px rgba(26,51,33,.025)}
+.compact-card-header{padding:13px 13px 11px;border-bottom:1px solid #edf0eb;min-height:93px}
+.compact-brand{font-size:9px;line-height:1.3;letter-spacing:.075em;text-transform:uppercase;color:#748878;font-weight:800}
+.compact-card h3{font-size:17px;color:#1f3b2a;letter-spacing:-.035em;line-height:1.18;margin:5px 0 8px;font-weight:750;overflow-wrap:anywhere}
+.compact-card-header p{font-size:10px;color:#879489;margin:0}
+.compact-offer{padding:12px 13px;border-bottom:1px solid #edf0eb}
+.compact-offer:last-child{border-bottom:0}
+.compact-offer-main{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.compact-retailer{font-size:11px;font-weight:700;line-height:1.25;color:#34493a;overflow-wrap:anywhere}
+.compact-price{font-size:14px;font-weight:750;color:#23593a;white-space:nowrap}
+.compact-subline{font-size:10px;color:#839187;margin-top:3px;align-items:start}
+.compact-subline span:last-child{text-align:right;white-space:nowrap}
+.offer-link{display:inline-block;margin-top:9px;font-size:10px;text-decoration:none;font-weight:700;color:#386f48}
+.offer-link:hover{text-decoration:underline}
+.offer-link.unavailable{color:#8b978e}
+.offer-warning{font-size:9px;color:#8b6c2e}
+@media(max-width:1100px){.comparisongroups{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.comparisongroups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.comparisongroups{grid-template-columns:1fr}}
+
+
+/* MNtrees 2026-11-18 card polish: restrained evergreen with bright #00732C accents. */
+:root{--mn-green:#00732C;--mn-deep:#174C2B;--mn-soft:#EAF6EF;--mn-line:#DCE8DF;--mn-paper:#F5F8F5}
+body{background:var(--mn-paper)}
+.comparisongroups{gap:14px;align-items:start}
+.compact-card{
+  border:1px solid #DCE8DF;
+  border-top:3px solid #00732C;
+  border-radius:11px;
+  box-shadow:0 3px 12px rgba(0,70,29,.065);
+  transition:box-shadow .18s ease,transform .18s ease;
+}
+.compact-card:hover{box-shadow:0 7px 22px rgba(0,70,29,.12);transform:translateY(-1px)}
+.compact-card-header{
+  min-height:106px;
+  padding:15px 15px 13px;
+  background:linear-gradient(145deg,#FCFEFC 0%,#F1F8F3 100%);
+  border-bottom:1px solid #DDEBE1;
+}
+.compact-brand{font-size:10px;letter-spacing:.09em;color:#417657;line-height:1.35}
+.compact-card h3{font-size:18px;line-height:1.2;margin:7px 0 9px;color:#183D27;font-weight:800}
+.compact-card-header p{font-size:11px;color:#5C7765;line-height:1.3}
+.compact-offer{padding:13px 15px 12px;border-color:#E8EFE9}
+.compact-offer:nth-child(even){background:#FCFDFC}
+.compact-retailer{font-size:11px;font-weight:750;color:#283F31}
+.compact-price{
+  font-size:16px;
+  color:#00732C;
+  letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums;
+}
+.compact-subline{font-size:10px;margin-top:4px;color:#6D8273}
+.offer-link{color:#00732C;font-weight:750;font-size:10px;margin-top:10px}
+.offer-link:hover{color:#00551F}
+.compact-card:focus-within{outline:2px solid #69B784;outline-offset:1px}
+.more-stores{display:block;background:#F1F8F3;border-top:1px solid #CFE5D6}
+.more-stores summary{
+  list-style:none;cursor:pointer;display:flex;align-items:center;
+  gap:9px;padding:12px 15px;color:#00732C;font-size:11px;
+  font-weight:800;letter-spacing:.01em;line-height:1.4;
+  user-select:none;min-height:45px;
+}
+.more-stores summary::-webkit-details-marker{display:none}
+.more-stores summary::marker{content:""}
+.more-stores summary:hover{background:#E6F4EB}
+.more-stores summary:focus-visible{outline:2px solid #00732C;outline-offset:-3px}
+.more-plus{
+  flex:0 0 22px;height:22px;width:22px;display:grid;place-items:center;
+  background:#00732C;color:white;font-size:17px;font-weight:500;
+  border-radius:6px;line-height:1;
+}
+.more-label{display:inline}
+.more-less{display:none}
+.more-stores[open] .more-label{display:none}
+.more-stores[open] .more-less{display:inline}
+.more-stores[open] .more-plus{background:#DFEEE4;color:#00732C}
+.more-plus{font-size:0}
+.more-plus::before{content:"+";font-size:17px}
+.more-stores[open] .more-plus::before{content:"âˆ’";font-size:17px}
+.more-stores-content{border-top:1px solid #DCE8DF;background:white}
+.more-stores-content .compact-offer:last-child{border-bottom:0}
+@media(max-width:1100px){.comparisongroups{gap:12px}}
+@media(max-width:480px){.comparisongroups{gap:12px}}
+
+
+/* MNtrees dashboard refresh â€” inspired by the RCWM order desk reference. */
+:root{--desk-forest:#004b20;--desk-forest-dark:#003c1a;--desk-green:#007b36;--desk-bg:#f3f6f0;--desk-line:#dfe7dc;--desk-ink:#173b27;--desk-muted:#6f8374}
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+body{background:var(--desk-bg);color:var(--desk-ink);font-size:13px}
+body&gt;.top{position:fixed;inset:0 auto 0 0;width:190px;z-index:40;background:linear-gradient(160deg,#00692c 0%,#004b20 48%,#003d1b 100%);border:0;box-shadow:3px 0 14px rgba(0,45,20,.08)}
+.top .topin{height:100%;min-height:0;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:20px;padding:24px 11px;max-width:none}
+.top .brand{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:9px 7px 16px;border-bottom:1px solid rgba(255,255,255,.18);color:#fff;font-size:23px;letter-spacing:-.8px}
+.top .brand .green{color:#b2eec5}
+.top .brand small{color:#cbe5d0;font-size:8px;letter-spacing:1.8px}
+.top .subreddit-logo,.top .logo-fallback{width:41px;height:41px}
+.side-nav{display:flex;flex-direction:column;gap:4px;width:100%}
+.side-link{display:flex;align-items:center;gap:11px;padding:12px 10px;text-decoration:none;color:#c4e3cd;border-radius:5px;font-size:12px;font-weight:550;line-height:1.35}
+.side-link:hover,.side-link:focus-visible{background:rgba(255,255,255,.12);color:#fff}
+.side-link.active{background:#008239;color:#fff;font-weight:750;box-shadow:inset 2px 0 0 #b6ecc7}
+.side-link span{min-width:0}
+.top .community{margin-top:auto;padding:14px 9px 5px;border-top:1px solid rgba(255,255,255,.16);color:#d0e8d5;font-size:12px;line-height:1.5}
+body&gt;main.shell,body&gt;.catalog-banner-shell{max-width:none;margin:0 0 0 190px;padding:22px clamp(18px,3vw,46px) 35px}
+.hero.intro{padding:0 0 16px;margin:0;gap:20px;border-bottom:1px solid var(--desk-line)}
+.hero.intro h1{font-size:clamp(25px,2.6vw,35px);font-weight:790;letter-spacing:-.9px;margin-bottom:6px}
+.hero.intro h1 em{font-style:normal;color:var(--desk-green);font-weight:650}
+.hero.intro p{font-size:12px;color:#708072;max-width:700px}
+.hero.intro .hero-side{background:transparent;border:0;padding:0;min-width:185px;gap:4px;align-items:flex-end;text-align:right}
+.hero-side .live-dot{background:#008239;width:7px;height:7px}
+.hero.intro .hero-stat{font-size:21px;color:#12462c}
+.hero.intro .muted{font-size:10px}
+.insights,.searchbox,.coverage{background:#fff;border:1px solid var(--desk-line);border-radius:7px;box-shadow:0 1px 4px rgba(5,54,19,.025)}
+.insights{margin:20px 0 12px;padding:17px 18px}
+.sectionhead h2,.insights .sectionhead h2{font-size:17px;letter-spacing:-.25px;font-weight:800}
+.metrics{gap:10px;margin:14px 0 9px}
+.metric{padding:15px 14px;background:#fff;border:1px solid var(--desk-line);border-top:2px solid #85ad92;border-radius:6px;min-height:102px}
+.metric:nth-child(2){border-top-color:#d8af69}
+.metric:nth-child(3){border-top-color:#188978}
+.metric:nth-child(4){border-top-color:#9e8eae}
+.metric strong{font-size:23px;color:#173b27;margin:7px 0 5px}
+.metric span{font-size:10px}
+.insightfoot{font-size:10px;color:#8a988e}
+.pilotnote{background:#fff9e9;border:1px solid #e9ddbd;border-radius:6px;padding:11px 12px;color:#75623b;font-size:11px}
+.searchbox{margin:14px 0;padding:16px 18px}
+.searchfield{border-radius:5px;background:#fff;border-color:#d9e4d9}
+.searchfield input{padding:11px 0;font-size:13px}
+.filters{gap:8px}
+.filters label{font-size:10px;color:#5c7463;font-weight:700}
+.filters select{border-radius:5px;border-color:#dae5dc;padding:9px 8px;font-size:11px}
+.secondary{border-radius:5px;font-size:11px;padding:10px 13px}
+.textbtn{font-size:11px}
+.resultbar{margin:17px 1px 10px}
+.resultbar h2{font-size:15px}
+.resultbar p,.hint{font-size:10px}
+.comparison{margin:10px 0 18px}
+.comparison&gt;.sectionhead{margin-bottom:5px}
+.comparison .sectionhead h2{font-size:17px}
+.comparison .reviewintro{font-size:11px;margin:3px 0 13px}
+.comparisongroups{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.compact-card{border:1px solid var(--desk-line);border-top:2px solid #4a9970;border-radius:7px;box-shadow:0 1px 5px rgba --- TRUNCATED --- 70,872 chars
