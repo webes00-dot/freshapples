@@ -1,5 +1,6 @@
 """Build the pre-V2 website's data files from its archived public records."""
 
+import gzip
 import json
 from collections import defaultdict
 from hashlib import sha256
@@ -21,7 +22,41 @@ def public_url(value):
     return url.scheme in ('http', 'https') and url.hostname and not (url.username or url.password)
 
 
+def build_preserved_snapshot(path):
+    with gzip.open(path, 'rt', encoding='utf-8') as archive:
+        preserved = json.load(archive)
+    data = preserved['site-data']
+    offers = data['catalog']
+    if data['schema_version'] != 1 or not offers or not data['strain_genetics'] or not data['strain_types']:
+        raise ValueError('The preserved production snapshot is incomplete')
+    if any(not row.get('id') for row in offers) or len({row['id'] for row in offers}) != len(offers):
+        raise ValueError('The preserved catalog has invalid listing identifiers')
+    data['manifest'].update({
+        'data_source': 'Preserved production menu snapshot',
+        'listings': len(offers),
+        'automated_scans_running': False,
+    })
+    output = Path('dist/data')
+    output.mkdir(parents=True, exist_ok=True)
+    for name, value in {
+        'site-data': data,
+        'catalog': offers,
+        'brands': data['brands'],
+        'business_tags': data['business_tags'],
+        'retailer_locations': data['retailers'],
+        'review_candidates': preserved['review_candidates'],
+        'market-price-history': preserved['market-price-history'],
+    }.items():
+        (output / f'{name}.json').write_text(json.dumps(value, ensure_ascii=False) + '\n', encoding='utf-8')
+    print(f'Preserved {len(offers)} production offers and {len(data["strain_genetics"])} strain profiles')
+
+
 def build():
+    preserved = Path('data/published-site-baseline.json.gz')
+    if preserved.is_file():
+        build_preserved_snapshot(preserved)
+        return
+
     stores = read('public-retailer-directory.json')['retailers']
     offers = read('public-menu-observations.json')['offers']
     enrichment = read('public-site-enrichment.json')
