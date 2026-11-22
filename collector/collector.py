@@ -25,8 +25,19 @@ def now():
     return dt.datetime.now(UTC).isoformat(timespec="seconds")
 
 def rows(filename):
-    with (ROOT / "config" / filename).open(newline="", encoding="utf-8-sig") as handle:
-        return list(csv.DictReader(handle))
+    path = ROOT / "config" / filename
+    if path.exists():
+        with path.open(newline="", encoding="utf-8-sig") as handle:
+            return list(csv.DictReader(handle))
+    if filename == "menu_targets.csv":
+        # Reuse the existing published target list; do not require a second CSV.
+        source = ROOT.parent / "data" / "retailer_menu_scan_targets.json"
+        targets = json.loads(source.read_text(encoding="utf-8"))
+        return [{"retailer": t["name"], "license": t["id"],
+                 "verified_direct_menu_url": t["url"]} for t in targets]
+    if filename in ("menu_categories.csv", "naming_corrections.csv"):
+        return []
+    raise FileNotFoundError(path)
 
 def valid_public_url(url):
     parsed = urllib.parse.urlsplit(url)
