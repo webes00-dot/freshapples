@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mntrees",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-18",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/api/*",
+      "/data/*"
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "REVIEWS_DB",
+      "database_name": "mntrees-reviews",
+      "database_id": "9d62cb7c-0f35-4e66-a47f-9cb3cb465a49"
+    }
+  ],
+  "env": {
+    "preview": {
+      "name": "mntrees-recovery-preview",
+      "d1_databases": [
+        {
+          "binding": "REVIEWS_DB",
+          "database_name": "mntrees-recovery-preview-reviews",
+          "database_id": "369472cb-6f59-415f-97ed-d3d955839ad1"
+        }
+      ]
+    }
+  }
+}
