@@ -1,0 +1,48 @@
+{
+  "build": "verified-catalog-2026-11-18",
+  "snapshot_date": "2026-11-20T21:54:08+00:00",
+  "data_source": "public retailer menu pages",
+  "retailers": 46,
+  "listings": 1489,
+  "verification": "Advertised public-menu prices. Not verified inventory or guaranteed final checkout prices.",
+  "automated_scans_running": true,
+  "publication_policy": "Publish sourced menu offers with explicit stock disclaimer; no deletions on failed scans; preserve product variants and weights",
+  "latest_approved_source_run": 44236793576,
+  "comparison_policy": "Excluded coming-soon products from active market averages and cross-retailer comparisons. Keep retailer-specific prices and exact package weight.",
+  "new_retailer_sources": [
+    "Waabigwan Mashkiki — Mahnomen",
+    "Minnesota Canna — Edina",
+    "RISE Dispensary — St. Paul",
+    "Blaine Dispensary",
+    "Green Goods — Blaine",
+    "Green Goods — Bloomington",
+    "Green Goods — Burnsville",
+    "Green Goods — Hermantown",
+    "Green Goods — Minneapolis",
+    "Green Goods — Moorhead",
+    "Green Goods — Rochester",
+    "Green Goods — Woodbury",
+    "BlooMN Cannabis Company — Minneapolis"
+  ],
+  "new_offers_source_observed": 169,
+  "latest_import_notes": "User-provided retailer directory cross-referenced against existing store registry: four location scan targets added and 28 further research leads staged; 20 BlooMN official-menu priced offers added. Official BlooMN menu lists 2514 Central Avenue NE, differing from uploaded 2518; original data retained in research notes.",
+  "retailer_scan_targets": 189,
+  "research_supplement": {
+    "offers": 426,
+    "retailers": 64,
+    "observed_date": "2026-11-18",
+    "source": "Dated public advertised menu price snapshots; latest Bloom/Levitated entries observed from Twin City Cannabis; not all are independently validated storefront feeds",
+    "stock_verified": false,
+    "automated_refresh_verified": false
+  },
+  "retailer_pricing_goal": 100,
+  "priced_coverage_note": "Main catalog: 35 reported priced retailers; supplemental: 64 retailer labels, with overlaps and identity variants. Do not add figures or treat as 100 distinct regularly refreshed priced stores.",
+  "retailer_directory_locations": 286,
+  "menu_url_audit": {
+    "total": 189,
+    "reachable": 176,
+    "blocked_or_error": 13,
+    "notes": "Latest URL audit: 162 reachable with menu keywords, 14 reachable without product evidence, 13 blocked/error. Not equivalent to product imports."
+  },
+  "retailer_naming_policy": "Use Retailer Master column C storefront display name for consumer-facing labels; retain column B as legal entity."
+}
