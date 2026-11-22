@@ -26,6 +26,12 @@ const validCoordinate=s=>['address_verified','rooftop_verified','census_address_
 const businessLink=s=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(placeQuery(s)+', USA');
 const addressLink=s=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(placeQuery(s)+', USA');
 const directionsLink=s=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(placeQuery(s)+', USA');
+function retailerProductsLink(store){
+ const params=new URLSearchParams({retailer:store.name,store:store.name});
+ if(store.id)params.append('storeId',store.id);
+ for(const alias of store.retailer_aliases||[])if(alias&&alias!==store.name)params.append('store',alias);
+ return './?'+params+'#compareTitle';
+}
 function actions(links){
  const el=$('map-actions');el.replaceChildren();
  for(const [label,url,secondary] of links){
@@ -56,10 +62,14 @@ async function resolveInMap(store){
  })().finally(()=>pendingGeocodes.delete(store.id));
  pendingGeocodes.set(store.id,task);return task;
 }
-function popupContent(store){return '<div class="retailer-popup"><strong>'+safe(store.name)+'</strong><div>'+safe(placeQuery(store))+'</div><div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap"><a href="'+safe(businessLink(store))+'" target="_blank" rel="noopener noreferrer">Google Maps</a><a href="'+safe(directionsLink(store))+'" target="_blank" rel="noopener noreferrer">Directions</a>'+(store.menu_url&&/^https:\/\//.test(store.menu_url)?'<a href="'+safe(store.menu_url)+'" target="_blank" rel="noopener noreferrer">Store menu</a>':'')+'</div>'+(store.coordinate_accuracy==='census_address_range_interpolated'?'<small>Approximate street-range location from US Census; not a storefront rooftop</small>':'')+'</div>'}
+function popupContent(store){return '<div class="retailer-popup"><strong><a class="map-retailer-product-link" href="'+safe(retailerProductsLink(store))+'">'+safe(store.name)+'</a></strong><div>'+safe(placeQuery(store))+'</div><div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap"><a href="'+safe(businessLink(store))+'" target="_blank" rel="noopener noreferrer">Google Maps</a><a href="'+safe(directionsLink(store))+'" target="_blank" rel="noopener noreferrer">Directions</a>'+(store.menu_url&&/^https:\/\//.test(store.menu_url)?'<a href="'+safe(store.menu_url)+'" target="_blank" rel="noopener noreferrer">Store menu</a>':'')+'</div>'+(store.coordinate_accuracy==='census_address_range_interpolated'?'<small>Approximate street-range location from US Census; not a storefront rooftop</small>':'')+'</div>'}
 async function select(store,focus=true){
  selected=store;
- $('selected-name').textContent=store.name;
+ const retailerLink=document.createElement('a');
+ retailerLink.className='map-retailer-product-link';
+ retailerLink.href=retailerProductsLink(store);
+ retailerLink.textContent=store.name;
+ $('selected-name').replaceChildren(retailerLink);
  $('selected-address').textContent=placeQuery(store)+', USA';
  actions([
   ['Open Google Maps',businessLink(store),false],
