@@ -27,15 +27,12 @@ jobs:
           ! grep -q 'market-price-reference.png' dist/market-prices.html
           ! grep -q 'history-details' dist/market-prices.html
       - name: Deploy to existing Cloudflare preview Worker
-        if: ${{ env.CLOUDFLARE_API_TOKEN != '' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx --yes wrangler@4 deploy --env preview
-      - name: Fail clearly if deployment credentials absent
-        if: ${{ env.CLOUDFLARE_API_TOKEN == '' }}
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          echo 'Missing CLOUDFLARE_API_TOKEN repository secret; preview not deployed.'
-          exit 1
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo 'Missing Cloudflare GitHub Actions credentials; preview was not deployed.'
+            exit 1
+          fi
+          npx --yes wrangler@4 deploy --env preview
