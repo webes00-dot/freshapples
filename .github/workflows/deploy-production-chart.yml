@@ -1,0 +1,71 @@
+name: Verify preview and publish MNtrees pricing chart
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PREVIEW: https://mntrees-recovery-preview.shawn-18c.workers.dev
+      PRODUCTION: https://mntrees.co
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build from canonical source
+        run: bash build.sh
+      - name: Verify preview and protect newer production files
+        run: |
+          python3 - <<'PY'
+          import pathlib,urllib.request,urllib.error,hashlib,sys
+          root=pathlib.Path('dist')
+          preview='https://mntrees-recovery-preview.shawn-18c.workers.dev'
+          production='https://mntrees.co'
+          chart={'market-prices.html','market-prices.js','market-prices.css','data/market-price-monthly.json'}
+          def fetch(host,path):
+              req=urllib.request.Request(host+'/'+path,headers={'User-Agent':'MNtrees-release-check/1.0','Cache-Control':'no-cache'})
+              with urllib.request.urlopen(req,timeout=25) as response:
+                  assert response.status == 200,(host,path,response.status)
+                  return response.read()
+          failures=[]
+          for path in sorted(root.rglob('*')):
+              if not path.is_file(): continue
+              rel=path.relative_to(root).as_posix()
+              expected=path.read_bytes()
+              try:
+                  pv=fetch(preview,rel)
+                  if pv!=expected: failures.append(('preview-mismatch',rel))
+                  if rel not in chart:
+                      live=fetch(production,rel)
+                      if live!=expected: failures.append(('production-diff',rel))
+              except Exception as e: failures.append(('unverifiable',rel,str(e)))
+          print('Reviewed',len(list(root.rglob('*'))),'built paths; failures:',failures[:30])
+          if failures:
+              print('STOP: existing site differs from source or preview; no production deployment.',file=sys.stderr)
+              sys.exit(1)
+          print('Preview matches repository and all unchanged production files match exactly.')
+          PY
+      - name: Deploy verified build to existing production Worker
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN"
+          test -n "$CLOUDFLARE_ACCOUNT_ID"
+          npx --yes wrangler@4 deploy
+      - name: Verify live chart and unchanged assets
+        run: |
+          python3 - <<'PY'
+          import urllib.request,pathlib,time
+          base='https://mntrees.co/'
+          for attempt in range(5):
+              try:
+                  for name in ['market-prices.html','market-prices.js','data/market-price-monthly.json']:
+                      req=urllib.request.Request(base+name,headers={'Cache-Control':'no-cache'})
+                      with urllib.request.urlopen(req,timeout=20) as r: actual=r.read()
+                      assert actual==pathlib.Path('dist',name).read_bytes(),name
+                  print('Verified chart assets live on production.')
+                  break
+              except Exception:
+                  if attempt==4: raise
+                  time.sleep(8)
+          PY
