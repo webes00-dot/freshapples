@@ -1,6 +1,10 @@
 name: Verify preview and publish MNtrees pricing chart
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-production-chart.yml'
 permissions:
   contents: read
 jobs:
