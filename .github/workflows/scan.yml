@@ -1,6 +1,11 @@
 name: MNtrees staging-only menu scans
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/scan.yml'
+      - 'collector/**'
   schedule:
     # UTC candidates for 8 AM and 8 PM America/Chicago across DST.
     - cron: '0 1,2,13,14 * * *'
@@ -23,7 +28,7 @@ jobs:
           import datetime,os
           from zoneinfo import ZoneInfo
           now=datetime.datetime.now(ZoneInfo("America/Chicago"))
-          eligible=os.environ["EVENT_NAME"]=="workflow_dispatch" or (now.hour in (8,20) and now.minute<30)
+          eligible=os.environ["EVENT_NAME"]=="workflow_dispatch" or (now.hour in (8,20))
           with open(os.environ["GITHUB_OUTPUT"],"a") as f:
               f.write(f"run={'true' if eligible else 'false'}\n")
           print("Central time",now.isoformat(),"run",eligible)
@@ -37,7 +42,11 @@ jobs:
       - name: Run existing collector read-only, staging only
         if: steps.slot.outputs.run == 'true'
         run: |
-          python3 collector/collector.py --delay 1.5
+          if [ "${{ github.event_name }}" = "push" ]; then
+            python3 collector/collector.py --limit 3 --delay 0.5
+          else
+            python3 collector/collector.py --delay 1.5
+          fi
           python3 - <<'PY'
           import json
           from pathlib import Path
