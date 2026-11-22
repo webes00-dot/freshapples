@@ -1,0 +1,57 @@
+name: MNtrees staging-only menu scans
+on:
+  workflow_dispatch:
+  schedule:
+    # UTC candidates for 8 AM and 8 PM America/Chicago across DST.
+    - cron: '0 1,2,13,14 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: mntrees-staging-scan
+  cancel-in-progress: false
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check 8 AM / 8 PM Central slot
+        id: slot
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import datetime,os
+          from zoneinfo import ZoneInfo
+          now=datetime.datetime.now(ZoneInfo("America/Chicago"))
+          eligible=os.environ["EVENT_NAME"]=="workflow_dispatch" or (now.hour in (8,20) and now.minute<30)
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
+              f.write(f"run={'true' if eligible else 'false'}\n")
+          print("Central time",now.isoformat(),"run",eligible)
+          PY
+      - uses: actions/checkout@v4
+        if: steps.slot.outputs.run == 'true'
+      - uses: actions/setup-python@v5
+        if: steps.slot.outputs.run == 'true'
+        with:
+          python-version: '3.11'
+      - name: Run existing collector read-only, staging only
+        if: steps.slot.outputs.run == 'true'
+        run: |
+          python3 collector/collector.py --delay 1.5
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path("collector/data/latest_scan.json").read_text())
+          assert data["published"] is False, "Collector unexpectedly published"
+          assert data["reason"].startswith("read_only_staging"), "Staging guard missing"
+          print("Checked targets:",data["targets_checked"],"Candidates:",data["counts"])
+          PY
+      - name: Archive scan evidence without editing catalog or D1
+        if: steps.slot.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mntrees-staging-scan-${{ github.run_id }}
+          path: |
+            collector/data/latest_scan.json
+            collector/data/candidate_products.json
+          retention-days: 30
