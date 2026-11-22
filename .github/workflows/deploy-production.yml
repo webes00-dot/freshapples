@@ -1,0 +1,39 @@
+name: Deploy MNtrees to production
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-production.yml'
+      - 'src/**'
+      - 'functions/**'
+      - 'wrangler.jsonc'
+      - 'build.sh'
+      - '*.html'
+      - '*.js'
+      - '*.css'
+      - 'data/*.json'
+permissions:
+  contents: read
+concurrency:
+  group: mntrees-production-deployment
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build storefront
+        run: bash build.sh
+      - name: Deploy production Worker
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx --yes wrangler@4 deploy
+      - name: Verify the live catalog
+        run: |
+          curl --retry 3 -fsS -D live-headers.txt https://mntrees.co/data/site-data.json -o live-catalog.json
+          grep -i '^x-mntrees-catalog-source: d1' live-headers.txt
+          python3 -c 'import json; d=json.load(open("live-catalog.json")); print(len(d["catalog"]), "listings served")'

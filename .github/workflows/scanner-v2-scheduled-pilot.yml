@@ -1,15 +1,7 @@
 name: Scanner V2 scheduled pilot
 
 on:
-  schedule:
-    - cron: '0 8,20 * * *'
-      timezone: 'America/Chicago'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/scanner-v2-scheduled-pilot.yml'
-
 permissions:
   contents: read
 

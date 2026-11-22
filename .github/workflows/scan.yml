@@ -1,19 +1,16 @@
-name: MNtrees staging-only menu scans
+name: MNtrees menu scans
 on:
   workflow_dispatch:
-    inputs:
-      lakeville_pilot:
-        description: Run and save the Lakeville staging pilot only
-        type: boolean
-        default: false
   push:
     branches: [main]
     paths:
       - '.github/workflows/scan.yml'
       - 'collector/**'
+      - 'data/retailer_menu_scan_targets.json'
+      - 'migrations/catalog_scanner.sql'
   schedule:
-    # UTC candidates for 8 AM and 8 PM America/Chicago across DST.
-    - cron: '0 1,2,13,14 * * *'
+    - cron: '0 8,20 * * *'
+      timezone: 'America/Chicago'
 permissions:
   contents: read
 concurrency:
@@ -21,58 +18,26 @@ concurrency:
   cancel-in-progress: false
 jobs:
   scan:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     steps:
-      - name: Check 8 AM / 8 PM Central slot
-        id: slot
-        env:
-          EVENT_NAME: ${{ github.event_name }}
-        run: |
-          python3 - <<'PY'
-          import datetime,os
-          from zoneinfo import ZoneInfo
-          now=datetime.datetime.now(ZoneInfo("America/Chicago"))
-          eligible=os.environ["EVENT_NAME"] in ("workflow_dispatch","push") or (now.hour in (8,20))
-          with open(os.environ["GITHUB_OUTPUT"],"a") as f:
-              f.write(f"run={'true' if eligible else 'false'}\n")
-          print("Central time",now.isoformat(),"run",eligible)
-          PY
       - uses: actions/checkout@v4
-        if: steps.slot.outputs.run == 'true'
       - uses: actions/setup-python@v5
-        if: steps.slot.outputs.run == 'true'
         with:
           python-version: '3.11'
-      - name: Run existing collector read-only, staging only
-        if: steps.slot.outputs.run == 'true'
-        env:
-          LAKEVILLE_PILOT: ${{ inputs.lakeville_pilot }}
-        run: |
-          if [ "${{ github.event_name }}" = "push" ] || [ "$LAKEVILLE_PILOT" = "true" ]; then
-            python3 collector/collector.py --limit 0 --include-license DIS-L24-000396-01-AUR --delay 0.5
-          else
-            python3 collector/collector.py --delay 1.5
-          fi
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          data=json.loads(Path("collector/data/latest_scan.json").read_text())
-          assert data["published"] is False, "Collector unexpectedly published"
-          assert data["reason"].startswith("read_only_staging"), "Staging guard missing"
-          print("Checked targets:",data["targets_checked"],"Candidates:",data["counts"])
-          PY
-      - name: Save verified Lakeville prices to staging D1
-        if: steps.slot.outputs.run == 'true' && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || inputs.lakeville_pilot)
+      - name: Scan configured retailer menus
+        run: python3 collector/collector.py --workers 8
+      - name: Save advertised prices and listings to D1
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: python3 collector/write_lakeville_prices.py
-      - name: Archive scan evidence
-        if: always() && steps.slot.outputs.run == 'true'
+        run: python3 collector/publish_offers.py
+      - name: Archive scan results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mntrees-staging-scan-${{ github.run_id }}
+          name: mntrees-scan-${{ github.run_id }}
           path: |
             collector/data/latest_scan.json
             collector/data/candidate_products.json

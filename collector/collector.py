@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """MNtrees read-only public menu scanner. Never publishes partial scan output."""
 import argparse
+from concurrent.futures import ThreadPoolExecutor
 import csv
 import datetime as dt
 import hashlib
@@ -190,7 +191,138 @@ def flowhub_category_pages(html,base_url,limit=7):
             break
     return found
 
-def run_scan(limit=None, delay=1.5, include_license=None):
+def scan_target(target, extra_categories, checked_at, delay):
+    statuses, extracted = [], []
+    url = (target.get("verified_direct_menu_url") or target.get("menu_or_site_url") or "").strip()
+    status = {"retailer": target["retailer"], "license": target["license"],
+              "url": url, "checked_at": checked_at, "connection": "not_tested",
+              "extraction": "not_tested", "count": 0}
+    if not url:
+        status["connection"] = "no_url"
+    else:
+        result = fetch(url)
+        status["connection"] = "reachable" if result["ok"] else "failed"
+        status["http_status"] = result.get("status")
+        if result["ok"]:
+            batch = [item for node in jsonld_products(result["html"])
+                     if (item := extract_product(node, target["retailer"], result["url"], checked_at, target["license"]))]
+            # Tymber menu product cards expose linked products and visible prices,
+            # but usually not Product JSON-LD. Keep offers store-specific.
+            if "shop.mnthc.co" in urllib.parse.urlsplit(result["url"]).hostname.lower():
+                for offer in extract_cards(result["html"], result["url"]):
+                    item = {
+                        **offer, "retailer": target["retailer"],
+                        "store_id": target["license"], "source_id": "",
+                        "checked_at": checked_at, "source_method": "ty mber_html_card".replace(" ", ""),
+                        "stock_status": "not_verified", "weight_status": "title_explicit",
+                    }
+                    identity = f'{item["store_id"]}|{item["url"]}|{item["product_name"]}'
+                    item["id"] = hashlib.sha256(identity.encode()).hexdigest()[:20]
+                    batch.append(item)
+            # Flowhub/dispensary.shop product cards have direct product links
+            # and advertised price text. Extract as review-only until an
+            # independent detail-page validator is implemented.
+            hostname = urllib.parse.urlsplit(result["url"]).hostname or ""
+            if hostname.endswith(".dispensary.shop"):
+                for offer in extract_flowhub_cards(result["html"], result["url"]):
+                    item = {
+                        **offer, "retailer": target["retailer"],
+                        "store_id": target["license"], "source_id": "",
+                        "checked_at": checked_at,
+                    }
+                    source_identity = f'{item["store_id"]}|{item["url"]}|{item["product_name"]}'
+                    item["id"] = hashlib.sha256(source_identity.encode()).hexdigest()[:20]
+                    batch.append(item)
+            status["menu_pages"] = []
+            if primary_page := menu_page(url, result, batch):
+                status["menu_pages"].append(primary_page)
+            if hostname.endswith(".dispensary.shop"):
+                category_pages=flowhub_category_pages(result["html"],result["url"])
+                status["flowhub_category_pages"]=len(category_pages)
+                status["flowhub_category_results"]=[]
+                for category_url in category_pages:
+                    time.sleep(0.25)
+                    category_page=fetch(category_url,timeout=9)
+                    category_rows=[]
+                    if category_page.get("ok") and (urllib.parse.urlsplit(category_page["url"]).hostname or "")==hostname:
+                        for offer in extract_flowhub_cards(category_page["html"],category_page["url"]):
+                            item={**offer,"retailer":target["retailer"],"store_id":target["license"],
+                                  "source_id":"","checked_at":checked_at}
+                            identity=f'{item["store_id"]}|{item["url"]}|{item["product_name"]}'
+                            item["id"]=hashlib.sha256(identity.encode()).hexdigest()[:20]
+                            category_rows.append(item)
+                        batch.extend(category_rows)
+                    if covered_page := menu_page(category_url, category_page, category_rows):
+                        status["menu_pages"].append(covered_page)
+                    status["flowhub_category_results"].append({
+                        "url":category_url,"reachable":category_page.get("ok",False),
+                        "offers":len(category_rows)
+                    })
+            # Deduplicate repeated recommended/menu sections before staging.
+            batch = list({(x.get("store_id"), x["url"], x["product_name"]): x for x in batch}.values())
+            status["count"] = len(batch)
+            status["html_bytes"] = len(result["html"].encode("utf-8"))
+            status["visible_price_tokens"] = len(re.findall(r"\$\s*\d+(?:\.\d{2})?", result["html"]))
+            # Diagnostic evidence for Flowhub: no full HTML is retained.
+            # Count product hrefs and capture a handful of sanitized card
+            # snippets so adapters can be fixed from reproducible evidence.
+            if (urllib.parse.urlsplit(result["url"]).hostname or "").endswith(".dispensary.shop"):
+                html_text = result["html"]
+                path_hits = list(re.finditer(r"/(?:rec|med)/[^\\\"'<>\\s]{0,250}/pdp/[^\\\"'<>\\s]{0,250}", html_text, re.I))
+                anchor_hits = list(re.finditer(r"<a\\b[^>]{0,1500}href=[\\\"']([^\\\"']+)[\\\"']", html_text, re.I))
+                product_anchors = [m for m in anchor_hits if "/pdp/" in m.group(1)]
+                status["flowhub_diagnostics"] = {
+                    "pdp_path_hits": len(path_hits),
+                    "path_context_samples": [re.sub(r"\\s+"," ",html_text[max(0,m.start()-500):min(len(html_text),m.end()+700)])[:1400] for m in path_hits[:3]],
+                    "pdp_anchor_hits": len(product_anchors),
+                    "all_anchor_hits": len(anchor_hits),
+                    "samples": [
+                        {
+                            "href": m.group(1)[:280],
+                            "html_structure": re.sub(r"\\s+", " ", html_text[max(0,m.start()-250):min(len(html_text),m.end()+1600)])[:1450],
+                        }
+                        for m in product_anchors[:3]
+                    ],
+                }
+
+            status["script_data_markers"] = sorted(set(re.findall(r"<script[^>]*(?:id|type)=[\"\']([^\"\']+)", result["html"], flags=re.I)))[:20]
+            # Preserve public-page structural evidence only; never store full HTML or visitor data.
+            status["price_snippets"] = [re.sub(r"<[^>]+>", " ", result["html"][max(0,m.start()-120):m.end()+90]).strip()[:230] for m in list(re.finditer(r"\$\s*\d+(?:\.\d{2})?", result["html"]))[:3]]
+            status["product_links_near_prices"] = []
+            for match in list(re.finditer(r"\\$\\s*\\d+(?:\\.\\d{2})?", result["html"]))[:8]:
+                near = result["html"][max(0, match.start()-2500):match.end()+150]
+                anchor_matches = list(re.finditer(r'<a\\b[^>]*href=["\\\']([^"\\\']+)["\\\'][^>]*>(.*?)</a>', near, re.I | re.S))
+                candidates = []
+                for anchor in anchor_matches[-5:]:
+                    label = re.sub(r'<[^>]+>', ' ', anchor.group(2))
+                    label = re.sub(r'\\s+', ' ', label).strip()[:120]
+                    if len(label) >= 6:
+                        candidates.append({"text": label, "url": urllib.parse.urljoin(result["url"], anchor.group(1))})
+                if candidates:
+                    status["product_links_near_prices"].append({"price": match.group(), "anchors": candidates[-3:]})
+            status["extraction"] = "jsonld" if batch else "adapter_needed_or_no_products"
+            extracted.extend(batch)
+        else:
+            status["error"] = result["error"]
+    statuses.append(status)
+    # Record reachability of category-specific menu pages for platforms
+    # still awaiting a validated extraction adapter. Do not guess products.
+    for category, category_url in supplemental_category_urls(target["license"], url, extra_categories):
+        time.sleep(delay)
+        category_result = fetch(category_url)
+        statuses.append({
+            "retailer": target["retailer"], "license": target["license"],
+            "category": category, "url": category_url, "checked_at": checked_at,
+            "connection": "reachable" if category_result["ok"] else "failed",
+            "http_status": category_result.get("status"),
+            "extraction": "adapter_needed_or_no_products" if category_result["ok"] else "not_tested",
+            "count": 0, "error": category_result.get("error", ""),
+            "note": "Category source monitored; not an inventory claim"
+        })
+    return statuses, extracted
+
+
+def run_scan(limit=None, delay=1.5, include_license=None, workers=1):
     targets = rows("menu_targets.csv")
     extra_categories = rows("menu_categories.csv")
     if limit is not None:
@@ -200,135 +332,17 @@ def run_scan(limit=None, delay=1.5, include_license=None):
         targets = chosen
     checked_at = now()
     statuses, extracted = [], []
-    for index, target in enumerate(targets):
-        url = (target.get("verified_direct_menu_url") or target.get("menu_or_site_url") or "").strip()
-        status = {"retailer": target["retailer"], "license": target["license"],
-                  "url": url, "checked_at": checked_at, "connection": "not_tested",
-                  "extraction": "not_tested", "count": 0}
-        if not url:
-            status["connection"] = "no_url"
-        else:
-            if index:
-                time.sleep(delay)
-            result = fetch(url)
-            status["connection"] = "reachable" if result["ok"] else "failed"
-            status["http_status"] = result.get("status")
-            if result["ok"]:
-                batch = [item for node in jsonld_products(result["html"])
-                         if (item := extract_product(node, target["retailer"], result["url"], checked_at, target["license"]))]
-                # Tymber menu product cards expose linked products and visible prices,
-                # but usually not Product JSON-LD. Keep offers store-specific.
-                if "shop.mnthc.co" in urllib.parse.urlsplit(result["url"]).hostname.lower():
-                    for offer in extract_cards(result["html"], result["url"]):
-                        item = {
-                            **offer, "retailer": target["retailer"],
-                            "store_id": target["license"], "source_id": "",
-                            "checked_at": checked_at, "source_method": "ty mber_html_card".replace(" ", ""),
-                            "stock_status": "not_verified", "weight_status": "title_explicit",
-                        }
-                        identity = f'{item["store_id"]}|{item["url"]}|{item["product_name"]}'
-                        item["id"] = hashlib.sha256(identity.encode()).hexdigest()[:20]
-                        batch.append(item)
-                # Flowhub/dispensary.shop product cards have direct product links
-                # and advertised price text. Extract as review-only until an
-                # independent detail-page validator is implemented.
-                hostname = urllib.parse.urlsplit(result["url"]).hostname or ""
-                if hostname.endswith(".dispensary.shop"):
-                    for offer in extract_flowhub_cards(result["html"], result["url"]):
-                        item = {
-                            **offer, "retailer": target["retailer"],
-                            "store_id": target["license"], "source_id": "",
-                            "checked_at": checked_at,
-                        }
-                        source_identity = f'{item["store_id"]}|{item["url"]}|{item["product_name"]}'
-                        item["id"] = hashlib.sha256(source_identity.encode()).hexdigest()[:20]
-                        batch.append(item)
-                status["menu_pages"] = []
-                if primary_page := menu_page(url, result, batch):
-                    status["menu_pages"].append(primary_page)
-                if hostname.endswith(".dispensary.shop"):
-                    category_pages=flowhub_category_pages(result["html"],result["url"])
-                    status["flowhub_category_pages"]=len(category_pages)
-                    status["flowhub_category_results"]=[]
-                    for category_url in category_pages:
-                        time.sleep(0.25)
-                        category_page=fetch(category_url,timeout=9)
-                        category_rows=[]
-                        if category_page.get("ok") and (urllib.parse.urlsplit(category_page["url"]).hostname or "")==hostname:
-                            for offer in extract_flowhub_cards(category_page["html"],category_page["url"]):
-                                item={**offer,"retailer":target["retailer"],"store_id":target["license"],
-                                      "source_id":"","checked_at":checked_at}
-                                identity=f'{item["store_id"]}|{item["url"]}|{item["product_name"]}'
-                                item["id"]=hashlib.sha256(identity.encode()).hexdigest()[:20]
-                                category_rows.append(item)
-                            batch.extend(category_rows)
-                        if covered_page := menu_page(category_url, category_page, category_rows):
-                            status["menu_pages"].append(covered_page)
-                        status["flowhub_category_results"].append({
-                            "url":category_url,"reachable":category_page.get("ok",False),
-                            "offers":len(category_rows)
-                        })
-                # Deduplicate repeated recommended/menu sections before staging.
-                batch = list({(x.get("store_id"), x["url"], x["product_name"]): x for x in batch}.values())
-                status["count"] = len(batch)
-                status["html_bytes"] = len(result["html"].encode("utf-8"))
-                status["visible_price_tokens"] = len(re.findall(r"\$\s*\d+(?:\.\d{2})?", result["html"]))
-                # Diagnostic evidence for Flowhub: no full HTML is retained.
-                # Count product hrefs and capture a handful of sanitized card
-                # snippets so adapters can be fixed from reproducible evidence.
-                if (urllib.parse.urlsplit(result["url"]).hostname or "").endswith(".dispensary.shop"):
-                    html_text = result["html"]
-                    path_hits = list(re.finditer(r"/(?:rec|med)/[^\\\"'<>\\s]{0,250}/pdp/[^\\\"'<>\\s]{0,250}", html_text, re.I))
-                    anchor_hits = list(re.finditer(r"<a\\b[^>]{0,1500}href=[\\\"']([^\\\"']+)[\\\"']", html_text, re.I))
-                    product_anchors = [m for m in anchor_hits if "/pdp/" in m.group(1)]
-                    status["flowhub_diagnostics"] = {
-                        "pdp_path_hits": len(path_hits),
-                        "path_context_samples": [re.sub(r"\\s+"," ",html_text[max(0,m.start()-500):min(len(html_text),m.end()+700)])[:1400] for m in path_hits[:3]],
-                        "pdp_anchor_hits": len(product_anchors),
-                        "all_anchor_hits": len(anchor_hits),
-                        "samples": [
-                            {
-                                "href": m.group(1)[:280],
-                                "html_structure": re.sub(r"\\s+", " ", html_text[max(0,m.start()-250):min(len(html_text),m.end()+1600)])[:1450],
-                            }
-                            for m in product_anchors[:3]
-                        ],
-                    }
 
-                status["script_data_markers"] = sorted(set(re.findall(r"<script[^>]*(?:id|type)=[\"\']([^\"\']+)", result["html"], flags=re.I)))[:20]
-                # Preserve public-page structural evidence only; never store full HTML or visitor data.
-                status["price_snippets"] = [re.sub(r"<[^>]+>", " ", result["html"][max(0,m.start()-120):m.end()+90]).strip()[:230] for m in list(re.finditer(r"\$\s*\d+(?:\.\d{2})?", result["html"]))[:3]]
-                status["product_links_near_prices"] = []
-                for match in list(re.finditer(r"\\$\\s*\\d+(?:\\.\\d{2})?", result["html"]))[:8]:
-                    near = result["html"][max(0, match.start()-2500):match.end()+150]
-                    anchor_matches = list(re.finditer(r'<a\\b[^>]*href=["\\\']([^"\\\']+)["\\\'][^>]*>(.*?)</a>', near, re.I | re.S))
-                    candidates = []
-                    for anchor in anchor_matches[-5:]:
-                        label = re.sub(r'<[^>]+>', ' ', anchor.group(2))
-                        label = re.sub(r'\\s+', ' ', label).strip()[:120]
-                        if len(label) >= 6:
-                            candidates.append({"text": label, "url": urllib.parse.urljoin(result["url"], anchor.group(1))})
-                    if candidates:
-                        status["product_links_near_prices"].append({"price": match.group(), "anchors": candidates[-3:]})
-                status["extraction"] = "jsonld" if batch else "adapter_needed_or_no_products"
-                extracted.extend(batch)
-            else:
-                status["error"] = result["error"]
-        statuses.append(status)
-        # Record reachability of category-specific menu pages for platforms
-        # still awaiting a validated extraction adapter. Do not guess products.
-        for category, category_url in supplemental_category_urls(target["license"], url, extra_categories):
+    def collect(item):
+        index, target = item
+        if index:
             time.sleep(delay)
-            category_result = fetch(category_url)
-            statuses.append({
-                "retailer": target["retailer"], "license": target["license"],
-                "category": category, "url": category_url, "checked_at": checked_at,
-                "connection": "reachable" if category_result["ok"] else "failed",
-                "http_status": category_result.get("status"),
-                "extraction": "adapter_needed_or_no_products" if category_result["ok"] else "not_tested",
-                "count": 0, "error": category_result.get("error", ""),
-                "note": "Category source monitored; not an inventory claim"
-            })
+        return scan_target(target, extra_categories, checked_at, delay)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        for observations, offers in pool.map(collect, enumerate(targets)):
+            statuses.extend(observations)
+            extracted.extend(offers)
     products, conflicts = consolidate(apply_corrections(extracted))
     result = {"checked_at": checked_at, "targets_checked": len(targets), "limited": limit is not None, "statuses": statuses,
               "counts": {"extracted": len(extracted), "deduplicated": len(products), "conflicts": len(conflicts)},
@@ -345,7 +359,8 @@ if __name__ == "__main__":
     parser.add_argument("--limit", type=int)
     parser.add_argument("--delay", type=float, default=1.5)
     parser.add_argument("--include-license", type=str, action="append", default=[])
+    parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
-    result = run_scan(args.limit, args.delay, args.include_license)
+    result = run_scan(args.limit, args.delay, args.include_license, args.workers)
     print(json.dumps({"checked_at": result["checked_at"], "targets_checked": result["targets_checked"],
                       "counts": result["counts"], "published": result["published"]}, indent=2))
