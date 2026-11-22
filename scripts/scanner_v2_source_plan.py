@@ -15,7 +15,7 @@ from scanner_v2_master import load_snapshot
 ROOT = Path(__file__).resolve().parents[1]
 SECONDARY = (
     "leafly.com", "weedmaps.com", "jointcommerce.com",
-    "twincitycannabis.com", "mncannabishub.com",
+    "twincitycannabis.com", "mncannabishub.com", "thcminnesota.com",
 )
 NONSHOP = ("google.com", "maps.google.com", "facebook.com", "instagram.com")
 MENU_TERMS = ("/shop", "/menu", "/store", "/rec/", "/products", "/dispensary/")
@@ -24,7 +24,7 @@ PROVIDERS = ("dispensary.shop", "dutchie.com", "iheartjane.com", "tymber.io")
 def hostname(value):
     try:
         p = urlsplit(str(value or "").strip())
-        if p.scheme not in ("https", "http"):
+        if p.scheme not in ("https", "http") or p.username or p.password:
             return ""
         return (p.hostname or "").lower().removeprefix("www.")
     except ValueError:
@@ -54,6 +54,7 @@ def discover_plan(stores):
         name = x.get("name") or x.get("legal_name") or rid
         shop = str(x.get("menu_url") or "").strip()
         site = str(x.get("website_url") or "").strip()
+        fallback = str(x.get("fallback_menu_url") or "").strip()
         shop_class = source_class(shop)
         website_class = source_class(site)
         official_candidates = []
@@ -69,12 +70,18 @@ def discover_plan(stores):
                                             "verification": "needs_official_shop_discovery"})
         elif website_class == "secondary":
             secondary_candidates.append({"url": site, "origin": "retailer_master_website"})
+        if (source_class(fallback) not in ("missing", "directory_or_social")
+                and fallback not in {item["url"] for item in official_candidates}):
+            secondary_candidates = [item for item in secondary_candidates if item["url"] != fallback]
+            secondary_candidates.append({"url": fallback, "origin": "retailer_master_fallback"})
         if official_candidates:
             next_step = "verify_first_party_menu_and_extract"
         else:
             next_step = "discover_official_website_and_shop"
         output.append({
             "retailer_id": rid, "retailer": name,
+            "menu_platform": x.get("menu_platform", ""),
+            "platform_location_id": x.get("platform_location_id", ""),
             "shop_source_type": shop_class,
             "website_source_type": website_class,
             "first_party_candidates": official_candidates,

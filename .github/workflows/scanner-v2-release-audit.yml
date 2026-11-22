@@ -9,6 +9,9 @@ on:
       - 'scripts/scanner_v2_browser_check.py'
       - 'scripts/scanner_v2_pilot.py'
       - 'scripts/scanner_v2_release_audit.py'
+      - 'scripts/scanner_v2_master.py'
+      - 'scripts/scanner_v2_source_plan.py'
+      - 'scripts/scanner_v2_capture.py'
 
 permissions:
   contents: read
@@ -31,6 +34,24 @@ jobs:
           python3 -m pip install playwright
           python3 -m playwright install --with-deps chromium
           python3 scripts/scanner_v2_browser_check.py
+      - name: Read Retailer Master and prepare the audit directory
+        env:
+          MNTREES_MASTER_SHEET_ID: ${{ vars.MNTREES_MASTER_SHEET_ID }}
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: |
+          python3 -m pip install google-auth requests
+          python3 scripts/build_public_snapshot.py
+          python3 scripts/scanner_v2_master.py --output "$RUNNER_TEMP/v2-master.json"
+          python3 scripts/scanner_v2_release_audit.py \
+            --public-directory dist/data/retailer_locations.json --master-snapshot "$RUNNER_TEMP/v2-master.json" \
+            --prepare-directory --output "$RUNNER_TEMP/v2-directory"
+      - name: Save the audit directory for all batches
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2-audit-directory
+          path: ${{ runner.temp }}/v2-directory/retailers.json
+          retention-days: 14
+          if-no-files-found: error
 
   capture:
     name: Capture batch ${{ matrix.batch }}
@@ -53,15 +74,18 @@ jobs:
         run: |
           python3 -m pip install playwright
           python3 -m playwright install --with-deps chromium
-      - name: Build the published public retailer directory
-        run: python3 scripts/build_public_snapshot.py
+      - name: Download the shared audit directory
+        uses: actions/download-artifact@v4
+        with:
+          name: v2-audit-directory
+          path: ${{ runner.temp }}/v2-directory
       - name: Capture public menus and save each result
         timeout-minutes: 25
         env:
           AUDIT_BATCH: ${{ matrix.batch }}
         run: |
           python3 scripts/scanner_v2_release_audit.py \
-            --public-directory dist/data/retailer_locations.json \
+            --public-directory "$RUNNER_TEMP/v2-directory/retailers.json" \
             --batch "$AUDIT_BATCH" --output "$RUNNER_TEMP/v2-menu-batch"
       - name: Save batch evidence
         if: ${{ always() }}
@@ -85,8 +109,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Build the published public retailer directory
-        run: python3 scripts/build_public_snapshot.py
+      - name: Download the shared audit directory
+        uses: actions/download-artifact@v4
+        with:
+          name: v2-audit-directory
+          path: ${{ runner.temp }}/v2-directory
       - name: Download completed and partial batch evidence
         uses: actions/download-artifact@v4
         with:
@@ -96,7 +123,7 @@ jobs:
         shell: bash
         run: |
           python3 scripts/scanner_v2_release_audit.py \
-            --public-directory dist/data/retailer_locations.json \
+            --public-directory "$RUNNER_TEMP/v2-directory/retailers.json" \
             --merge-batches "$RUNNER_TEMP/v2-menu-batches" --output "$RUNNER_TEMP/v2-release-audit" \
             | tee -a "$GITHUB_STEP_SUMMARY"
       - name: Save coverage report

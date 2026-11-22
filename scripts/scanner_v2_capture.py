@@ -60,7 +60,7 @@ def capture_rendered(data):
                     "source_url": menu, "product_url": url,
                     "raw_title": title, "observed_at": observed_at,
                     "adapter": "rendered_menu_card",
-                    "source_kind": ("secondary_research" if source_class(menu) == "secondary"
+                    "source_kind": ("secondary_research" if card.get("secondary_source") or source_class(menu) == "secondary"
                                     else "official_menu_candidate"),
                     "price": prices[0],
                     # Brand may come from an actual card brand element,

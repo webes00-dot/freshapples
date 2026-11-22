@@ -7,10 +7,30 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
-from scanner_v2_release_audit import STORE_TIMEOUT_STATUS, audit_plan, combine_batches, write_capture_report
+from scanner_v2_release_audit import (STORE_TIMEOUT_STATUS, apply_master_sources, audit_plan,
+                                      combine_batches, targets_from_master, write_capture_report)
 
 
 class ReleaseAuditTests(unittest.TestCase):
+    def test_master_source_picks_direct_link_and_isolates_shared_urls(self):
+        shared = "https://shop.example/menu"
+        published = [
+            {"id": "a", "name": "Store A", "menu_url": shared},
+            {"id": "b", "name": "Store B", "menu_url": shared},
+        ]
+        directory = apply_master_sources(published, {"retailers": [
+            {"id": "a", "name": "Store A", "menu_url": shared, "website_url": shared + "/",
+             "fallback_menu_url": "https://thcminnesota.com/dispensary/store-a", "menu_platform": "meadow"},
+            {"id": "c", "name": "Store C", "menu_url": "https://store-c.example/shop"},
+        ]})
+        targets, skipped = targets_from_master(directory)
+        self.assertEqual([(row["id"], row["audit_sources"]) for row in targets], [
+            ("a", [("https://thcminnesota.com/dispensary/store-a", True)]),
+            ("c", [("https://store-c.example/shop", False)]),
+        ])
+        self.assertEqual([(row["id"], reason) for row, reason in skipped],
+                         [("b", "Menu URL shared by multiple locations")])
+
     def test_partial_artifacts_and_retries_preserve_coverage(self):
         directory = [
             {"id": f"store-{index}", "name": f"Store {index}", "menu_url": f"https://store-{index}.example/menu"}

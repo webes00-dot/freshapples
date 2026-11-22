@@ -55,6 +55,39 @@ READ_CARDS = r"""() => {
   })).filter(card => card.text.length >= 12 && card.text.length <= 750 && card.text.includes('$'));
 }"""
 
+READ_THC_MINNESOTA = r"""() => {
+  const headers = ['product', 'brand', 'price', 'category', 'type', 'thc', 'size'];
+  const clean = text => String(text || '').replace(/\s+/g, ' ').trim();
+  const key = (name, category) => JSON.stringify([clean(name).toLowerCase(), clean(category).toLowerCase()]);
+  const links = new Map();
+  for (const script of document.querySelectorAll('script[type="application/ld+json"]')) {
+    let data;
+    try { data = JSON.parse(script.textContent); } catch { continue; }
+    if (data?.['@type'] !== 'ItemList' || !Array.isArray(data.itemListElement)) continue;
+    for (const entry of data.itemListElement) {
+      const item = entry?.item;
+      if (item?.['@type'] !== 'Product' || !item.url || !item.name || !item.category) continue;
+      let url;
+      try { url = new URL(item.url, location.href); } catch { continue; }
+      if (url.origin !== location.origin || !/^\/products\/[^/]+\/?$/.test(url.pathname)) continue;
+      const id = key(item.name, item.category);
+      if (!links.has(id)) links.set(id, new Set());
+      links.get(id).add(url.href);
+    }
+  }
+  return [...document.querySelectorAll('table')].filter(table =>
+    table.checkVisibility({checkVisibilityCSS: true}) &&
+    [...table.querySelectorAll('thead th')].map(th => clean(th.innerText).toLowerCase()).join('|') === headers.join('|')
+  ).flatMap(table => [...table.querySelectorAll('tbody tr')].flatMap(row => {
+    if (!row.checkVisibility({checkVisibilityCSS: true}) || row.cells.length !== headers.length) return [];
+    const [title, brand, priceText, category] = [...row.cells].map(cell => clean(cell.innerText));
+    if (!title || !/^\$\s*[\d,]+(?:\.\d{2})?\*?$/.test(priceText)) return [];
+    const candidates = links.get(key(title, category));
+    const href = candidates?.size === 1 ? [...candidates][0] : null;
+    return [{text: row.innerText.trim(), title, brand, href, priceText, category}];
+  }));
+}"""
+
 AGE_CONFIRM_CONTROL = r"""() => {
   const prompt = /(?:verify|confirm) (?:your )?age|age verification|are you (?:over |at least )?21|you must be (?:at least )?21|\b21\s*(?:\+|years? (?:of age|old)|or older|and older)/i;
   const restricted = /date of birth|birth date|upload (?:an? |your )?(?:id|identification)|government[- ]issued|verify (?:your )?identity|sign in|log in|captcha|verify (?:that )?you are human/i;
@@ -94,7 +127,7 @@ AGE_CONFIRM_CONTROL = r"""() => {
 def rendered_products(cards, menu_url):
     products = []
     for card in cards:
-        prices = [float(price.replace(",", "")) for price in PRICE.findall(card["text"])]
+        prices = [float(price.replace(",", "")) for price in PRICE.findall(card.get("priceText") or card["text"])]
         if prices:
             products.append({
                 "card_text": card["text"], "price_candidates": prices,
@@ -102,6 +135,7 @@ def rendered_products(cards, menu_url):
                 "raw_product_title": card.get("title"),
                 "brand_candidate": card.get("brand"),
                 "source_product_id": card.get("productId"),
+                "category_candidate": card.get("category"),
             })
     return products
 
@@ -137,7 +171,12 @@ async def read_menu(page, url):
                             return "Access limited", []
                         access_limited = True
                         continue
-                    rendered.extend(await frame.evaluate(READ_CARDS))
+                    frame_url = urlsplit(frame.url)
+                    if (frame_url.hostname in {"thcminnesota.com", "www.thcminnesota.com"}
+                            and frame_url.path.startswith("/dispensary/")):
+                        rendered.extend(await frame.evaluate(READ_THC_MINNESOTA))
+                    else:
+                        rendered.extend(await frame.evaluate(READ_CARDS))
                 except BrowserError:
                     if frame == page.main_frame and attempt == 5:
                         return "Page unavailable", []

@@ -9,7 +9,7 @@ from tempfile import NamedTemporaryFile
 
 
 RANGES = {
-    "Retailer Master": "A:I",
+    "Retailer Master": "A:X",
     "Brand Master": "A:B",
     "Strain Master": "A:B",
     "Entity Aliases": "A:E",
@@ -64,14 +64,15 @@ def read_workbook(workbook_id):
     return payload
 
 
-def records(tabs, tab, *columns):
+def records(tabs, tab, *columns, optional=()):
     headers, *body = tabs[tab]
     missing = set(columns) - set(headers)
     if missing:
         raise ValueError(f"{tab} is missing columns: {', '.join(sorted(missing))}")
-    indexes = [headers.index(name) for name in columns]
+    indexes = [headers.index(name) if name in headers else None for name in (*columns, *optional)]
     for row in body:
-        yield tuple(str(row[i]).strip() if i < len(row) and row[i] is not None else "" for i in indexes)
+        yield tuple(str(row[i]).strip() if i is not None and i < len(row) and row[i] is not None else ""
+                    for i in indexes)
 
 
 def approved_aliases(entries, canonical_names, entity):
@@ -111,11 +112,12 @@ def make_snapshot(values, workbook_id):
 
     retailers = []
     retailer_ids = set()
-    for license_id, legal, display, address, map_address, menu, override, website in records(
+    for license_id, legal, display, address, map_address, menu, override, website, platform, location, fallback in records(
         tabs, "Retailer Master", "License ID", "Retailer / legal name",
         "Store display name (YOUR CORRECTION)", "Address on record",
         "Map address (YOUR CORRECTION)", "Existing menu URL",
         "Menu URL (YOUR CORRECTION)", "Website URL",
+        optional=("Menu platform", "Platform location ID", "Fallback menu URL"),
     ):
         if not license_id:
             continue
@@ -126,6 +128,8 @@ def make_snapshot(values, workbook_id):
             "id": license_id, "name": display or legal, "legal_name": legal,
             "address": address, "map_address": map_address,
             "menu_url": override or menu, "website_url": website,
+            "menu_platform": platform.casefold(), "platform_location_id": location,
+            "fallback_menu_url": fallback,
         })
 
     brand_rows = [(observed, corrected or observed) for observed, corrected in records(

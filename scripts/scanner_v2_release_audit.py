@@ -13,7 +13,7 @@ from scanner_v2_capture import capture_rendered
 from scanner_v2_master import load_snapshot
 from scanner_v2_pilot import read_menu, write_holds
 from scanner_v2_reconcile import reconcile
-from scanner_v2_source_plan import source_class
+from scanner_v2_source_plan import discover_plan, source_class
 from scanner_v2_validate import validate
 
 
@@ -40,7 +40,10 @@ def menu_links(current, hrefs):
         target = urlsplit(href)
         if target.scheme != "https" or target.netloc != current_parts.netloc:
             continue
-        if CATEGORY_PATH.search(target.path) or (
+        category = parse_qs(target.query).get("dtche[category]", [""])[0]
+        if CATEGORY_PATH.search(target.path) or category in {
+            "flower", "pre-rolls", "prerolls", "vaporizers", "concentrates",
+        } or (
             target.path.rstrip("/") == current_parts.path.rstrip("/")
             and parse_qs(target.query).get("page", [""])[0].isdigit()
         ):
@@ -49,9 +52,24 @@ def menu_links(current, hrefs):
 
 
 def targets_from_master(retailers):
-    counts = Counter(menu_key(r["menu_url"]) for r in retailers if r.get("menu_url"))
+    candidates = {}
+    for retailer, plan in zip(retailers, discover_plan(retailers), strict=True):
+        sources = [(item["url"], False) for item in plan["first_party_candidates"]]
+        sources.extend((item["url"], True) for item in plan["secondary_candidates"]
+                       if item["origin"] == "retailer_master_fallback")
+        deduped = {}
+        for url, fallback in sources:
+            if urlsplit(url).scheme == "https":
+                deduped.setdefault(menu_key(url), (url, fallback))
+        candidates[retailer["id"]] = list(deduped.values())
+    counts = Counter(menu_key(url) for sources in candidates.values() for url, _ in sources)
     targets, skipped = [], []
     for retailer in retailers:
+        sources = candidates[retailer["id"]]
+        eligible = [(url, fallback) for url, fallback in sources if counts[menu_key(url)] == 1]
+        if eligible:
+            targets.append({**retailer, "menu_url": eligible[0][0], "audit_sources": eligible})
+            continue
         url = retailer.get("menu_url") or ""
         parts = urlsplit(url)
         if not url:
@@ -60,13 +78,32 @@ def targets_from_master(retailers):
             reason = "Unsupported menu URL"
         elif source_class(url) in {"secondary", "directory_or_social", "missing"}:
             reason = "Secondary menu source"
-        elif counts[menu_key(url)] != 1:
+        elif sources:
             reason = "Menu URL shared by multiple locations"
         else:
-            targets.append(retailer)
-            continue
+            reason = "No eligible store-specific menu URL"
         skipped.append((retailer, reason))
     return targets, skipped
+
+
+def apply_master_sources(directory, master):
+    if master is None:
+        return directory
+    indexed = {row["id"]: row for row in master["retailers"]}
+    for retailer in directory:
+        entry = indexed.pop(retailer["id"], None)
+        if entry is None:
+            continue
+        for key in ("website_url", "menu_platform", "platform_location_id", "fallback_menu_url"):
+            if entry.get(key):
+                retailer[key] = entry[key]
+        if source_class(entry.get("menu_url")) not in ("missing", "secondary", "directory_or_social"):
+            retailer["menu_url"] = entry["menu_url"]
+    fields = ("id", "name", "menu_url", "website_url", "menu_platform",
+              "platform_location_id", "fallback_menu_url")
+    directory.extend({key: row[key] for key in fields if row.get(key)}
+                     for row in indexed.values())
+    return directory
 
 
 def audit_plan(path):
@@ -91,44 +128,64 @@ async def capture_store(browser, retailer):
     from playwright.async_api import Error as BrowserError
 
     root = retailer["menu_url"]
-    pending = deque([menu_key(root)])
     visited, product_keys = set(), set()
     statuses, products = [], []
+    attempted = []
     seen_controls = False
+    source_has_timeout = False
+    sources = retailer["audit_sources"]
+    source_timeout = (STORE_TIMEOUT_SECONDS - 30) / len(sources)
     page = await browser.new_page()
     try:
-        while pending and len(visited) < PAGE_LIMIT:
-            url = pending.popleft()
-            if url in visited:
-                continue
-            visited.add(url)
-            status, cards = await read_menu(page, url)
-            statuses.append(status)
-            for card in cards:
-                key = (card["product_url"], card["card_text"], card["source_product_id"])
-                if key not in product_keys:
-                    product_keys.add(key)
-                    products.append(card)
-            if status in {"Age gate", "Access limited"} or status.endswith(("HTTP 401", "HTTP 403", "HTTP 429")):
-                break
+        for source, fallback in sources:
+            attempted.append(source)
+            pending = deque([menu_key(source)])
+            source_pages = 0
             try:
-                for frame in page.frames:
-                    hrefs = await frame.locator("a[href]").evaluate_all(
-                        "(nodes) => nodes.map(node => node.href)")
-                    pending.extend(link for link in menu_links(frame.url, hrefs) if link not in visited)
-                    if await frame.get_by_role("button", name=re.compile(
-                            r"^(?:next(?: page)?|load more|show more products)$", re.I)).count():
-                        seen_controls = True
-            except BrowserError:
-                statuses.append("Page links unavailable")
-        if pending and len(visited) >= PAGE_LIMIT:
-            statuses.append("Page limit reached")
+                async with asyncio.timeout(source_timeout):
+                    while pending and source_pages < PAGE_LIMIT:
+                        url = pending.popleft()
+                        if url in visited:
+                            continue
+                        visited.add(url)
+                        source_pages += 1
+                        status, cards = await read_menu(page, url)
+                        statuses.append(status)
+                        for card in cards:
+                            key = (card["product_url"], card["card_text"], card["source_product_id"])
+                            if key not in product_keys:
+                                product_keys.add(key)
+                                products.append({**card, "secondary_source": fallback})
+                        if status in {"Age gate", "Access limited"} or status.endswith(("HTTP 401", "HTTP 403", "HTTP 429")):
+                            break
+                        try:
+                            for frame in page.frames:
+                                hrefs = await frame.locator("a[href]").evaluate_all(
+                                    "(nodes) => nodes.map(node => node.href)")
+                                pending.extend(link for link in menu_links(frame.url, hrefs) if link not in visited)
+                                if await frame.get_by_role("button", name=re.compile(
+                                        r"^(?:next(?: page)?|load more|show more products)$", re.I)).count():
+                                    seen_controls = True
+                        except BrowserError:
+                            statuses.append("Page links unavailable")
+            except TimeoutError:
+                source_has_timeout = True
+                statuses.append("Menu source timed out")
+            if pending and source_pages >= PAGE_LIMIT:
+                statuses.append("Page limit reached")
+            if products:
+                if fallback:
+                    statuses.append("Cards captured from fallback menu")
+                break
         if seen_controls:
             statuses.append("Button pagination requires adapter")
     finally:
         await page.close()
+    if source_has_timeout and not products:
+        statuses.append(STORE_TIMEOUT_STATUS)
     return {
         "id": retailer["id"], "retailer": retailer["name"], "menu_url": root,
+        "attempted_menu_urls": attempted, "menu_platform": retailer.get("menu_platform", ""),
         "scanned_at": datetime.now(timezone.utc).isoformat(),
         "statuses": statuses, "products": products, "pages": len(visited),
     }
@@ -197,15 +254,19 @@ def combine_batches(directory, batches, skipped, artifacts):
 def write_coverage(path, batch, accepted=None):
     with path.open("w", encoding="utf-8-sig", newline="") as stream:
         writer = csv.writer(stream)
-        writer.writerow(["Retailer", "Retailer ID", "Menu URL", "Pages checked", "Raw cards", "Validated offers", "Statuses"])
+        writer.writerow(["Retailer", "Retailer ID", "Menu URL", "Pages checked", "Raw cards", "Validated offers",
+                         "Statuses", "Menu platform", "Attempted menu URLs"])
         for result in batch["results"]:
             writer.writerow([result["retailer"], result["id"], result["menu_url"], result["pages"],
                              len(result["products"]), accepted[result["id"]] if accepted is not None else "",
-                             " | ".join(dict.fromkeys(result["statuses"]))])
+                             " | ".join(dict.fromkeys(result["statuses"])), result.get("menu_platform", ""),
+                             " | ".join(result.get("attempted_menu_urls", []))])
         for retailer, reason in batch["skipped"]:
-            writer.writerow([retailer["name"], retailer["id"], retailer.get("menu_url"), 0, 0, "", reason])
+            writer.writerow([retailer["name"], retailer["id"], retailer.get("menu_url"), 0, 0, "", reason,
+                             retailer.get("menu_platform", ""), ""])
         for retailer in batch.get("missing", []):
-            writer.writerow([retailer["name"], retailer["id"], retailer["menu_url"], 0, 0, "", "Batch did not return a result"])
+            writer.writerow([retailer["name"], retailer["id"], retailer["menu_url"], 0, 0, "",
+                             "Batch did not return a result", retailer.get("menu_platform", ""), ""])
 
 
 def write_capture_report(output, batch):
@@ -216,6 +277,8 @@ def write_capture_report(output, batch):
         "locations_with_cards": sum(bool(result["products"]) for result in batch["results"]),
         "locations_captured_after_age_prompt": sum(
             "Cards captured after age prompt" in result["statuses"] for result in batch["results"]),
+        "locations_captured_from_fallback": sum(
+            "Cards captured from fallback menu" in result["statuses"] for result in batch["results"]),
         "raw_cards": sum(len(result["products"]) for result in batch["results"]),
         "skipped": dict(Counter(reason for _, reason in batch["skipped"])),
         "limitations": dict(Counter(status for result in batch["results"] for status in set(result["statuses"])
@@ -237,9 +300,16 @@ def main():
     p.add_argument("--master-snapshot", type=Path)
     p.add_argument("--batch", type=int, choices=range(1, BATCH_COUNT + 1))
     p.add_argument("--merge-batches", type=Path)
+    p.add_argument("--prepare-directory", action="store_true")
     p.add_argument("--output", type=Path, required=True)
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
+    if args.prepare_directory:
+        if not args.public_directory or not args.master_snapshot or args.batch or args.merge_batches or args.captures:
+            p.error("--prepare-directory requires --public-directory and --master-snapshot")
+        directory = json.loads(args.public_directory.read_text(encoding="utf-8"))
+        write_json(args.output / "retailers.json", apply_master_sources(directory, load_snapshot(args.master_snapshot)))
+        return
     if args.public_directory and not args.captures and not args.master_snapshot:
         if args.batch and args.merge_batches:
             p.error("--batch and --merge-batches are mutually exclusive")
