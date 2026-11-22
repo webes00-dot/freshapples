@@ -22,7 +22,7 @@ PY
 
 rm -rf dist
 mkdir -p dist/data
-cp index.html brands.html retailers.html map.html reviews.html feedback.html market-prices.html dist/
+cp index.html brands.html retailers.html map.html reviews.html feedback.html market-prices.html catalog-test.html dist/
 cp app.js catalog-model.js brands.js retailers.js map.js reviews.js market-prices.js dist/
 cp style.css market-prices.css rcwm-logo.svg market-price-reference.png dist/
 cp data/site-data.json data/catalog.json data/brands.json data/retailer_locations.json data/business_tags.json data/review_candidates.json data/market-price-history.json dist/data/
