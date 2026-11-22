@@ -37,13 +37,16 @@ async function resolveInMap(store){
  if(pins.has(store.id))return pins.get(store.id);
  if(pendingGeocodes.has(store.id))return pendingGeocodes.get(store.id);
  const task=(async()=>{
-  const url='https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?'+new URLSearchParams({SingleLine:placeQuery(store)+', USA',f:'json',outFields:'Addr_type,Match_addr',maxLocations:'1'});
+  const address=placeQuery(store);
+  const url='https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?'+new URLSearchParams({SingleLine:address+', USA',f:'json',outFields:'Addr_type,Match_addr,Postal',maxLocations:'1',forStorage:'false'});
   const response=await fetch(url);
   if(!response.ok)throw Error('Address lookup unavailable');
   const data=await response.json();const match=(data.candidates||[])[0];
   const kind=match?.attributes?.Addr_type;
   if(!match||match.score<90||!['PointAddress','Subaddress','StreetAddress'].includes(kind))throw Error('Street-level match unavailable');
-  const matched=String(match?.attributes?.Match_addr||'');const streetNumber=String(placeQuery(store)).match(/^\s*\d+/)?.[0];if(!streetNumber||!new RegExp('^\\s*'+streetNumber+'\\b').test(matched))throw Error('Street number mismatch');
+  const matched=String(match?.attributes?.Match_addr||'');const streetNumber=String(address).match(/^\s*\d+/)?.[0];if(!streetNumber||!new RegExp('^\\s*'+streetNumber+'\\b').test(matched))throw Error('Street number mismatch');
+  const zip=String(address).match(/\b(\d{5})(?:-\d{4})?\s*$/)?.[1];
+  if(zip&&String(match.attributes.Postal||'').slice(0,5)!==zip)throw Error('ZIP code mismatch');
   const lat=Number(match.location.y),lng=Number(match.location.x);
   if(!(lat>43&&lat<50&&lng> -98&&lng< -89))throw Error('Location outside Minnesota');
   const marker=L.marker([lat,lng],{title:store.name});

@@ -25,7 +25,7 @@ from pathlib import Path
 for page, script in (
     ('index.html', 'catalog-model.js'), ('index.html', 'app.js'),
     ('retailers.html', 'retailers.js'), ('brands.html', 'brands.js'),
-    ('brands.html', 'catalog-model.js'),
+    ('brands.html', 'catalog-model.js'), ('map.html', 'map.js'),
 ):
     html = Path('dist', page)
     digest = hashlib.sha256(Path('dist', script).read_bytes()).hexdigest()[:12]
