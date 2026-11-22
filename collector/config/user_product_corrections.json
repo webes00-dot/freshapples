@@ -1,0 +1,1208 @@
+{
+  "source": "User-edited Pasted text(3).txt plus assistant source-grounded review of Pasted markdown(5).md 2026-11-18",
+  "policy": "Owner-reviewed exact listing ID corrections override retailer naming; original product_name, package_g, price and source URL preserved. Four Cherry Kush => Cap Junky edits explicitly rejected by owner. Brand corrections are canonically normalized before each scan; aliases never merge different product formats or weights.",
+  "by_listing_id": {
+    "e140cb3099d3641428a3": {
+      "strain": "Mixed Strains",
+      "note": "User-supplied label; not a named single strain"
+    },
+    "8387a3c3f799ff6fbed5": {
+      "strain": "Grand Daddy Purple"
+    },
+    "3e6e357e444b91f9a6a0": {
+      "strain": "Dabbalicious",
+      "brand": "Elevate Botanicals"
+    },
+    "c523dbb1a9b78f02c12b": {
+      "strain": "Citrus Slushy",
+      "brand": "Grasslandz"
+    },
+    "3a8da2867fef0f9b50bf": {
+      "strain": "Bourbon Berry x Whiskey Zulu",
+      "brand": "Greenest Pastures"
+    },
+    "97464a2aedee7ec06b76": {
+      "strain": "Grape Canyon Zkittlez"
+    },
+    "ff3fae7dbee3cf5b9c2f": {
+      "strain": "Grape Canyon Zkittlez"
+    },
+    "5ee8eb8561bbc235c209": {
+      "strain": "Sex Panther",
+      "brand": "Green Box"
+    },
+    "409c41d75d7a788dc1df": {
+      "strain": "Space Queen",
+      "brand": "Green Box"
+    },
+    "1b70b47599841c784263": {
+      "strain": "Tropical Cherry"
+    },
+    "bc2e7d7d324ef33e0b80": {
+      "brand": "Valhalla"
+    },
+    "pub-55fb3092ce6c97d912": {
+      "brand": "Valhalla"
+    },
+    "e78e1240b2f97462afd2": {
+      "display_size_g": 0.75,
+      "note": "Source reports 0.7g; user provided 0.75g. Preserve package_g until source verified",
+      "brand": "FLÖR"
+    },
+    "ddc941fb20aa7ce934b9": {
+      "display_size_g": 0.75,
+      "note": "Source reports 0.7g; user provided 0.75g. Preserve package_g until source verified",
+      "brand": "FLÖR"
+    },
+    "d4f5e79118977fd1e6d9": {
+      "strain": "Blue Dream"
+    },
+    "de2a29229c3e67caaaf3": {
+      "strain": "Brownie Scout"
+    },
+    "10cd901679c5a86ae44b": {
+      "strain": "24K Gold"
+    },
+    "69f9965e0a6450e0a400": {
+      "strain": "OMG"
+    },
+    "401ad4f73ad207417238": {
+      "strain": "Animal Face"
+    },
+    "6ce32358ba4d44bdee1f": {
+      "strain": "Animal Scout"
+    },
+    "420847349185dc74e1b7": {
+      "strain": "Animal Scout"
+    },
+    "7b94e7d0301a646d29de": {
+      "strain": "Apex Orange"
+    },
+    "e05902f9b9db79d1cce0": {
+      "strain": "Apple Fritter"
+    },
+    "fa7e828b8ee450a037e4": {
+      "strain": "Apple Fritter"
+    },
+    "f4beca08b59f52ba25ed": {
+      "strain": "Apple Fritter"
+    },
+    "7f7d5cae09021121aa3b": {
+      "strain": "Aquamarine Dream"
+    },
+    "02c44c1071ec626e9a31": {
+      "strain": "Atomic Pop"
+    },
+    "1d3da8a699a077106876": {
+      "strain": "Lemon Yacht Club"
+    },
+    "7af7d9831be9f9a912de": {
+      "brand": "Avion",
+      "strain": "Autopilot"
+    },
+    "131863b3e0a0eeae88a3": {
+      "brand": "Avion",
+      "strain": "Strawberry Lemonade"
+    },
+    "94fd323071820f7405f6": {
+      "brand": "Avion",
+      "strain": "Frodo Squeeze"
+    },
+    "official-tribal-waabigwan-mahnomen-vape-baja-blast-0p5": {
+      "strain": "Baja Blast"
+    },
+    "21de1824b4d7b05b3f71": {
+      "brand": "FLÖR",
+      "strain": "Banana Push Pop"
+    },
+    "6f2c451a52ed8e6eb69e": {
+      "strain": "Bananaconda"
+    },
+    "bea866fa5feeab2ec475": {
+      "strain": "Bananaconda"
+    },
+    "94c2f94acd671f16b6e2": {
+      "strain": "Bananaconda"
+    },
+    "155453be4a05e401363a": {
+      "strain": "Block Party"
+    },
+    "f7d405bc8411855bf305": {
+      "strain": "Block Party"
+    },
+    "a2127be8437dfc29e939": {
+      "strain": "Block Party"
+    },
+    "a1ed8ddc5201a6a75e18": {
+      "strain": "Blue Dream"
+    },
+    "2b3bdb82aa46b8bad192": {
+      "strain": "Blue Dream"
+    },
+    "be0d8e307e1f63a1206b": {
+      "strain": "Blue Dream"
+    },
+    "5d-5d-014": {
+      "brand": "Float Cannabis",
+      "strain": "Blue Zushi"
+    },
+    "6f052918b95179d2c04e": {
+      "strain": "Brownie Scout"
+    },
+    "375f893e6e632cbf896b": {
+      "strain": "Brownie Scout"
+    },
+    "8e6b7618bea42ac7988f": {
+      "strain": "Brownie Scout"
+    },
+    "0acb97aa54afdb4dd4f1": {
+      "strain": "Brownie Scout"
+    },
+    "0520d3d4b613896eb754": {
+      "strain": "Brownie Scout"
+    },
+    "dcdcb9839e1deabcbc0b": {
+      "strain": "Brownie Scout"
+    },
+    "f6fb39e0ba47641c15c3": {
+      "strain": "Bubble Bath"
+    },
+    "pub-0dbeb570a4b042b916": {
+      "brand": "FLÖR"
+    },
+    "31e41af43b796fdd6be5": {
+      "strain": "Cake Mix"
+    },
+    "4dd8f37b18d2774524ab": {
+      "strain": "Cake Mix"
+    },
+    "66f565af0756b82843da": {
+      "strain": "Cap Junky"
+    },
+    "8826b01f6ed0d1333906": {
+      "strain": "Cap Junky"
+    },
+    "d08878898b76ffe6c475": {
+      "strain": "Cap Junky"
+    },
+    "cd56f70bf6edbf0e54eb": {
+      "strain": "Fight Club"
+    },
+    "f64d474e808bcaac21b6": {
+      "strain": "Fight Club"
+    },
+    "0a11a9dededec0068a08": {
+      "strain": "God's Breath"
+    },
+    "750a2927370c8c59275a": {
+      "strain": "Guava"
+    },
+    "2df2d6e415f386cfaacc": {
+      "strain": "LIT OG"
+    },
+    "344d6849ecc436f0c8b7": {
+      "strain": "Sunset Sherbet",
+      "brand": "Campfire Cannabis"
+    },
+    "55bdff31eaa00ec393dd": {
+      "strain": "Soap"
+    },
+    "e2ef0e8aea2972e5139c": {
+      "strain": "Fog Dog"
+    },
+    "1bd09a9293a67fc18c28": {
+      "strain": "Fog Dog"
+    },
+    "8024d42c7a24a91b2631": {
+      "strain": "Turtle Taffy"
+    },
+    "e0f4282020b01893dc05": {
+      "brand": "Float Cannabis"
+    },
+    "60ca2a1ca38f35cf4efe": {
+      "strain": "Cap Junky"
+    },
+    "c577647438fdf43bf186": {
+      "strain": "Cap Junky"
+    },
+    "9aa31273f4d75ba9a0b8": {
+      "strain": "Cap Junky"
+    },
+    "2ad3c606935269da9f62": {
+      "strain": "Cap Junky"
+    },
+    "c880d130247b044edc2a": {
+      "brand": "Dizgo"
+    },
+    "6de5b24d8b1f08134537": {
+      "brand": "Dizgo"
+    },
+    "21723b2fd7f40ae0881b": {
+      "brand": "Classified Crops"
+    },
+    "56abd18130937749cceb": {
+      "brand": "Confidential Crops"
+    },
+    "e76f463f406dcfe962b3": {
+      "brand": "D'Ope"
+    },
+    "c7e0a4f9b39c8ba2b412": {
+      "brand": "D'Ope"
+    },
+    "89403903e3904631b496": {
+      "brand": "D'Ope"
+    },
+    "dbc49550512efdfa3be4": {
+      "brand": "D'Ope"
+    },
+    "170b620b9d776666aae8": {
+      "brand": "D'Ope"
+    },
+    "5d927ec42be93e5097c3": {
+      "brand": "D'Ope"
+    },
+    "9246091179413696c97f": {
+      "brand": "D'Ope"
+    },
+    "f5c12886cead0a0191c1": {
+      "brand": "D'Ope"
+    },
+    "d5e7a036d9108a5bd69a": {
+      "brand": "D'Ope"
+    },
+    "67cebeb50fb4917519a2": {
+      "brand": "D'Ope"
+    },
+    "e3667169d6bb97cbe21a": {
+      "brand": "Dizgo"
+    },
+    "40950bf9f0f4dd94f2ea": {
+      "brand": "Dizgo"
+    },
+    "3e0928c58b8cccec30b9": {
+      "brand": "Dizgo"
+    },
+    "a8060db8b8ed92f23cb2": {
+      "brand": "Dizgo"
+    },
+    "d2701389f58d78b30013": {
+      "brand": "Dizgo"
+    },
+    "5bcde723c4a6fee4f4ea": {
+      "brand": "Dizgo"
+    },
+    "50499dc1a4446fa40da3": {
+      "brand": "Dizgo"
+    },
+    "1feda28bc5c13d9143ab": {
+      "brand": "Dizgo"
+    },
+    "7b0114362191dbc3b8ea": {
+      "brand": "Dizgo"
+    },
+    "13b45736e614b1b347d9": {
+      "brand": "Dizgo"
+    },
+    "6db6d90dee0afa4b9be9": {
+      "brand": "D'Ope"
+    },
+    "cd8cb7f4e8e269170ad8": {
+      "brand": "D'Ope"
+    },
+    "4d26265107b149118edb": {
+      "brand": "D'Ope"
+    },
+    "ad081c5ef6ff34468283": {
+      "brand": "D'Ope"
+    },
+    "275e6592f4843bfd5bd3": {
+      "brand": "D'Ope"
+    },
+    "f22071453999b5c04e3b": {
+      "brand": "D'Ope"
+    },
+    "3c00219c4e39ef805741": {
+      "brand": "D'Ope"
+    },
+    "e1cc593962a23b121823": {
+      "brand": "Elevate Botanicals"
+    },
+    "022915ad0322c5cfa932": {
+      "brand": "Elevate Botanicals"
+    },
+    "4f6f4a13c76695527ea6": {
+      "brand": "Elevate Botanicals"
+    },
+    "589e66ff148c257f20a2": {
+      "brand": "Elevate Botanicals"
+    },
+    "eade828108846ce6ad8a": {
+      "brand": "Elevate Botanicals"
+    },
+    "5361bb532ce84111b6f6": {
+      "brand": "Emerald Farms"
+    },
+    "af2eb9451656f2cfd462": {
+      "brand": "Emerald Farms"
+    },
+    "079d988250e708ed9382": {
+      "brand": "Float Cannabis"
+    },
+    "eec7c1b0669a2fd4a1e2": {
+      "brand": "Float Cannabis"
+    },
+    "8017afdc1391ed97c69d": {
+      "brand": "Float Cannabis"
+    },
+    "840f0dedc49f533cfec0": {
+      "brand": "Float Cannabis"
+    },
+    "1354e4612e37192e386e": {
+      "brand": "Float Cannabis"
+    },
+    "649a8d6e9ad5073932f7": {
+      "brand": "Float Cannabis"
+    },
+    "deed92e41c02e9809224": {
+      "brand": "Float Cannabis"
+    },
+    "c02e1be94e036f1151e8": {
+      "brand": "Float Cannabis"
+    },
+    "872bdf58eddd80172fc9": {
+      "brand": "Float Cannabis"
+    },
+    "8d8c9a0a3ac55acc6524": {
+      "brand": "Float Cannabis"
+    },
+    "97bd5fb13df1b43bafb4": {
+      "brand": "Float Cannabis"
+    },
+    "2d685ef101d5b66f0e7b": {
+      "brand": "Float Cannabis"
+    },
+    "e0822ccef8fe78dc98e4": {
+      "brand": "Float Cannabis"
+    },
+    "792a21b1dd166f00b694": {
+      "brand": "Float Cannabis"
+    },
+    "f36f0db451fb88036582": {
+      "brand": "Float Cannabis"
+    },
+    "ba88be514598b69832ef": {
+      "brand": "Float Cannabis"
+    },
+    "93166d32defc51740f87": {
+      "brand": "Float Cannabis"
+    },
+    "e4eac99ea2590e8dcd53": {
+      "brand": "Float Cannabis"
+    },
+    "4e22392c8e02e701ccb9": {
+      "brand": "Float Cannabis"
+    },
+    "69f8d8d5653793ff548e": {
+      "brand": "Float Cannabis"
+    },
+    "cdce9e18418e9134566b": {
+      "brand": "Float Cannabis"
+    },
+    "7b8b24289509d205c8a5": {
+      "brand": "Float Cannabis"
+    },
+    "c89ea01ddeee6dbafe5e": {
+      "brand": "Float Cannabis"
+    },
+    "82a73d72f1f37452255b": {
+      "brand": "Float Cannabis"
+    },
+    "cfabd4449965e299f2e8": {
+      "brand": "Float Cannabis"
+    },
+    "5584beba805ba68b6677": {
+      "brand": "Float Cannabis"
+    },
+    "f9a2b0dc8439f6ee9b55": {
+      "brand": "Float Cannabis"
+    },
+    "31437b10f965aee96b37": {
+      "brand": "Float Cannabis"
+    },
+    "2bfbb3ecbbe3531ae0e4": {
+      "brand": "Float Cannabis"
+    },
+    "3042b076206312f83395": {
+      "brand": "Float Cannabis"
+    },
+    "70276bfa794a7d4d89e0": {
+      "brand": "Float Cannabis"
+    },
+    "99036b2bbfa17120d42e": {
+      "brand": "Float Cannabis"
+    },
+    "226d471660dedf944367": {
+      "brand": "Float Cannabis"
+    },
+    "572e13877bd33975d86a": {
+      "brand": "Float Cannabis"
+    },
+    "e2487956f37c2b645ee8": {
+      "brand": "FLÖR"
+    },
+    "c7e17a237b90934039eb": {
+      "brand": "FLÖR"
+    },
+    "446244c9ac4241e756f4": {
+      "brand": "FLÖR"
+    },
+    "45315d9a8a88b247ff61": {
+      "brand": "FLÖR"
+    },
+    "4275f3c099f648a4fc88": {
+      "brand": "FLÖR"
+    },
+    "2186b2a27da3b39fa404": {
+      "brand": "FLÖR"
+    },
+    "c3ddf78eb7684f89c828": {
+      "brand": "FLÖR"
+    },
+    "0604026f9f94b950cc0f": {
+      "brand": "FLÖR"
+    },
+    "aa9a7804676aaac79642": {
+      "brand": "FLÖR"
+    },
+    "a273f70916abfe156bfe": {
+      "brand": "FLÖR"
+    },
+    "9d59bbbd6b58c2a7b4fb": {
+      "brand": "FLÖR"
+    },
+    "6f304dd6521c5fc25e36": {
+      "brand": "FLÖR"
+    },
+    "041f8fece8403c38cfbd": {
+      "brand": "FLÖR"
+    },
+    "0fdfd8e1c925d1c0d829": {
+      "brand": "FLÖR"
+    },
+    "9adf2602d5aa63a41482": {
+      "brand": "FLÖR"
+    },
+    "5bca70a59c66010ee880": {
+      "brand": "FLÖR"
+    },
+    "bdf1e5a893f81d5af08f": {
+      "brand": "FLÖR"
+    },
+    "97eb749b561b48409645": {
+      "brand": "FLÖR"
+    },
+    "1a4432bced6fa51f2f8e": {
+      "brand": "FLÖR"
+    },
+    "5405b57be2d75f90245e": {
+      "brand": "FLÖR"
+    },
+    "71118c7f89960f424774": {
+      "brand": "FLÖR"
+    },
+    "2df7bb45a86dfa16ffdc": {
+      "brand": "FLÖR"
+    },
+    "b5491868d1681d9c65cd": {
+      "brand": "FLÖR"
+    },
+    "52855268a3a789d9b0f4": {
+      "brand": "Grasslandz"
+    },
+    "bca026814b44895ec61b": {
+      "brand": "Grasslandz"
+    },
+    "4a8e65c33ff48790d0a0": {
+      "brand": "Grasslandz"
+    },
+    "f4149d802baf391b2731": {
+      "brand": "Grasslandz"
+    },
+    "86df36d21219df90bfc2": {
+      "brand": "Mischief Cannabis"
+    },
+    "a499eaca1809b3c898a9": {
+      "brand": "Float Cannabis"
+    },
+    "af860f00948ff6e909b0": {
+      "brand": "Float Cannabis"
+    },
+    "a9cf3ab8278127952425": {
+      "brand": "Float Cannabis"
+    },
+    "568345bf51a91e63300b": {
+      "brand": "FLÖR"
+    },
+    "d06e999303993bbc70a8": {
+      "brand": "Grasslandz"
+    },
+    "8d31429d7cd6ea8db4c7": {
+      "brand": "Grasslandz"
+    },
+    "407a9d3860e3fe0d8c7e": {
+      "brand": "Grasslandz"
+    },
+    "83104a00775c0a465126": {
+      "brand": "Grasslandz"
+    },
+    "e0ca3772e8d6e2707a82": {
+      "brand": "Float Cannabis"
+    },
+    "52968e12020fe1f57a1d": {
+      "brand": "Float Cannabis"
+    },
+    "cb8c0153af58d547119c": {
+      "brand": "Mischief Cannabis"
+    },
+    "fcf8366cc981331cf50b": {
+      "brand": "Float Cannabis"
+    },
+    "f47ab57ac38025a8396f": {
+      "brand": "FLÖR"
+    },
+    "2606ca219e39dd2b46ed": {
+      "brand": "Lakeside Cannabis"
+    },
+    "5ca63002737035c93e75": {
+      "brand": "Lakeside Cannabis"
+    },
+    "29068f8272b695c84df0": {
+      "brand": "Lakeside Cannabis"
+    },
+    "2bca9460dd722c698ed3": {
+      "brand": "Laketown Farms"
+    },
+    "9ffb771fe4c92efbaf2e": {
+      "brand": "Float Cannabis"
+    },
+    "f6288201e77b3f923a94": {
+      "brand": "Float Cannabis"
+    },
+    "5d-5d-001": {
+      "brand": "Float Cannabis"
+    },
+    "f4f91ca8b76b6eaebd00": {
+      "brand": "Lifted North"
+    },
+    "46795feb0d471e0a9454": {
+      "brand": "Lifted North"
+    },
+    "34f9a4ed3c1f8c624882": {
+      "brand": "Looner"
+    },
+    "13fa2438344c89913990": {
+      "brand": "Looner"
+    },
+    "4d8b08fa59c72f114256": {
+      "brand": "Looner"
+    },
+    "a42d2eed034af8b2469f": {
+      "brand": "Marawanna"
+    },
+    "bb29e7da01ef2c7186b7": {
+      "brand": "Marawanna"
+    },
+    "13ff03d554780a06cfd5": {
+      "brand": "Marawanna"
+    },
+    "3e76fc84f1a014a5cd78": {
+      "brand": "Marawanna"
+    },
+    "d8d6333b9724d9a7e8cd": {
+      "brand": "Dizgo"
+    },
+    "61a65b80db7ab32bc1de": {
+      "brand": "MNLoon"
+    },
+    "cba94130dd61b1151ac5": {
+      "brand": "MNLoon"
+    },
+    "a7e94d74b5e5e721ab84": {
+      "brand": "MNLoon"
+    },
+    "433aa7b0bfae3371c084": {
+      "brand": "MNLoon"
+    },
+    "59ddd8fedd7e18c63fc3": {
+      "brand": "MNLoon"
+    },
+    "418be1d67bcaedeff985": {
+      "brand": "MNLoon"
+    },
+    "964e8d1c8ef6158baec1": {
+      "brand": "Mr. Birch"
+    },
+    "1cda941780c03d8c71cc": {
+      "brand": "Native Care"
+    },
+    "6f7c1cb340907503021e": {
+      "brand": "Native Care"
+    },
+    "70b54e81566311d313f1": {
+      "brand": "Native Care"
+    },
+    "d79a36159cb011a45994": {
+      "brand": "Native Care"
+    },
+    "1164e60b1a66c9bef743": {
+      "brand": "Campfire Cannabis"
+    },
+    "6b8143a8ffc1372b82c2": {
+      "brand": "Dizgo"
+    },
+    "9990472a6e0b3ff91ae3": {
+      "brand": "Dizgo"
+    },
+    "dff4e071469acc47e7ee": {
+      "brand": "Grasslandz"
+    },
+    "9c9ce4c4876a43680449": {
+      "brand": "High Definition"
+    },
+    "651ef16ead8213269a65": {
+      "brand": "Campfire Cannabis"
+    },
+    "bf058ec42664f45c99c5": {
+      "brand": "Lakeside Cannabis"
+    },
+    "8ecfdbc7106454da40ba": {
+      "brand": "Lakeside Cannabis"
+    },
+    "1f0a63670d1b0b1bf6ed": {
+      "brand": "Minny Grown"
+    },
+    "bd5ddc6de16473b3a477": {
+      "brand": "Minny Grown"
+    },
+    "fcfb64752b55498a1905": {
+      "brand": "Native Cuts"
+    },
+    "23ca4e681d88504aba44": {
+      "brand": "Native Cuts"
+    },
+    "44dfd45a7b10cec84986": {
+      "brand": "Unbound"
+    },
+    "e6578f40b11827bbee81": {
+      "brand": "Avio"
+    },
+    "e9845033bdcb87048e26": {
+      "brand": "Avion"
+    },
+    "a13d5720766d67f638e7": {
+      "brand": "Avio"
+    },
+    "c13c180f8d32c39cfe3f": {
+      "brand": "Campfire Cannabis"
+    },
+    "f4161aa6f89bbb4377f2": {
+      "brand": "Classified Crops"
+    },
+    "d3e6372d63d20e9067fb": {
+      "brand": "Dizgo"
+    },
+    "cb66bdc0b8103556ac5c": {
+      "brand": "Dizgo"
+    },
+    "ccbeea16a6fc84e4df55": {
+      "brand": "Dizgo"
+    },
+    "b6e15fc3c962f8329d1f": {
+      "brand": "Dizgo"
+    },
+    "54b2696fc315a3fe124b": {
+      "brand": "Float Cannabis"
+    },
+    "00da7d1bec0e9e82e63a": {
+      "brand": "Float Cannabis"
+    },
+    "4c0735d088aa4e4aa8e9": {
+      "brand": "Float Cannabis"
+    },
+    "91cb23e5b963f3bb58c5": {
+      "brand": "Green Goods"
+    },
+    "5427566f05c2494ed725": {
+      "brand": "Green Goods"
+    },
+    "70c5e05ca47849e9765c": {
+      "brand": "Green Goods"
+    },
+    "07b083d6efc9e3657dae": {
+      "brand": "Grasslandz"
+    },
+    "1bd7a019e42e508b0e6f": {
+      "brand": "Lakeside Cannabis"
+    },
+    "9810d1dd99ec4223a6f4": {
+      "brand": "Looner"
+    },
+    "27aa3fe9643c22452857": {
+      "brand": "Native Care"
+    },
+    "2133a27d90d849b5d894": {
+      "brand": "Native Care"
+    },
+    "932a3988007fb8a72568": {
+      "brand": "Rythym"
+    },
+    "167d3dbbe38dcdca85c1": {
+      "brand": "Rythym"
+    },
+    "8f5490e80f5cc69d927a": {
+      "brand": "Trailhead"
+    },
+    "bc95545051aa64c4048c": {
+      "brand": "Trailhead"
+    },
+    "245877bfe7daceb6def7": {
+      "brand": "Trailhead"
+    },
+    "3a3dd7f1bae2c05fa74a": {
+      "brand": "Unbound"
+    },
+    "25e09ab5a55f791d3540": {
+      "brand": "Verist Fields"
+    },
+    "5c60d2b4e0294882bc39": {
+      "brand": "Verist Fields"
+    },
+    "9758e35d391d51d3da78": {
+      "brand": "Verist Fields"
+    },
+    "18c2ed70adbf1dbd966e": {
+      "brand": "Verist Fields"
+    },
+    "2b75465706d0a093be43": {
+      "brand": "Dizgo"
+    },
+    "official-research-minnesota-canna-edina-flower-orion-3p5": {
+      "brand": "Dizgo"
+    },
+    "eb07e5b22ca4eb4709d5": {
+      "brand": "Float Cannabis"
+    },
+    "242b0a2e52b4edfa8c4f": {
+      "brand": "Grasslandz"
+    },
+    "784b95141cbc2438c3da": {
+      "brand": "Dizgo"
+    },
+    "569d49517e0218d18c4c": {
+      "brand": "Mischief Cannabis"
+    },
+    "a7ac0086fef59816f751": {
+      "brand": "Avion"
+    },
+    "d155226f838ad1853001": {
+      "brand": "Purple Prince",
+      "strain": "Forbidden Blueprint"
+    },
+    "5d-5d-002": {
+      "brand": "Float Cannabis"
+    },
+    "62b1d3b45ffb497c5253": {
+      "brand": "R&D Pharms"
+    },
+    "8fb3d5f33f7c56449e49": {
+      "brand": "Redwood County Weed Management"
+    },
+    "4dd266d89a33c6e0fbd0": {
+      "brand": "SMIILE"
+    },
+    "37d4a888f82e20326744": {
+      "brand": "SMIILE"
+    },
+    "c49102f22c24ce855aad": {
+      "brand": "SMIILE"
+    },
+    "4c95c137904b98c7558e": {
+      "brand": "SMIILE"
+    },
+    "056ad84506676969e2eb": {
+      "brand": "The Bud Doctor"
+    },
+    "5d-5d-015": {
+      "brand": "Float Cannabis"
+    },
+    "e7ed86748661be74bf6e": {
+      "brand": "Trailhead"
+    },
+    "1ebcd0166e812b4c5ede": {
+      "brand": "Trailhead"
+    },
+    "750bb27052c2d2decd4d": {
+      "brand": "Trailhead"
+    },
+    "cb802fe3716a23b44859": {
+      "brand": "Trailhead"
+    },
+    "d837dd012a53fbc46319": {
+      "brand": "Trailhead"
+    },
+    "8c3d3c222d32366e62fe": {
+      "brand": "Trailhead"
+    },
+    "01e72159c09b469493a4": {
+      "brand": "Trailhead"
+    },
+    "7f69cfec9218a827a11c": {
+      "brand": "Trailhead"
+    },
+    "d9d2bbd9eeb880a53b11": {
+      "brand": "Trailhead"
+    },
+    "3a1092c2ff7a98283059": {
+      "brand": "Trailhead"
+    },
+    "94f6507984d36d3458aa": {
+      "brand": "Trailhead"
+    },
+    "379a9ae721d808541d9f": {
+      "brand": "Trailhead"
+    },
+    "4775f9c419ea6970d41d": {
+      "brand": "Trailhead"
+    },
+    "0d049e15980a0dfac92e": {
+      "brand": "Trailhead"
+    },
+    "05c17f726b9efc0d5e67": {
+      "brand": "Trailhead"
+    },
+    "06f099d0f40702ee3550": {
+      "brand": "True Canna"
+    },
+    "c1c3ceddf72b141fd763": {
+      "brand": "FLÖR"
+    },
+    "62f9ec7055f33112e3a4": {
+      "brand": "FLÖR"
+    },
+    "32ad47277c9a2284fe73": {
+      "brand": "Verist Fields"
+    },
+    "8289a0888b42a09b8289": {
+      "brand": "Verist Fields"
+    },
+    "557a5941745dbfbf89eb": {
+      "brand": "Verist Fields"
+    },
+    "0ae5146619adb2694344": {
+      "brand": "Verist Fields"
+    },
+    "8cf191dfa330693ace45": {
+      "brand": "Verist Fields"
+    },
+    "5518588ebfc6b3446bcc": {
+      "brand": "Verist Fields"
+    },
+    "e7ed70b1a477d861da7e": {
+      "brand": "Verist Fields"
+    },
+    "524ffb43e1ef1fd2e278": {
+      "brand": "Verist Fields"
+    },
+    "b8fe6d70f3f5ab873231": {
+      "brand": "Verist Fields"
+    },
+    "7e25dfe56d23faea8584": {
+      "brand": "Verist Fields"
+    },
+    "573f0383bf112a2253c7": {
+      "brand": "Verist Fields"
+    },
+    "0f78d8c190f6ef15d261": {
+      "brand": "Verist Fields"
+    },
+    "7a0c8745500d0237fba3": {
+      "brand": "Verist Fields"
+    },
+    "8a5bfcdf7e08ebbf8db7": {
+      "brand": "Verist Fields"
+    },
+    "3e0bb36268d7c91f1409": {
+      "brand": "Verist Fields"
+    },
+    "6b2aa8289d414f621e71": {
+      "brand": "Verist Fields"
+    },
+    "ea3b02dbf709aa7aa885": {
+      "brand": "Verist Fields"
+    },
+    "b13f09fd35803f46a50b": {
+      "brand": "Redwood County Weed Management"
+    },
+    "7b2505eeb3b287a9617b": {
+      "brand": "Redwood County Weed Management"
+    },
+    "be69f4ed52d9a59660d6": {
+      "brand": "Redwood County Weed Management"
+    },
+    "c492431f78babde3b17e": {
+      "brand": "Avion"
+    },
+    "8840ba0b87d693ebb63b": {
+      "brand": "Dizgo"
+    },
+    "d65edca53a36d4f3dd45": {
+      "brand": "Unwind",
+      "strain": "Push OG"
+    },
+    "d0385173a96816e6393a": {
+      "brand": "Unwind",
+      "strain": "Sour Diesel"
+    },
+    "ff52bd1eeadb466a3f59": {
+      "brand": "Unbound",
+      "strain": "Purple Ice Water"
+    },
+    "7fa23fdb64cea0667142": {
+      "brand": "Unbound",
+      "strain": "Vanilla Berries"
+    },
+    "a7e2912cabb28de8c858": {
+      "strain": "Sour Pebbles"
+    },
+    "0bf76633e20ffe136028": {
+      "brand": "Float Cannabis",
+      "strain": "Super Boof"
+    },
+    "3278c46d177f85368263": {
+      "brand": "Float Cannabis",
+      "strain": "Purple Starfruit"
+    },
+    "7963a97c9dfb5988151a": {
+      "strain": "Mint Jelly"
+    },
+    "2f81d2f8591e4f7f2e1c": {
+      "brand": "Float Cannabis",
+      "strain": "Cap Junky"
+    },
+    "551adb1a9b504ebcab2c": {
+      "brand": "Northpark",
+      "strain": "OG Kush"
+    },
+    "fa834d0ea0d3936b170c": {
+      "brand": "Grasslandz",
+      "strain": "Peaches and Dream"
+    },
+    "98e7b2b50c9d5613abf1": {
+      "brand": "Northpark",
+      "strain": "Trainwreck"
+    },
+    "16fb93a5a5d8dae2dff7": {
+      "brand": "Native Cuts",
+      "strain": "Cheetah Piss"
+    },
+    "64775f85fff0419d5742": {
+      "brand": "Native Cuts",
+      "strain": "MAC-1"
+    },
+    "4628aa4322355583354b": {
+      "brand": "Verist Fields",
+      "strain": "DreamBerry"
+    },
+    "448ec21416efea079458": {
+      "brand": "Lakeside Cannabis",
+      "strain": "Gelato 45"
+    },
+    "44b2dd9551b635991231": {
+      "brand": "Native Cuts",
+      "strain": "Cheetah Piss"
+    },
+    "ff648ef1b0c3afbd9fc5": {
+      "brand": "Campfire Cannabis",
+      "strain": "Purple Octane"
+    },
+    "7c23c0310aa41dc248a7": {
+      "brand": "Lakeside Cannabis",
+      "strain": "Zoap"
+    },
+    "3b7e336e2540ec390df9": {
+      "brand": "Unbound",
+      "strain": "Wilfunk"
+    },
+    "7ae44746e88a89216201": {
+      "brand": "Native Cuts",
+      "strain": "MAC-1"
+    },
+    "8887c2cd4dad5654b703": {
+      "brand": "Minny Grown",
+      "strain": "Tamarindo"
+    },
+    "17514b0b024be1366564": {
+      "brand": "Minny Grown",
+      "strain": "Purple Starfruit"
+    },
+    "3e6e093540369a27065b": {
+      "brand": "High Definition",
+      "strain": "Mendo Breath"
+    },
+    "940a44ec2a287f374d3a": {
+      "brand": "Lakeside Cannabis",
+      "strain": "Cotton Candy"
+    },
+    "1ca1a16aa281d96b16c6": {
+      "brand": "Emerald Farms",
+      "strain": "Candy Cigarette"
+    },
+    "0741c9aa7cc024b5915f": {
+      "brand": "Emerald Farms",
+      "strain": "Mochi Melon"
+    },
+    "3136982997954a849c2f": {
+      "brand": "Emerald Farms",
+      "strain": "Planet of the Grapes"
+    },
+    "f7d730cc3bdcc32812a8": {
+      "brand": "Laketown Farms",
+      "strain": "24K Gold"
+    },
+    "588bc1f2ebb0c2f1716a": {
+      "brand": "Looner",
+      "strain": "Sweet Orange"
+    },
+    "abd409d527e8c867194b": {
+      "brand": "Looner",
+      "strain": "Wild Grape"
+    },
+    "fbf4fbf056e729e04628": {
+      "brand": "Verist Fields",
+      "strain": "Platinum Jesus"
+    },
+    "ff7b3e97667a2c6d32ed": {
+      "brand": "FLÖR",
+      "strain": "Mendo Breath"
+    },
+    "b507e470a1b4cb5c563c": {
+      "brand": "Verist Fields",
+      "strain": "Mimosa Ice"
+    },
+    "f9c5b1208c5cb05f0370": {
+      "brand": "No Coast Wellness",
+      "strain": "Turtle Taffy"
+    },
+    "0ce046f92958b48f5c85": {
+      "brand": "Rewind",
+      "strain": "Kanobi Sunset"
+    },
+    "e59fa4d72e4cac5da0f0": {
+      "brand": "Rewind",
+      "strain": "Killer Cupcake"
+    },
+    "07320ccabf4338266c99": {
+      "brand": "Rosebuds Cannabis Company",
+      "strain": "Sour Diesel"
+    },
+    "3767243adcb085deb143": {
+      "brand": "Nebula",
+      "strain": "Rocket Pop"
+    },
+    "e933adc6b2703fbcc192": {
+      "brand": "Northpark",
+      "strain": "OG Kush"
+    },
+    "3edd6c1ad964eb4eafae": {
+      "brand": "Northpark",
+      "strain": "Trainwreck"
+    },
+    "5f4818b477c402b0e6b9": {
+      "brand": "Northpark",
+      "strain": "Pineapple Express"
+    },
+    "dc583d60e19bb2047561": {
+      "brand": "Lakeside Cannabis",
+      "strain": "Cotton Candy",
+      "category": "Preroll"
+    },
+    "0259d67162f4d7a68ce2": {
+      "brand": "Trailhead",
+      "strain": "Cherry Lady Slipper"
+    },
+    "42ce03718351065b0ef9": {
+      "brand": "Float Cannabis",
+      "strain": "Black Ice"
+    },
+    "eca2b989f9354babc43f": {
+      "brand": "Float Cannabis",
+      "strain": "Coolio"
+    },
+    "f8de99baf25b601948b3": {
+      "brand": "Trailhead",
+      "strain": "Gastronaut"
+    },
+    "317c3b1c26f3c88db972": {
+      "brand": "Float Cannabis",
+      "strain": "Glitter Bomb"
+    },
+    "f2c10350c590bc8c22c7": {
+      "brand": "Valhalla",
+      "strain": "Granola Funk"
+    },
+    "db5e6b86bbb4eb9e72d1": {
+      "brand": "Trailhead",
+      "strain": "Gorilla Glue 4"
+    },
+    "e50475fa030a6d2df9f6": {
+      "brand": "Lakeside Cannabis",
+      "strain": "Lime Ice"
+    },
+    "ebc83ac3efba6eaad0cd": {
+      "brand": "Stargaze",
+      "strain": "Cap Junky"
+    },
+    "b6f9998e8a55d5d3752d": {
+      "brand": "Marawanna",
+      "strain": "Dulce de Fresa"
+    },
+    "5dc504f189e35b506f18": {
+      "brand": "Verist Fields",
+      "strain": "Sour Luxx"
+    },
+    "49604f58a088005a8508": {
+      "brand": "Marawanna",
+      "strain": "Tropic Fresa"
+    },
+    "86a3d02d734dbd5a0250": {
+      "brand": "Emerald Farms",
+      "strain": "Mochi Melon"
+    },
+    "adf8d4bfb749a2fbe3c3": {
+      "brand": "Potcorn",
+      "strain": "Gummibears"
+    },
+    "0e0fae952f050d374739": {
+      "brand": "Nebula",
+      "strain": "Rocket Pop"
+    },
+    "e2c2c67305e9e73fd52b": {
+      "brand": "Native Care",
+      "strain": "Super Silver Haze"
+    },
+    "5d-5d-013": {
+      "brand": "Redwood County Weed Management"
+    },
+    "5d-5d-016": {
+      "brand": "Redwood County Weed Management"
+    },
+    "5d-5d-017": {
+      "brand": "Redwood County Weed Management"
+    }
+  },
+  "excluded_owner_erroneous_strain_edits": {
+    "reason": "Keep Cherry Kush",
+    "count": 4
+  },
+  "review_note": "59 listing IDs reviewed: 2 Unwind already resolved; TGP abbreviated brand deliberately left unconfirmed; product formats and raw retailer evidence preserved."
+}
