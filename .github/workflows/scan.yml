@@ -43,7 +43,7 @@ jobs:
         if: steps.slot.outputs.run == 'true'
         run: |
           if [ "${{ github.event_name }}" = "push" ]; then
-            python3 collector/collector.py --limit 1 --delay 0.5
+            python3 collector/collector.py --limit 0 --include-license DIS-L24-000396-01-AUR --delay 0.5
           else
             python3 collector/collector.py --delay 1.5
           fi
@@ -55,13 +55,6 @@ jobs:
           assert data["reason"].startswith("read_only_staging"), "Staging guard missing"
           print("Checked targets:",data["targets_checked"],"Candidates:",data["counts"])
           PY
-      - name: Reconcile scan against D1 without writing any records
-        if: steps.slot.outputs.run == 'true'
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          MNTREES_CATALOG_D1_ID: 457785f2-ab73-4858-b524-ba613a2b5388
-        run: python3 collector/reconcile_d1_readonly.py
       - name: Archive scan evidence without editing catalog or D1
         if: always() && steps.slot.outputs.run == 'true'
         uses: actions/upload-artifact@v4
@@ -70,5 +63,4 @@ jobs:
           path: |
             collector/data/latest_scan.json
             collector/data/candidate_products.json
-            collector/data/d1_reconciliation.json
           retention-days: 30
