@@ -31,6 +31,12 @@ def build_preserved_snapshot(path):
         raise ValueError('The preserved production snapshot is incomplete')
     if any(not row.get('id') for row in offers) or len({row['id'] for row in offers}) != len(offers):
         raise ValueError('The preserved catalog has invalid listing identifiers')
+    coordinates = read('verified-retailer-coordinates.json')
+    for retailer in data['retailers']:
+        verified = coordinates.get(retailer['id'])
+        address = retailer.get('map_address') or retailer.get('address')
+        if verified and verified['coordinate_for_address'] == address:
+            retailer.update(verified)
     data['manifest'].update({
         'data_source': 'Preserved production menu snapshot',
         'listings': len(offers),
