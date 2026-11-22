@@ -71,7 +71,11 @@ def main():
     for start in range(0, len(rows), 100):
         request = urllib.request.Request(
             ENDPOINT, data=json.dumps(rows[start:start + 100]).encode(),
-            headers={"Authorization": f"Bearer {token}", "Content-Type": "application/json"},
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/json",
+                "User-Agent": "MNtrees-Scanner/1.0",
+            },
         )
         result = request_json(request, attempts=8)
         updated += result["listings_written"]
