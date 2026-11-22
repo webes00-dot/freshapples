@@ -134,7 +134,7 @@ function renderComparisons(input){
     const storeMatches=retailerDirectory.filter(store=>[store.name,store.legal_name].some(n=>matchKey(n)===matchKey(o.retailer)));
     const store=storeMatches.length===1?storeMatches[0]:null;
     const address=store&&String(store.map_address||store.address||'').trim();
-    const locationPreview=address?'<button type="button" class="retailer-preview-trigger" data-retailer-address="'+esc(address)+'" data-retailer-name="'+esc(o.retailer)+'" aria-label="Preview location of '+esc(o.retailer)+'">'+esc(o.retailer)+' <span class="location-hint">⌖ Map</span></button>':'<span class="compact-retailer">'+esc(o.retailer)+'</span>';
+    const locationPreview=address?'<button type="button" class="retailer-preview-trigger" data-retailer-address="'+esc(address)+'" data-retailer-name="'+esc(o.retailer)+'" data-retailer-id="'+esc(o.retailer_id)+'" aria-label="Preview location of '+esc(o.retailer)+'">'+esc(o.retailer)+' <span class="location-hint">⌖ Map</span></button>':'<span class="compact-retailer">'+esc(o.retailer)+'</span>';
     return '<div class="compact-offer"><div class="compact-offer-meta">'+esc(o.displayBrand)+' · '+esc(o.displayType)+(o.product_variant?' · '+esc(o.product_variant):'')+'</div><div class="compact-offer-main"><div class="compact-retailer-wrap">'+locationPreview+coming+'</div><div class="compact-price">'+money(o.price)+offerTrend+'</div></div><div class="compact-offer-main compact-subline"><span>'+esc(o.city||'Minnesota')+(o.pack.total?' · '+esc(String(o.pack.total))+' g':' · weight not listed')+(o.reviewed_identity&&o.pack.packLabel?' · '+esc(o.pack.packLabel):'')+'</span><span>'+esc(ppg)+'</span></div>'+note+link+'</div>';
   };
   const summary=geneticsSummary(g.strain);
@@ -227,6 +227,11 @@ document.addEventListener('click',event=>{
 });
 strainProfileDialog.addEventListener('click',event=>{if(event.target===strainProfileDialog||event.target.closest('.strain-profile-close'))strainProfileDialog.close()});
 const storeMatchesForPreview=name=>{const norm=v=>String(v||'').trim().toLowerCase();const matches=retailerDirectory.filter(x=>[x.name,x.legal_name].some(n=>norm(n)===norm(name)));return matches.length===1?matches[0]:null;};
+function retailerCatalogLink(name,id){
+ const params=new URLSearchParams({retailer:name,store:name});
+ if(id)params.append('storeId',id);
+ return './?'+params+'#compareTitle';
+}
 const locationDialog=document.createElement('dialog');
 locationDialog.className='retailer-location-dialog';
 locationDialog.setAttribute('aria-label','Retailer location preview');
@@ -237,7 +242,8 @@ document.addEventListener('click',event=>{
  const address=trigger.dataset.retailerAddress||'';
  const name=trigger.dataset.retailerName||'Dispensary';
  if(!address)return;
- locationDialog.innerHTML='<div class="retailer-dialog-heading"><strong>'+esc(name)+'</strong><button type="button" class="retailer-dialog-close" aria-label="Close location preview">×</button></div><p>'+esc(address)+'</p><div id="retailer-dialog-map" class="retailer-dialog-map" role="application" aria-label="Interactive map of '+esc(name)+'"></div><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address)+'" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a>';
+ const retailerLink='<a class="retailer-dialog-product-link" href="'+esc(retailerCatalogLink(name,trigger.dataset.retailerId))+'">'+esc(name)+'</a>';
+ locationDialog.innerHTML='<div class="retailer-dialog-heading"><strong>'+retailerLink+'</strong><button type="button" class="retailer-dialog-close" aria-label="Close location preview">×</button></div><p>'+esc(address)+'</p><div id="retailer-dialog-map" class="retailer-dialog-map" role="application" aria-label="Interactive map of '+esc(name)+'"></div><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(address)+'" target="_blank" rel="noopener noreferrer">Open in Google Maps ↗</a>';
  locationDialog.showModal();
  const mapHost=locationDialog.querySelector('#retailer-dialog-map');
  if(typeof L!=='undefined'){
@@ -247,14 +253,19 @@ document.addEventListener('click',event=>{
    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors',maxZoom:19}).addTo(locationMap);
    const exact=storeMatchesForPreview(name);
    const known=exact&&['address_verified','rooftop_verified','census_address_range_interpolated'].includes(exact.coordinate_accuracy)&&Number.isFinite(Number(exact.lat))&&Number.isFinite(Number(exact.lng));
-   const showPoint=(lat,lng)=>{if(!locationDialog.open)return;locationMap.setView([lat,lng],15);L.marker([lat,lng]).addTo(locationMap).bindPopup(esc(name)+'<br>'+esc(address));};
+   const showPoint=(lat,lng)=>{if(!locationDialog.open)return;locationMap.setView([lat,lng],15);L.marker([lat,lng]).addTo(locationMap).bindPopup(retailerLink+'<br>'+esc(address));};
    if(known)showPoint(Number(exact.lat),Number(exact.lng));
    else fetch('https://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?'+new URLSearchParams({SingleLine:address+', USA',f:'json',outFields:'Match_addr',maxLocations:'1'})).then(r=>r.json()).then(d=>{const p=d.candidates&&d.candidates[0];if(p&&p.score>=90&&p.location)showPoint(p.location.y,p.location.x);else mapHost.insertAdjacentHTML('beforeend','<p class="retailer-map-unresolved">Exact map location unavailable. Use the Google Maps link below.</p>')}).catch(()=>mapHost.insertAdjacentHTML('beforeend','<p class="retailer-map-unresolved">Map lookup unavailable. Use the Google Maps link below.</p>'));
    requestAnimationFrame(()=>locationMap.invalidateSize());
  }
 
 });
-locationDialog.addEventListener('click',event=>{if(event.target===locationDialog||event.target.closest('.retailer-dialog-close'))locationDialog.close()});
+locationDialog.addEventListener('click',event=>{
+ if(event.target===locationDialog||event.target.closest('.retailer-dialog-close')||
+    (event.target.closest('.retailer-dialog-product-link')&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey)){
+  locationDialog.close();
+ }
+});
 $('alphabetNav').addEventListener('click',e=>{
  const button=e.target.closest('button');
  if(!button)return;
@@ -416,10 +427,7 @@ $('topStrainsList').addEventListener('click',event=>{
   if(!store)return;
   const retailerId=retailerButton.dataset.topRetailerId||'';
   // Show every published offer at this location, not only the selected brand.
-  const params=new URLSearchParams({retailer:store});
-  if(retailerId)params.append('storeId',retailerId);
-  params.append('store',store);
-  window.location.assign('./?'+params.toString()+'#compareTitle');
+  window.location.assign(retailerCatalogLink(store,retailerId));
   return;
  }
  const brandButton=event.target.closest('button[data-top-brand]');
