@@ -1,0 +1,158 @@
+{
+  "first_store_opening": "2023-08-01",
+  "observed_start": "2025-08",
+  "observed_end": "2026-11",
+  "units": "USD per gram",
+  "observations": [
+    {
+      "month": "2025-08",
+      "category": "Flower",
+      "price_per_gram": 10.86,
+      "original_eighth_price": 38.01,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2025-09",
+      "category": "Flower",
+      "price_per_gram": 13.5571,
+      "original_eighth_price": 47.45,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2025-10",
+      "category": "Flower",
+      "price_per_gram": 16.9543,
+      "original_eighth_price": 59.34,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2025-11",
+      "category": "Flower",
+      "price_per_gram": 16.4114,
+      "original_eighth_price": 57.44,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2025-12",
+      "category": "Flower",
+      "price_per_gram": 17.1229,
+      "original_eighth_price": 59.93,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-01",
+      "category": "Flower",
+      "price_per_gram": 16.9229,
+      "original_eighth_price": 59.23,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-02",
+      "category": "Flower",
+      "price_per_gram": 15.9857,
+      "original_eighth_price": 55.95,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-03",
+      "category": "Flower",
+      "price_per_gram": 15.7857,
+      "original_eighth_price": 55.25,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-04",
+      "category": "Flower",
+      "price_per_gram": 15.3914,
+      "original_eighth_price": 53.87,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-05",
+      "category": "Flower",
+      "price_per_gram": 15.0229,
+      "original_eighth_price": 52.58,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-06",
+      "category": "Flower",
+      "price_per_gram": 14.7486,
+      "original_eighth_price": 51.62,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-07",
+      "category": "Flower",
+      "price_per_gram": 15.3743,
+      "original_eighth_price": 53.81,
+      "source": "Hoodie Minnesota monthly eighth prices",
+      "url": "https://www.cannabiscreditscores.com/archives/57594"
+    },
+    {
+      "month": "2026-08",
+      "category": "Concentrates",
+      "price_per_gram": 60,
+      "source": "MNtrees Minneapolis reference"
+    },
+    {
+      "month": "2026-08",
+      "category": "Flower",
+      "price_per_gram": 13.71,
+      "source": "MNtrees Minneapolis reference"
+    },
+    {
+      "month": "2026-08",
+      "category": "Pre-rolls",
+      "price_per_gram": 17,
+      "source": "MNtrees Minneapolis reference"
+    },
+    {
+      "month": "2026-10",
+      "category": "Concentrates",
+      "price_per_gram": 76,
+      "source": "MNtrees matched market median"
+    },
+    {
+      "month": "2026-10",
+      "category": "Flower",
+      "price_per_gram": 12.57,
+      "source": "MNtrees matched market median"
+    },
+    {
+      "month": "2026-10",
+      "category": "Pre-rolls",
+      "price_per_gram": 16,
+      "source": "MNtrees matched market median"
+    },
+    {
+      "month": "2026-11",
+      "category": "Concentrates",
+      "price_per_gram": 76,
+      "source": "MNtrees matched market median"
+    },
+    {
+      "month": "2026-11",
+      "category": "Flower",
+      "price_per_gram": 12.72,
+      "source": "MNtrees matched market median"
+    },
+    {
+      "month": "2026-11",
+      "category": "Pre-rolls",
+      "price_per_gram": 16,
+      "source": "MNtrees matched market median"
+    }
+  ]
+}
