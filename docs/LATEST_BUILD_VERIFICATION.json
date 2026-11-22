@@ -1,0 +1,10 @@
+{
+  "timestamp_utc": "2026-11-22T20:54:13.780212+00:00",
+  "source_sha": "535dac7a1fd11b9757bb164602cc054fcc21b700",
+  "status": "verified_storefront_build_only",
+  "files": 26,
+  "catalog_bytes": 2386598,
+  "site_data_bytes": 3320400,
+  "admin_portal_and_scanner_consolidated": false,
+  "production_deployed": false
+}
