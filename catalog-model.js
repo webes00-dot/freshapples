@@ -116,7 +116,9 @@ function mnLoonIdentity(o){
   const raw=String(value||"").trim();
   const match=raw.match(/^(?:mnl|mn\s*loon)\s+(.+)$/i);
   if(!match)continue;
-  let name=match[1].replace(/\s*(?:1\s*\/\s*2\s*gram|0?\.5\s*(?:g|gram)?|half\s*gram)\s*$/i,"").trim().replace(/[.\s-]+$/,"");
+  const [first,...details]=match[1].split("|").map(part=>part.trim());
+  const cultivar=details.length&&!isMerchField(first)&&details.every(isMerchField)?first:match[1];
+  let name=cultivar.replace(/\s*(?:1\s*\/\s*2\s*gram|0?\.5\s*(?:g|gram)?|half\s*gram)\s*$/i,"").trim().replace(/[.\s-]+$/,"");
   if(/^pinke\s+rozay$/i.test(name))name="Pink Rozay";
   if(/^nyc\s+diesel$/i.test(name))name="NYC Diesel";
   if(/^lemon\s+cherry\s+gelato$/i.test(name))name="Lemon Cherry Gelato";
