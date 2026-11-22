@@ -1,0 +1,41 @@
+{
+  "origin": "https://mntrees.co/data/",
+  "type": "one-time-production-recovery-snapshot",
+  "files": {
+    "site-data.json": {
+      "bytes": 3320400,
+      "sha256": "c0e467c016d22fdc39d1be1f2d883b292e3608a95bb69fc3ca1309d27dbcac24",
+      "json_type": "dict"
+    },
+    "catalog.json": {
+      "bytes": 2386598,
+      "sha256": "5a648ea29fef72e8eb208cecc7046ceb7ed77056387fd8ca1c9f682a3029fc14",
+      "json_type": "list"
+    },
+    "brands.json": {
+      "bytes": 32414,
+      "sha256": "a1c5982c33f33f4f8f981887f15eb44a377ed73a68f8c12fb25af8380f901c23",
+      "json_type": "list"
+    },
+    "retailer_locations.json": {
+      "bytes": 200194,
+      "sha256": "014fbddac931bbc4cda9ebb551b3b9ae860d62312ba3879adcf0335a2bf1dac7",
+      "json_type": "list"
+    },
+    "business_tags.json": {
+      "bytes": 147443,
+      "sha256": "01d46593406a337caff1cc0956d213f8fae0e3370cb3deebc6e2498c8b73ab9a",
+      "json_type": "dict"
+    },
+    "review_candidates.json": {
+      "bytes": 16798,
+      "sha256": "469ddf82059568b961b1a94f91fef92b5711415bdeadd5a663547aa88ef9aa6d",
+      "json_type": "dict"
+    },
+    "market-price-history.json": {
+      "bytes": 692,
+      "sha256": "05e0ddc378e47099f066e769ef53e0688e97362b2cef520f35ea593e8dc5861c",
+      "json_type": "dict"
+    }
+  }
+}
