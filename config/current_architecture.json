@@ -36,15 +36,28 @@
     "namespace": "mntrees-private-recovery-snapshots",
     "catalog_restore_tool": "scripts/restore_catalog_from_kv.py",
     "last_catalog_drill": "2026-11-22",
-    "independent_off_cloudflare_backup": "NOT_VERIFIED"
+    "independent_off_cloudflare_backup": "Encrypted complete GitHub D1 snapshot, 6 shard files; 3 encrypted Worker source archives; recovery key stored separately in private ChatGPT Library; readback/chunk check and SHA256 decrypt verification accomplished"
   },
   "release_gate": {
     "public_static_source_recovered": true,
     "catalog_restore_passed": true,
     "scanner_integrated_and_validated": false,
-    "admin_code_in_secure_version_control": false,
-    "preview_parity_verified": false,
-    "production_promotion": false
+    "admin_code_in_secure_version_control": true,
+    "preview_parity_verified": true,
+    "production_promotion": true,
+    "admin_deployment_pipeline_reproduced": false,
+    "automatic_scan_data_authority_reconciled": false
   },
-  "legacy_repository_dependencies": []
+  "legacy_repository_dependencies": [],
+  "release": {
+    "date": "2026-11-22",
+    "source_repository": "webes00-dot/freshapples",
+    "source_branch": "main",
+    "build_id": "ea1b5d4f-0a08-4a63-a3f1-4a746eab87e7",
+    "production_worker_version": "6c744a2f-17cf-462c-ad04-a776bab71d9f",
+    "preview_worker_version": "7f696772-b56a-4242-a9aa-d9cb3924145d",
+    "production_build_outcome": "success",
+    "production_deploy_default": "gated no-op",
+    "live_browser_postdeploy": "not verified due to Browser Rendering quota"
+  }
 }
