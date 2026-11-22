@@ -16,6 +16,11 @@
       "binding": "REVIEWS_DB",
       "database_name": "mntrees-reviews",
       "database_id": "9d62cb7c-0f35-4e66-a47f-9cb3cb465a49"
+    },
+    {
+      "binding": "CATALOG_DB",
+      "database_name": "mntrees-catalog-staging",
+      "database_id": "457785f2-ab73-4858-b524-ba613a2b5388"
     }
   ],
   "env": {
@@ -26,6 +31,11 @@
           "binding": "REVIEWS_DB",
           "database_name": "mntrees-recovery-preview-reviews",
           "database_id": "369472cb-6f59-415f-97ed-d3d955839ad1"
+        },
+        {
+          "binding": "CATALOG_DB",
+          "database_name": "mntrees-catalog-staging",
+          "database_id": "457785f2-ab73-4858-b524-ba613a2b5388"
         }
       ]
     }
