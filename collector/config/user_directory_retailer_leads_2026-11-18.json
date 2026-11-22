@@ -1,0 +1,259 @@
+{
+  "source": "User-uploaded Minnesota retailer directory (Pasted markdown(6).md) on 2026-11-18",
+  "review_scope": "Nonduplicate candidates not yet added as verified scan targets. Candidate data requires retailer existence, license, adult-use status and direct menu validation before publication.",
+  "count": 28,
+  "candidates": [
+    {
+      "name": "5th Sun Gardens LLC",
+      "address": "111 Coffee St E, Lanesboro, MN 55949, USA",
+      "website": "https://www.fifthsungardens.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Cali Cannabis Dispensary Uptown",
+      "address": "2945 Hennepin Ave S, Minneapolis, MN 55408, USA",
+      "website": "http://calimn.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Coconut Cannabis",
+      "address": "13371 Irvine Ave NW suite 1, Bemidji, MN 56601, USA",
+      "website": "http://coconutcannabis.net",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Corner Acre Dispensary",
+      "address": "4321 MN-23, Brook Park, MN 55007, USA",
+      "website": "https://www.corneracredispensary.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Da Spot Dispensary & Wellness",
+      "address": "2313 W 50th St, Minneapolis, MN 55410, USA",
+      "website": "http://daspotcannabis.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Flower Shop Dispensary - Luverne",
+      "address": "706 S Kniss Ave, Luverne, MN 56156, USA",
+      "website": "https://flowershopdispo.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Green Genie",
+      "address": "1321 Center Ave, Moorhead, MN 56560",
+      "website": "",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Hazy Bear",
+      "address": "40 MN-6, Outing, MN 56662, USA",
+      "website": "",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Healing Harvest",
+      "address": "1123 S Minnesota Ave B, St Peter, MN 56082, USA",
+      "website": "http://www.healingharvestmn.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Hempire",
+      "address": "3135 Superior Dr NW STE B, Rochester, MN 55901, USA",
+      "website": "https://www.hempiredispensary.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Hidden Gardens",
+      "address": "24000 218 Highway N, Austin, MN   55912",
+      "website": "",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Highnorth Dispensary - Cottage Grove",
+      "address": "8711 E Point Douglas Rd S #108, Cottage Grove, MN 55016, USA",
+      "website": "http://highnorthmn.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Holy Smokes Cannabis",
+      "address": "7424 Lyndale Ave S, Minneapolis, MN 55423, USA",
+      "website": "http://dutchie.com/stores/holy-smokes-cannabis",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "HWS Cannabis Company",
+      "address": "499 Arrowhead Ln, Moose Lake, MN 55767, USA",
+      "website": "http://www.hwshemp.life/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Jackson Canna",
+      "address": "924 US-71, Jackson, MN 56143, USA",
+      "website": "https://jacksoncanna.com",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "La Canna - Legal Cannabis Store 21+",
+      "address": "1570 US-14, La Crescent, MN 55947, USA",
+      "website": "https://lacanna.co/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Minne Organix",
+      "address": "1900 80th St, Victoria, MN 55386, USA",
+      "website": "https://www.minneorganix.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "MN Grass Hero Recreational Dispensary",
+      "address": "1331 105th St NW, Rice, MN 56367, USA",
+      "website": "https://mngrasshero.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Munch Cannabis Company LLC",
+      "address": "25246 Rice Rd, Hinckley, MN 55037, USA",
+      "website": "https://www.munch-cannabis.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "North Shore Dispensary",
+      "address": "2033 W Superior St, Duluth, MN 55806, USA",
+      "website": "https://northshoredispensary.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Northern Illusion Dispensary",
+      "address": "1982 Rainbow St, Mora, MN 55051, USA",
+      "website": "https://www.northernillusiondispensary.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Pipestone Recreational Dispensary",
+      "address": "112 Main St W, Pipestone, MN 56164, USA",
+      "website": "http://pipestonedispo.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Really Dope",
+      "address": "162 Dale St N, St Paul, MN 55102, USA",
+      "website": "https://www.really-dope.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Silver Therapeutics Cannabis Company   Stillwater Dispensary",
+      "address": "1778 Greeley St S, Stillwater, MN 55082, USA",
+      "website": "https://silver-therapeutics.com/location/medical-and-recreational-cannabis-dispensary-in-stillwater-silver-cannabis/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Two Harbors Cannabis & Smoke Shop",
+      "address": "629 7th Ave, Two Harbors, MN 55616, USA",
+      "website": "https://www.twoharborscannabis.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Weed Wishes Recreational Dispensary",
+      "address": "2 1st St E, Cook, MN 55723, USA",
+      "website": "http://weedwishesdispensary.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "Zenith Horizon Dispensary",
+      "address": "Back Alley Entrance, 110B W Main St, Le Roy, MN 55951, USA",
+      "website": "http://www.zhdispensary.com",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    },
+    {
+      "name": "The Zen Pot",
+      "address": "403 Hwy 55 Suite-A, Buffalo, MN 55313, USA",
+      "website": "https://thezenpot420.com/",
+      "status": "user_supplied_research_lead",
+      "menu_verified": false,
+      "price_products_imported": 0,
+      "notes": "Store open/licensing/menu not independently checked; do not claim coverage from this lead alone"
+    }
+  ]
+}
