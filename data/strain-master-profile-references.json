@@ -1,11 +1,35 @@
 {
+  "24K Gold": {
+    "url": "https://www.allbud.com/marijuana-strains/indica-dominant-hybrid/24k-gold",
+    "source": "allbud.com"
+  },
   "Alien Lights": {
     "url": "https://www.allbud.com/marijuana-strains/hybrid/alien-lights",
     "source": "allbud.com"
   },
+  "Angry Apples": {
+    "url": "https://www.leafly.com/strains/angry-apple",
+    "source": "leafly.com"
+  },
+  "Apex Oranges": {
+    "url": "https://visitgreengoods.com/shop-minnesota/products/2781961/rythm-sativa-apex-orange",
+    "source": "RYTHM cultivar description (Green Goods)"
+  },
+  "Autopilot": {
+    "url": "https://www.allbud.com/marijuana-strains/indica-dominant-hybrid/autopilot",
+    "source": "allbud.com"
+  },
+  "Baja Blast": {
+    "url": "https://weedmaps.com/strains/baja-blast",
+    "source": "weedmaps.com"
+  },
   "Bangkok Purple": {
     "url": "https://www.allbud.com/marijuana-strains/sativa-dominant-hybrid/bangkok-purple",
     "source": "allbud.com"
+  },
+  "Berry Bomb": {
+    "url": "https://www.leafly.com/strains/berry-bomb",
+    "source": "leafly.com"
   },
   "Blackberry Kush": {
     "url": "https://www.leafly.com/strains/blackberry-kush",
@@ -19,6 +43,14 @@
     "url": "https://onedaycannabis.com/bodacious-berriez-2/",
     "source": "onedaycannabis.com"
   },
+  "Bubble Gum OG": {
+    "url": "https://weedmaps.com/strains/bubble-gum-og",
+    "source": "weedmaps.com"
+  },
+  "Burger Breath": {
+    "url": "https://genetics.areto.tech/strains/burger-breath/",
+    "source": "genetics.areto.tech"
+  },
   "Candy Blues": {
     "url": "https://getqualityroots.com/strains/candy-blues/",
     "source": "getqualityroots.com"
@@ -27,6 +59,14 @@
     "url": "https://medbud.wiki/cultivars/colada/",
     "source": "medbud.wiki"
   },
+  "Cookies and Chem": {
+    "url": "https://www.leafly.com/strains/cookies-and-chem",
+    "source": "leafly.com"
+  },
+  "Duct Tape": {
+    "url": "https://www.allbud.com/marijuana-strains/hybrid/duct-tape",
+    "source": "allbud.com"
+  },
   "Egg Roll": {
     "url": "https://www.leafly.com/strains/egg-roll",
     "source": "leafly.com"
@@ -34,6 +74,22 @@
   "Face Fat": {
     "url": "https://genetics.areto.tech/strains/face-fat/",
     "source": "genetics.areto.tech"
+  },
+  "Fruitstripez": {
+    "url": "https://seeds.phylos.bio/products/fruitstripez",
+    "source": "seeds.phylos.bio"
+  },
+  "Funk Bomb": {
+    "url": "https://www.strainapi.com/funk-bomb/",
+    "source": "strainapi.com"
+  },
+  "G-Tank": {
+    "url": "https://www.leafly.com/strains/gas-tanker",
+    "source": "leafly.com"
+  },
+  "Glue #31": {
+    "url": "https://growdiaries.com/strains/glue-31",
+    "source": "growdiaries.com"
   },
   "Grease Gun": {
     "url": "https://www.leafly.com/strains/grease-gun",
@@ -46,6 +102,10 @@
   "Gucci Fruit": {
     "url": "https://weedmaps.com/strains/gucci-fruit",
     "source": "weedmaps.com"
+  },
+  "Gus Scout Cookies": {
+    "url": "https://mephistogenetics.com/products/gus-scout-cookies",
+    "source": "mephistogenetics.com"
   },
   "Hooch": {
     "url": "https://www.leafly.com/strains/hooch",
@@ -67,9 +127,29 @@
     "url": "https://minnygrown.com/minnesota/",
     "source": "minnygrown.com"
   },
+  "Octane Mintz": {
+    "url": "https://trailheadmn.com/strains/octane-mintz",
+    "source": "trailheadmn.com"
+  },
+  "Orange Creamsicle": {
+    "url": "https://www.leafly.com/strains/orange-creamsicle",
+    "source": "leafly.com"
+  },
   "Orange Sour": {
     "url": "https://seedfinder.eu/en/strain-info/orange-sour/imperial-seal-seeds",
     "source": "seedfinder.eu"
+  },
+  "Permanent Push Pop": {
+    "url": "https://weedmaps.com/strains/permanent-push-pop",
+    "source": "weedmaps.com"
+  },
+  "Petrol Station": {
+    "url": "https://www.leafly.com/strains/petrol-station",
+    "source": "leafly.com"
+  },
+  "Pilot Light": {
+    "url": "https://atlasseed.com/wp-content/uploads/2023/11/2024-Atlas-Seed-Catalog-Strain-Guide.pdf#page=5",
+    "source": "atlasseed.com"
   },
   "Pineapple Burst": {
     "url": "https://weedmaps.com/strains/pineapple-burst",
@@ -87,9 +167,17 @@
     "url": "https://seedfinder.eu/en/strain-info/primal-punch/unknown-or-legendary",
     "source": "seedfinder.eu"
   },
+  "Ruby Slippers": {
+    "url": "https://www.leafly.com/strains/ruby-slippers",
+    "source": "leafly.com"
+  },
   "Sneak Attack OG": {
     "url": "https://www.jointcommerce.com/strains/sneak-attack-og",
     "source": "jointcommerce.com"
+  },
+  "Sour Lemons": {
+    "url": "https://www.leafly.com/strains/sour-lemons",
+    "source": "leafly.com"
   },
   "Stardust": {
     "url": "https://weedmaps.com/strains/stardust",
@@ -103,8 +191,24 @@
     "url": "https://www.leafly.com/strains/top-gun",
     "source": "leafly.com"
   },
+  "Unicorn Piss": {
+    "url": "https://www.allbud.com/marijuana-strains/hybrid/unicorn-piss",
+    "source": "allbud.com"
+  },
+  "Watermelon": {
+    "url": "https://www.leafly.com/strains/watermelon",
+    "source": "leafly.com"
+  },
+  "Watermelon Rolex": {
+    "url": "https://neptuneseedbank.com/product/watermelon-rolex-2strain/",
+    "source": "neptuneseedbank.com"
+  },
   "White Inferno": {
     "url": "https://www.jointcommerce.com/strains/white-inferno",
+    "source": "jointcommerce.com"
+  },
+  "Zimosa": {
+    "url": "https://www.jointcommerce.com/strains/zimosa",
     "source": "jointcommerce.com"
   },
   "Zour Zushi": {
