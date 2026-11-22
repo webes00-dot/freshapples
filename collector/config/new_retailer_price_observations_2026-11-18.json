@@ -1,0 +1,199 @@
+{
+  "description": "Source-observed new retailer offers. Staging only; must not be published until source/product identity and dated price are rechecked. Duplicate-review decisions untouched.",
+  "observed_date": "2026-11-18",
+  "price_currency": "USD",
+  "source_notes": {
+    "Unanimous Cannabis": "Individual product detail pages for most offers; one-item prices only, not quantity discounts",
+    "Waabigwan Mashkiki - Mahnomen": "Official site default Mahnomen store; only one named store, no extrapolation to other locations",
+    "La Canna": "Official homepage featured items, not full catalog; listed sale price for Lit OG"
+  },
+  "offers": [
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Mystic Mint",
+      "brand": "",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 32,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/info",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Mendo Breath",
+      "brand": "FLÖR",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 37,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/3-5-grams-of-flor-flower-mendo-breath",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Mac V2",
+      "brand": "Unbound",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 36,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/3-5-grams-of-unbound-flower-mac-v2",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Durban Z",
+      "brand": "",
+      "category": "Flower",
+      "package_g": 7,
+      "price": 63,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/7-grams-of-flower-durban-z",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Apex Orange",
+      "brand": "",
+      "category": "Flower",
+      "package_g": 14,
+      "price": 110,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/14-grams-of-flower-apex-orange",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "OMG",
+      "brand": "Good Green",
+      "category": "Flower",
+      "package_g": 7,
+      "price": 53,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/good-green-7-grams-of-flower-omg",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Bananaconda",
+      "brand": "RYTHM",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 38,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/3-5-grams-of-flower-bananaconda",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Unanimous Cannabis",
+      "city": "Minneapolis",
+      "strain": "Evercrisp",
+      "brand": "",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 32,
+      "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/product/3-5-grams-of-flower-evercrisp",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "Cheetah Piss",
+      "brand": "Native Cuts",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 45,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "White Truffle",
+      "brand": "Waabigwan Mashkiki",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 50,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "Glitter Bomb",
+      "brand": "Waabigwan Mashkiki",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 50,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "Alien Rock Candy",
+      "brand": "Native Cuts",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 45,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "MAC 1",
+      "brand": "Native Cuts",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 40,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "Jealousy",
+      "brand": "Native Cuts",
+      "category": "Preroll",
+      "package_g": 1,
+      "price": 12,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "Waabigwan Mashkiki - Mahnomen",
+      "city": "Mahnomen",
+      "strain": "Lemon Fresh",
+      "brand": "Waabigwan Mashkiki",
+      "category": "Concentrate",
+      "package_g": 1,
+      "price": 65,
+      "url": "https://waabigwan.com/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "La Canna",
+      "city": "La Crescent",
+      "strain": "Lit OG",
+      "brand": "Campfire Cannabis",
+      "category": "Flower",
+      "package_g": 3.5,
+      "price": 49,
+      "url": "https://lacanna.co/",
+      "status": "source_observed_pending_ingestion"
+    },
+    {
+      "retailer": "La Canna",
+      "city": "La Crescent",
+      "strain": "Live Rosin Badder",
+      "brand": "Unwind Distribution",
+      "category": "Concentrate",
+      "package_g": 1,
+      "price": 50,
+      "url": "https://lacanna.co/",
+      "status": "source_observed_pending_ingestion"
+    }
+  ]
+}
