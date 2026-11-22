@@ -1,0 +1,132 @@
+{
+  "audit_date": "2026-11-18",
+  "scope": "Registry and source-observed product audit; does not imply 100 actively refreshed price feeds",
+  "tracked_locations": 128,
+  "published_retailers_reported_in_manifest": 35,
+  "source_observed_research_supplement_stores": 44,
+  "source_observed_research_supplement_offers": 356,
+  "registry_statuses": {
+    "confirmed_product_menu": 19,
+    "menu_link_prior_audit": 8,
+    "official_menu_page_product_extraction_pending": 3,
+    "shop_entry_not_verified": 17,
+    "third_party_menu": 1,
+    "store_with_shop": 2,
+    "website_only": 33,
+    "spreadsheet_active_url_unverified": 19,
+    "confirmed_store_menu": 7,
+    "source_listed_menu_needs_validation": 1,
+    "third_party_live_menu_needs_retailer_validation": 2
+  },
+  "major_host_groups": [
+    {
+      "host": "dispensary.shop",
+      "count": 18
+    },
+    {
+      "host": "RISE",
+      "count": 8
+    },
+    {
+      "host": "Green Goods",
+      "count": 8
+    },
+    {
+      "host": "waabigwan.com",
+      "count": 5
+    },
+    {
+      "host": "themnloon.com",
+      "count": 3
+    },
+    {
+      "host": "legacycannabismn.com",
+      "count": 2
+    },
+    {
+      "host": "shop.mnthc.co",
+      "count": 2
+    },
+    {
+      "host": "dispostore.com",
+      "count": 2
+    },
+    {
+      "host": "mnrootsdispensary.com",
+      "count": 2
+    },
+    {
+      "host": "mnlegitcannabis.com",
+      "count": 2
+    },
+    {
+      "host": "Weedmaps store",
+      "count": 2
+    },
+    {
+      "host": "wildflower.cc",
+      "count": 2
+    },
+    {
+      "host": "Weedmaps third-party",
+      "count": 2
+    },
+    {
+      "host": "shop.trf.cannacorners.com",
+      "count": 1
+    },
+    {
+      "host": "shop.greenduckgo.com",
+      "count": 1
+    },
+    {
+      "host": "jazz-cabbage.com",
+      "count": 1
+    },
+    {
+      "host": "waconiadispensary.com",
+      "count": 1
+    },
+    {
+      "host": "altitudedispensarymn.com",
+      "count": 1
+    },
+    {
+      "host": "americanmadecannabis.us",
+      "count": 1
+    },
+    {
+      "host": "blackbeardispensary.com",
+      "count": 1
+    },
+    {
+      "host": "cannajoymn.com",
+      "count": 1
+    },
+    {
+      "host": "www.coastlesscannabis.com",
+      "count": 1
+    },
+    {
+      "host": "www.flipsidemn.com",
+      "count": 1
+    },
+    {
+      "host": "shop.flowerzdispensary.com",
+      "count": 1
+    },
+    {
+      "host": "grazzhopper.com",
+      "count": 1
+    }
+  ],
+  "missing_url_targets": [],
+  "notes": [
+    "Registry statuses include historically unverified links, not live probe results.",
+    "Newly included offer supplements are separately sourced, kept distinct from the automated publication feed.",
+    "Flowhub, Sweed, Blaze, Weedmaps and dynamically rendered menus need provider-specific adapters for reliable repeatable refreshes.",
+    "A failed or empty scan must never erase last-known-good priced offers."
+  ],
+  "pricing_goal": 100,
+  "automated_priced_feeds_not_verified": true
+}
