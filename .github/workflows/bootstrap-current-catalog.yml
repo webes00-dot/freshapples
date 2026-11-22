@@ -1,0 +1,41 @@
+name: Bootstrap current MNtrees public catalog
+on:
+  push:
+    paths:
+      - .github/workflows/bootstrap-current-catalog.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  capture:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Capture published public datasets
+        run: |
+          python3 - <<'PY'
+          import urllib.request,json,hashlib,pathlib
+          base='https://mntrees.co/data/'
+          names=['site-data.json','catalog.json','brands.json','retailer_locations.json','business_tags.json','review_candidates.json','market-price-history.json']
+          root=pathlib.Path('data');root.mkdir(exist_ok=True)
+          manifest={'origin':base,'type':'one-time-production-recovery-snapshot','files':{}}
+          for name in names:
+              req=urllib.request.Request(base+name,headers={'User-Agent':'MNtrees-recovery/1.0','Cache-Control':'no-cache'})
+              with urllib.request.urlopen(req,timeout=90) as r: data=r.read()
+              parsed=json.loads(data)
+              (root/name).write_bytes(data)
+              manifest['files'][name]={'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'json_type':type(parsed).__name__}
+          (root/'production-capture-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          print(manifest)
+          PY
+      - name: Record immutable public snapshot
+        run: |
+          git config user.name "MNtrees recovery bot"
+          git config user.email "recovery@users.noreply.github.com"
+          git add data/site-data.json data/catalog.json data/brands.json data/retailer_locations.json data/business_tags.json data/review_candidates.json data/market-price-history.json data/production-capture-manifest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Capture current public MNtrees dataset from active new deployment"
+            git push
+          fi
