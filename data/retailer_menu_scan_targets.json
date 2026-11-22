@@ -1,0 +1,937 @@
+[
+  {
+    "id": "MICRO-L25-000761-01-AUR",
+    "name": "Zenith Horizon",
+    "url": "https://zhdispensary.com/store/le-roy/"
+  },
+  {
+    "id": "MICRO-L24-000422-01-AUR",
+    "name": "Unanimous Cannabis",
+    "url": "https://shop.unanimouscannabis.com/dispensary/minneapolis-mn-55408-unanimous-cannabis/menu/info"
+  },
+  {
+    "id": "MICRO-L25-000648-01-AUR",
+    "name": "Strains of the Earth",
+    "url": "https://www.strainsoftheearth.com/"
+  },
+  {
+    "id": "MICRO-L24-000066-02-AUR",
+    "name": "St. Paul Cannabis",
+    "url": "https://www.stpaulcannabis.com/"
+  },
+  {
+    "id": "MICRO-L25-001298-01-AUR",
+    "name": "Spring Lake Park Dispensary",
+    "url": "https://www.springlakeparksdispensary.com/"
+  },
+  {
+    "id": "MICRO-L25-000998-01-AUR",
+    "name": "Sota Sown",
+    "url": "https://www.sotasown.com/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-000350-01-AUR",
+    "name": "Great Northern Greens",
+    "url": "https://www.shop.greatnortherngreens.com/store/"
+  },
+  {
+    "id": "DIS-L25-000045-03-AUR",
+    "name": "Pot Mamas",
+    "url": "https://www.pot-mamas.com/woodbury-menu"
+  },
+  {
+    "id": "DIS-L25-000045-02-AUR",
+    "name": "Pot Mamas",
+    "url": "https://www.pot-mamas.com/mendota-menu"
+  },
+  {
+    "id": "DIS-L25-000045-01-AUR",
+    "name": "Pot Mamas",
+    "url": "https://www.pot-mamas.com/edina-menu"
+  },
+  {
+    "id": "MICRO-L25-000351-01-AUR",
+    "name": "Northern Dispensary",
+    "url": "https://www.northerndispensary.co/stores/northern-dispensary"
+  },
+  {
+    "id": "MICRO-L25-001549-01-AUR",
+    "name": "New Brighton Dispensary",
+    "url": "https://www.mndispensaryco.com/menu"
+  },
+  {
+    "id": "MICRO-L25-001453-01-AUR",
+    "name": "Mary Jane's Dispensary",
+    "url": "https://www.maryjanesdispensary420.com/#menu"
+  },
+  {
+    "id": "MICRO-L25-000977-01-AUR",
+    "name": "MUNCHIEZ CANNABIS MN",
+    "url": "https://www.leafly.com/dispensary-info/munch-cannabis-co"
+  },
+  {
+    "id": "MICRO-L25-000908-01-AUR",
+    "name": "Cheeky Winona",
+    "url": "https://www.cheekywinona.com/menu"
+  },
+  {
+    "id": "MICRO-L25-000873-01-AUR",
+    "name": "Wild River Dispensary",
+    "url": "https://wildrivercannabis.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "DIS-L24-000408-01-AUR",
+    "name": "Wildflower Cannabis",
+    "url": "https://wildflowercannabis.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-000612-01-AUR",
+    "name": "Wildflower Northeast",
+    "url": "https://wildflower.cc/store/northeast/"
+  },
+  {
+    "id": "MICRO-L25-000627-01-AUR",
+    "name": "Wildflower North Loop",
+    "url": "https://wildflower.cc/store/north-loop/"
+  },
+  {
+    "id": "MICRO-L25-000345-01-AUR",
+    "name": "Weed Wishes Company",
+    "url": "https://weedwishesdispensary.com/store/cook-minnesota/"
+  },
+  {
+    "id": "MEZZO-L24-000140-01-AUR",
+    "name": "Verist Fields",
+    "url": "https://veristfields.com/store/50th-bryant/"
+  },
+  {
+    "id": "MICRO-L25-001594-01-AUR",
+    "name": "The Greenhouse Cannabis Company",
+    "url": "https://thegreenhousecannabisco.com/mn/forestlake"
+  },
+  {
+    "id": "MICRO-L24-000018-02-AUR",
+    "name": "HWS Cannabis Company",
+    "url": "https://sweede.io/dispensary/moose-lake-mn-55767-holistic-wellness-services/menu"
+  },
+  {
+    "id": "MICRO-L25-001080-01-AUR",
+    "name": "Sugarleaf",
+    "url": "https://sugarleafmn.netlify.app/"
+  },
+  {
+    "id": "MICRO-L25-000333-01-AUR",
+    "name": "LMNO Dispensary",
+    "url": "https://store.lmnodispensary.com/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-001135-02-AUR",
+    "name": "St. Louis Park Canna",
+    "url": "https://stlouisparkcanna.com/"
+  },
+  {
+    "id": "MICRO-L25-000931-01-AUR",
+    "name": "Stinky Petes",
+    "url": "https://stinkypetesely.dispensary.shop/"
+  },
+  {
+    "id": "DIS-L25-000120-02-AUR",
+    "name": "Silver Therapeutics Cannabis Company",
+    "url": "https://silver-therapeutics.com/"
+  },
+  {
+    "id": "MICRO-L25-001116-01-AUR",
+    "name": "LOTW Dispensary",
+    "url": "https://shop.lotwdispensary.com/shop/"
+  },
+  {
+    "id": "MICRO-L25-000469-01-AUR",
+    "name": "Randolph's Cannabis Reserve",
+    "url": "https://randolphsreserve.com/order-online/"
+  },
+  {
+    "id": "MICRO-L25-000945-01-AUR",
+    "name": "Aurora Cannabis",
+    "url": "https://priorlakedispo.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-000414-01-AUR",
+    "name": "MN Grass Hero",
+    "url": "https://mngrasshero.com/#menu"
+  },
+  {
+    "id": "MICRO-L25-000912-01-AUR",
+    "name": "Mary Pot'ins",
+    "url": "https://marypotinsdispensary.com/shop/"
+  },
+  {
+    "id": "MICRO-L25-000522-01-AUR",
+    "name": "Loon Leaf",
+    "url": "https://loonleafmn.com/shop"
+  },
+  {
+    "id": "MICRO-L25-000646-01-AUR",
+    "name": "Higher Plains Cannabis Co",
+    "url": "https://higherplainscannabis.com/shop/"
+  },
+  {
+    "id": "MICRO-L24-000232-01-AUR",
+    "name": "Healing Harvest",
+    "url": "https://healingharvestmn.com/store/"
+  },
+  {
+    "id": "MICRO-L25-001309-01-AUR",
+    "name": "Green Genie",
+    "url": "https://greengeniemn.com/shop/"
+  },
+  {
+    "id": "MICRO-L24-000293-02-AUR",
+    "name": "Green Box Cannabis",
+    "url": "https://greenboxcannabis.wm.store/discover"
+  },
+  {
+    "id": "MICRO-L25-000684-01-AUR",
+    "name": "Holy Smokes",
+    "url": "https://dutchie.com/stores/holy-smokes-cannabis"
+  },
+  {
+    "id": "MICRO-L25-000574-01-AUR",
+    "name": "Pipestone Dispensary",
+    "url": "https://dutchie.com/dispensary/serene-acres"
+  },
+  {
+    "id": "MICRO-L25-001583-01-AUR",
+    "name": "Velvet Leaf",
+    "url": "https://dutchie.com/dispensary/beezwax-moorehead-2"
+  },
+  {
+    "id": "MICRO-L25-000659-01-AUR",
+    "name": "Coconut Cannabis",
+    "url": "https://coconutcannabis.net/store/recreational/"
+  },
+  {
+    "id": "MICRO-L25-000490-01-AUR",
+    "name": "Cali Cannabis",
+    "url": "https://calimn.com/shop"
+  },
+  {
+    "id": "MICRO-L25-001055-01-AUR",
+    "name": "B & D Cannabis",
+    "url": "https://banddcannabis.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "DIS-L25-000004-01-AUR",
+    "name": "Spark Minnesota",
+    "url": "https://www.sparkmn.com/"
+  },
+  {
+    "id": "MICRO-L24-000460-01-AUR",
+    "name": "PUR NORTH",
+    "url": "https://purnorthmn.com/newhope"
+  },
+  {
+    "id": "MICRO-L25-000747-02-AUR",
+    "name": "Hopkins Dispensary — Hopkins",
+    "url": "https://hopkinsdispensary.com/shop/"
+  },
+  {
+    "id": "MICRO-L25-000883-01-AUR",
+    "name": "Minne Organix — Victoria",
+    "url": "https://shop.minneorganix.com/rec/menu"
+  },
+  {
+    "id": "MICRO-L24-000031-02-AUR",
+    "name": "The Cannabis Co. — St. Michael",
+    "url": "https://thecannabisco.us/store/recreational/"
+  },
+  {
+    "id": "MICRO-L25-000558-01-AUR",
+    "name": "Two Harbors Cannabis — Two Harbors",
+    "url": "https://weedmaps.com/dispensaries/two-harbors-cannabis"
+  },
+  {
+    "id": "MICRO-L25-000500-01-AUR",
+    "name": "North Shore Dispensary — Duluth",
+    "url": "https://northshoredispensary.com/stores/north-shore-dispensary"
+  },
+  {
+    "id": "TRIBAL-NATIVECARE-RED-LAKE",
+    "name": "NativeCare — Red Lake",
+    "url": "https://nativecare.com/menu-2/"
+  },
+  {
+    "id": "MICRO-L25-001581-01-AUR",
+    "name": "Beezwax Dispensary — Moorhead",
+    "url": "https://www.jointcommerce.com/dispensaries/beezwax-dispensary"
+  },
+  {
+    "id": "TRIBAL-ANANG-CLOQUET",
+    "name": "Anang Native Cannabis Co. — Cloquet",
+    "url": "https://www.jointcommerce.com/dispensaries/anang-native-cannabis-co"
+  },
+  {
+    "id": "MICRO-L25-000505-01-AUR",
+    "name": "Green Grass",
+    "url": "https://www.hfcannabis.com/"
+  },
+  {
+    "id": "MEZZO-L24-000170-01-AUR",
+    "name": "Dirty Flamingo Cannabis Company",
+    "url": "https://www.dirtyflamingocannabis.com/locations/maplewood"
+  },
+  {
+    "id": "MICRO-L25-000656-01-AUR",
+    "name": "Deep Roots",
+    "url": "https://www.deeprootscannabismn.com/"
+  },
+  {
+    "id": "MICRO-L24-000350-01-AUR",
+    "name": "Coastless",
+    "url": "https://www.coastlesscannabis.com/"
+  },
+  {
+    "id": "MICRO-L25-001577-01-AUR",
+    "name": "Blaine Dispensary",
+    "url": "https://www.blainedispensary.com/menu/flower"
+  },
+  {
+    "id": "SITE-WILDFLOWER-NORTH-LOOP",
+    "name": "Wildflower North Loop",
+    "url": "https://wildflower.cc/locations/north-loop/"
+  },
+  {
+    "id": "MICRO-L25-000412-01-AUR",
+    "name": "The Stash & Co",
+    "url": "https://weedmaps.com/dispensaries/the-stash-co/flower"
+  },
+  {
+    "id": "MICRO-L25-000809-01-AUR",
+    "name": "Lindstrom Canna",
+    "url": "https://www.lindstromcanna.com/"
+  },
+  {
+    "id": "MEZZO-L24-000296-01-AUR",
+    "name": "High 10 Dispensary — Ramsey",
+    "url": "https://weedmaps.com/dispensaries/high-10-dispensary"
+  },
+  {
+    "id": "RESEARCH-GREEN-BOX-LAKEVILLE",
+    "name": "Green Box Cannabis — Lakeville",
+    "url": "https://weedmaps.com/dispensaries/green-box-cannabis"
+  },
+  {
+    "id": "RESEARCH-DANKZ-ST-CLOUD",
+    "name": "DankZ — St. Cloud",
+    "url": "https://weedmaps.com/dispensaries/dankz-1/flower"
+  },
+  {
+    "id": "MICRO-L25-001195-01-AUR",
+    "name": "North Blume Cannabis - Rogers",
+    "url": "https://weedbuddylink.com/dispensaries/north-blume-cannabis-co/"
+  },
+  {
+    "id": "MEZZO-L24-000296-02-AUR",
+    "name": "Waconia Dispensary",
+    "url": "https://waconiadispensary.com/shop"
+  },
+  {
+    "id": "TRIBAL-WAABIGWAN-MAHNOMEN",
+    "name": "Waabigwan Mashkiki — Mahnomen",
+    "url": "https://waabigwan.com/stores/waabigwan-mashkiki2"
+  },
+  {
+    "id": "TRIBAL-WAABIGWAN-SAINT-CLOUD",
+    "name": "Waabigwan Mashkiki — Saint Cloud",
+    "url": "https://waabigwan.com/stores/waabigwan-mashkiki-saint-cloud"
+  },
+  {
+    "id": "TRIBAL-WAABIGWAN-MOORHEAD",
+    "name": "Waabigwan Mashkiki — Moorhead",
+    "url": "https://waabigwan.com/stores/waabigwan-mashkiki-moorhead"
+  },
+  {
+    "id": "TRIBAL-WAABIGWAN-EAST-GRAND-FORKS",
+    "name": "Waabigwan Mashkiki — East Grand Forks",
+    "url": "https://waabigwan.com/stores/waabigwan-mashkiki-east-grand-forks"
+  },
+  {
+    "id": "TRIBAL-WAABIGWAN-CHANHASSEN",
+    "name": "Waabigwan Mashkiki — Chanhassen",
+    "url": "https://waabigwan.com/stores/waabigwan-mashkiki-chanhassen"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-MOORHEAD",
+    "name": "Green Goods — Moorhead",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6500/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-MINNEAPOLIS",
+    "name": "Green Goods — Minneapolis",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6499/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-BLOOMINGTON",
+    "name": "Green Goods — Bloomington",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6498/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-ROCHESTER",
+    "name": "Green Goods — Rochester",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6497/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-BLAINE",
+    "name": "Green Goods — Blaine",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6496/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-BURNSVILLE",
+    "name": "Green Goods — Burnsville",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6495/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-HERMANTOWN",
+    "name": "Green Goods — Hermantown",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6494/featured"
+  },
+  {
+    "id": "SITE-GREEN-GOODS-WOODBURY",
+    "name": "Green Goods — Woodbury",
+    "url": "https://visitgreengoods.com/shop-minnesota/store/6493/featured"
+  },
+  {
+    "id": "MICRO-L25-000608-01-AUR",
+    "name": "Unwind Dispensary — Moorhead",
+    "url": "https://unwindmn.dispensary.shop"
+  },
+  {
+    "id": "SITE-WILDFLOWER-NORTHEAST",
+    "name": "Wildflower — Northeast Minneapolis",
+    "url": "https://wildflower.cc/locations/northeast-minneapolis/"
+  },
+  {
+    "id": "MICRO-L24-000063-04-AUR",
+    "name": "Watchtower Dispensary",
+    "url": "https://watchtowerdispensary.com/"
+  },
+  {
+    "id": "MICRO-L25-000615-01-AUR",
+    "name": "URBAN GREEN Dispensary",
+    "url": "https://www.urbangreenmn.com/"
+  },
+  {
+    "id": "MICRO-L25-001531-01-AUR",
+    "name": "The Lakes Dispensary",
+    "url": "https://www.thelakesdispensary.com/"
+  },
+  {
+    "id": "RESEARCH-PRICED-128",
+    "name": "The Flower Shop MN — Luverne",
+    "url": "https://twincitycannabis.com/dispensaries/the-flower-shop-mn-llc/"
+  },
+  {
+    "id": "MICRO-L24-000257-01-AUR",
+    "name": "Sweetleaves — Minneapolis",
+    "url": "https://sweetleaves.co/"
+  },
+  {
+    "id": "RESEARCH-PRICED-129",
+    "name": "Off The Path Cannabis — Morton",
+    "url": "https://offthepathcannabis.com/"
+  },
+  {
+    "id": "MICRO-L25-000572-01-AUR",
+    "name": "Northern Crown Cannabis — Isanti",
+    "url": "https://northerncrowncannabis.com/"
+  },
+  {
+    "id": "RESEARCH-PRICED-134",
+    "name": "NativeCare — West St. Paul",
+    "url": "https://nativecare.com/"
+  },
+  {
+    "id": "DIS-L24-000241-01-AUR",
+    "name": "My Dealer",
+    "url": "https://mydealermn.com/"
+  },
+  {
+    "id": "MICRO-L25-001064-01-AUR",
+    "name": "MnLooN — Minneapolis",
+    "url": "https://themnloon.com/"
+  },
+  {
+    "id": "MEZZO-L24-000300-01-AUR",
+    "name": "MnLooN — St. Paul",
+    "url": "https://themnloon.com/"
+  },
+  {
+    "id": "MEZZO-L24-000173-05-AUR",
+    "name": "Legit Cannabis — Rosemount",
+    "url": "https://shop.mnlegitcannabis.com/south-metro/menu"
+  },
+  {
+    "id": "MICRO-L25-001612-01-AUR",
+    "name": "Lake Superior Dispensary — Duluth",
+    "url": "https://lakesuperiordispensary.org/"
+  },
+  {
+    "id": "RESEARCH-PRICED-136",
+    "name": "Lake Leaf Dispensary — Hinckley",
+    "url": "https://lakeleafretail.com/"
+  },
+  {
+    "id": "MICRO-L25-000523-01-AUR",
+    "name": "Irie Cannabis Dispensary — Minneapolis",
+    "url": "https://iriecannabisdispensary.com/"
+  },
+  {
+    "id": "MICRO-L25-000702-01-AUR",
+    "name": "HighRx — Fridley",
+    "url": "https://highrx.co/"
+  },
+  {
+    "id": "RESEARCH-PRICED-126",
+    "name": "Healing Harvest — St. Peter",
+    "url": "https://twincitycannabis.com/dispensaries/healing-harvest/"
+  },
+  {
+    "id": "MICRO-L25-000411-01-AUR",
+    "name": "Green Rose — Minneapolis",
+    "url": "https://greenrosemn.com/"
+  },
+  {
+    "id": "MICRO-L25-001342-02-AUR",
+    "name": "Great Cannabis",
+    "url": "https://greatcannabisllc.com/"
+  },
+  {
+    "id": "RESEARCH-PRICED-125",
+    "name": "Fullmelt Factory — Maple Grove",
+    "url": "https://www.fullmeltfactory.com/"
+  },
+  {
+    "id": "MICRO-L25-000395-01-AUR",
+    "name": "Frostbite Dispensary — Roseville",
+    "url": "https://frostbitedispensary.com/"
+  },
+  {
+    "id": "MICRO-L25-000569-01-AUR",
+    "name": "Flipside Dispensary and Music — Minneapolis",
+    "url": "https://flipsideflipside.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-001411-01-AUR",
+    "name": "Feelin' MN — Little Canada",
+    "url": "https://feelinmn.com/store/little-canada-mn/"
+  },
+  {
+    "id": "MICRO-L25-001284-01-AUR",
+    "name": "CannaJoy",
+    "url": "https://cannajoymn.com/"
+  },
+  {
+    "id": "MICRO-L25-000364-01-AUR",
+    "name": "Twin Cities Cannabis",
+    "url": "https://twincitiescannabis.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L24-000346-01-AUR",
+    "name": "Tranquil Gardens",
+    "url": "https://tranquilgardens.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-000917-01-AUR",
+    "name": "Trailhead Cannabis Company",
+    "url": "https://trailheadmn.com/menu"
+  },
+  {
+    "id": "MICRO-L25-000902-02-AUR",
+    "name": "Theory Wellness",
+    "url": "https://theorywellness.org/minnesota-dispensary/"
+  },
+  {
+    "id": "MEZZO-L24-000300-02-AUR",
+    "name": "MnLooN — Lakeville",
+    "url": "https://themnloon.com/"
+  },
+  {
+    "id": "MICRO-L25-001007-01-AUR",
+    "name": "Canna Corners",
+    "url": "https://shop.trf.cannacorners.com/"
+  },
+  {
+    "id": "MICRO-L25-001117-01-AUR",
+    "name": "Winona Dispensary — Winona",
+    "url": "https://shop.thewinonadispensary.com"
+  },
+  {
+    "id": "DIS-L24-000396-01-AUR",
+    "name": "MN THC Co — Lakeville",
+    "url": "https://shop.mnthc.co/lakeville/"
+  },
+  {
+    "id": "DIS-L24-000396-02-AUR",
+    "name": "MN THC Co — Dundas",
+    "url": "https://shop.mnthc.co/dundas/"
+  },
+  {
+    "id": "MICRO-L25-001203-01-AUR",
+    "name": "Green Duck Dispensary",
+    "url": "https://shop.greenduckgo.com/"
+  },
+  {
+    "id": "MICRO-L25-000555-02-AUR",
+    "name": "Flowerz Cannabis Co. — Saint Paul",
+    "url": "https://shop.flowerzdispensary.com/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-000658-01-AUR",
+    "name": "Dinky Dope",
+    "url": "https://shop.dinkydope.com/dinkytown"
+  },
+  {
+    "id": "MICRO-L25-001208-01-AUR",
+    "name": "Northern Sky Cannabis",
+    "url": "https://rosebudscannabiscompany.com/store/"
+  },
+  {
+    "id": "MDCMB-L25-000001-09-AUR",
+    "name": "RISE Dispensary — Willmar",
+    "url": "https://risecannabis.com/dispensaries/minnesota/willmar/6457/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-08-AUR",
+    "name": "RISE Dispensary — St. Paul",
+    "url": "https://risecannabis.com/dispensaries/minnesota/st-paul/6456/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-07-AUR",
+    "name": "RISE Dispensary — St. Cloud",
+    "url": "https://risecannabis.com/dispensaries/minnesota/st-cloud/6458/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-06-AUR",
+    "name": "RISE Dispensary — New Hope",
+    "url": "https://risecannabis.com/dispensaries/minnesota/new-hope/6460/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-05-AUR",
+    "name": "RISE Dispensary — Mankato",
+    "url": "https://risecannabis.com/dispensaries/minnesota/mankato/6454/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-04-AUR",
+    "name": "RISE Dispensary — Eagan",
+    "url": "https://risecannabis.com/dispensaries/minnesota/eagan/6455/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-03-AUR",
+    "name": "RISE Dispensary — Brooklyn Park",
+    "url": "https://risecannabis.com/dispensaries/minnesota/brooklyn-park/6459/recreational-menu/"
+  },
+  {
+    "id": "MDCMB-L25-000001-02-AUR",
+    "name": "RISE Dispensary — Baxter",
+    "url": "https://risecannabis.com/dispensaries/minnesota/baxter/6466/recreational-menu/"
+  },
+  {
+    "id": "MICRO-L24-000013-04-AUR",
+    "name": "Northern Sky Cannabis",
+    "url": "https://northernskycannabis.com/store/"
+  },
+  {
+    "id": "MICRO-L25-000543-01-AUR",
+    "name": "MN Roots Crosslake",
+    "url": "https://mnrootsdispensary.com/stores/mn-roots-crosslake"
+  },
+  {
+    "id": "MICRO-L25-000544-01-AUR",
+    "name": "MN Roots Jenkins",
+    "url": "https://mnrootsdispensary.com/stores/mn-roots-jenkins"
+  },
+  {
+    "id": "MICRO-L25-000846-02-AUR",
+    "name": "Minnesota Canna",
+    "url": "https://minnesotacanna.com/stores/minnesota-canna/products/flower"
+  },
+  {
+    "id": "MICRO-L24-000575-02-AUR",
+    "name": "Lucky Strains — New Brighton",
+    "url": "https://luckystrains-newbrighton.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-001038-01-AUR",
+    "name": "Lake of the Woods Cannabis Company",
+    "url": "https://lowcanco.com/"
+  },
+  {
+    "id": "MICRO-L25-000913-01-AUR",
+    "name": "Levitated Dispensaries",
+    "url": "https://levitateddispensary.dispensary.shop"
+  },
+  {
+    "id": "MEZZO-L24-000306-01-AUR",
+    "name": "Legacy Cannabis Woodbury",
+    "url": "https://legacycannabismn.com/store"
+  },
+  {
+    "id": "MEZZO-L24-000306-02-AUR",
+    "name": "Legacy Cannabis Minneapolis",
+    "url": "https://legacycannabismn.com/"
+  },
+  {
+    "id": "MICRO-L25-001289-01-AUR",
+    "name": "Legacy Cannabis — Duluth",
+    "url": "https://legacycannabisduluth.com/"
+  },
+  {
+    "id": "DIS-L25-000070-01-AUR",
+    "name": "Kodjo's Dispensary",
+    "url": "https://kodjos.dispensary.shop/"
+  },
+  {
+    "id": "MICRO-L25-000860-01-AUR",
+    "name": "Jazz Cabbage",
+    "url": "https://jazz-cabbage.com/shop"
+  },
+  {
+    "id": "MICRO-L25-000439-01-AUR",
+    "name": "In-Dispensary",
+    "url": "https://in-dispensary.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-001224-01-AUR",
+    "name": "Huff and Puff Smoke Shop",
+    "url": "https://huffandpuffdispensarymn.com/"
+  },
+  {
+    "id": "MICRO-L25-000436-01-AUR",
+    "name": "Higherplace — Chaska",
+    "url": "https://higherplace.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-000427-01-AUR",
+    "name": "Green Leafs",
+    "url": "https://greenleafscannabis.com/"
+  },
+  {
+    "id": "MICRO-L25-000398-01-AUR",
+    "name": "Green Leaf Depot",
+    "url": "https://greenleafdepot.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-000821-01-AUR",
+    "name": "Green Canopy Craft Dispensary — Lakeland Shores",
+    "url": "https://greencanopymn.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L24-000244-02-AUR",
+    "name": "Green Apple",
+    "url": "https://greenapplecannabis.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-001374-01-AUR",
+    "name": "Green 2 Go",
+    "url": "https://green-2-go.com/"
+  },
+  {
+    "id": "MICRO-L25-001246-01-AUR",
+    "name": "Grazzhopper",
+    "url": "https://grazzhopper.com/store/"
+  },
+  {
+    "id": "MICRO-L25-000498-01-AUR",
+    "name": "Go4 Cannabis Co.",
+    "url": "https://go4cannabis.com/"
+  },
+  {
+    "id": "MICRO-L25-001401-01-AUR",
+    "name": "Full Spectrum Dispensary",
+    "url": "https://fullspectrumdispo.com/"
+  },
+  {
+    "id": "MICRO-L25-000630-01-AUR",
+    "name": "Fort Road Cannabis",
+    "url": "https://fortroadcannabis.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "DIS-L25-000106-02-AUR",
+    "name": "Farmer's Cannabis Company",
+    "url": "https://farmerscannabisco.com/"
+  },
+  {
+    "id": "MICRO-L25-000519-02-AUR",
+    "name": "Edina Canna",
+    "url": "https://edinacanna.com/stores/edina-canna/products/flower"
+  },
+  {
+    "id": "MICRO-L25-000673-02-AUR",
+    "name": "Eagan Canna",
+    "url": "https://eagancanna.com/"
+  },
+  {
+    "id": "MICRO-L25-001072-02-AUR",
+    "name": "Duluth Cannabis Company",
+    "url": "https://duluthcannabiscompany.com/"
+  },
+  {
+    "id": "MICRO-L24-000426-01-AUR",
+    "name": "Do Be Kind",
+    "url": "https://dobekind.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L24-000290-04-AUR",
+    "name": "DNA Dispensary",
+    "url": "https://dnadispensary.wm.store/"
+  },
+  {
+    "id": "DIS-L25-000080-02-AUR",
+    "name": "DISPO - Rochester",
+    "url": "https://dispostore.com/stores/dispo-rochester"
+  },
+  {
+    "id": "DIS-L25-000080-01-AUR",
+    "name": "DISPO - Minneapolis",
+    "url": "https://dispostore.com/stores/dispo-minneapolis"
+  },
+  {
+    "id": "MICRO-L24-000481-01-AUR",
+    "name": "Canna Gemz",
+    "url": "https://cannagemz.com/"
+  },
+  {
+    "id": "MICRO-L25-000679-01-AUR",
+    "name": "Lake Daze Dispensary — Hopkins",
+    "url": "https://lakedaze.com/?meadowQuery=#shop"
+  },
+  {
+    "id": "MICRO-L25-001470-02-AUR",
+    "name": "Cabin Fever Cannabis",
+    "url": "https://cabinfevercannabis.com/"
+  },
+  {
+    "id": "MICRO-L24-000333-01-AUR",
+    "name": "Blue Ox Cannabis Company",
+    "url": "https://blueox.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-000565-01-AUR",
+    "name": "BlooMN Cannabis Company",
+    "url": "https://bloomncannabis.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-000407-01-AUR",
+    "name": "Blooming Buds Dispensary",
+    "url": "https://bloomingbudsdispensary.com/"
+  },
+  {
+    "id": "DIS-L24-000083-03-AUR",
+    "name": "Bloom Wellness Dispensary St. Paul",
+    "url": "https://bloom-wellness.com/stores/bloom-wellness-st-paul"
+  },
+  {
+    "id": "DIS-L25-000016-03-AUR",
+    "name": "Black Bear Dispensary · Owatonna",
+    "url": "https://blackbeardispensary.com/owatonna/"
+  },
+  {
+    "id": "DIS-L25-000016-01-AUR",
+    "name": "Black Bear Dispensary · Winona",
+    "url": "https://blackbear.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L24-000177-02-AUR",
+    "name": "Big Dream Organics",
+    "url": "https://bigdreamorganics.com/"
+  },
+  {
+    "id": "DIS-L25-000046-01-AUR",
+    "name": "Anoka Cannabis Company",
+    "url": "https://anokacannabisco.wm.store/"
+  },
+  {
+    "id": "MICRO-L24-000236-01-AUR",
+    "name": "American Made Cannabis",
+    "url": "https://americanmadecannabis.us/cart"
+  },
+  {
+    "id": "MICRO-L25-001295-01-AUR",
+    "name": "Altitude Dispensary — Monticello",
+    "url": "https://altitudedispensarymn.com/shop/"
+  },
+  {
+    "id": "MICRO-L25-001251-01-AUR",
+    "name": "ABC Cannabis Co.",
+    "url": "https://abccannabisco.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L25-000584-01-AUR",
+    "name": "5D Dispensary",
+    "url": "https://5ddispensary.com/shop/flower"
+  },
+  {
+    "id": "MICRO-L25-001282-01-AUR",
+    "name": "10000 Lakes Cannabis Company",
+    "url": "https://10000lakescannabisco.dispensary.shop"
+  },
+  {
+    "id": "MICRO-L24-000216-02-AUR",
+    "name": "Da Spot Dispensary & Wellness",
+    "url": "https://shop.daspotcannabis.com/shop/"
+  },
+  {
+    "id": "MICRO-L24-000211-03-AUR",
+    "name": "Dabney's Cannabis Co.",
+    "url": "https://dabneys.dispensary.shop/rec/all-products/nb/kef"
+  },
+  {
+    "id": "MICRO-L25-001288-01-AUR",
+    "name": "Really Dope",
+    "url": "https://www.really-dope.com/st-paul"
+  },
+  {
+    "id": "MICRO-L25-001149-01-AUR",
+    "name": "The Bridge MN",
+    "url": "https://www.thebridgemn.com/rec/menu"
+  },
+  {
+    "id": "MICRO-L25-000559-01-AUR",
+    "name": "The Flower Shop MN",
+    "url": "https://dutchie.com/embedded-menu/69447b2b59020a2ed20af5d5"
+  },
+  {
+    "id": "MICRO-L24-000538-01-AUR",
+    "name": "The Grey Area",
+    "url": "https://greyareacannabis.dispensary.shop/rec/menu"
+  },
+  {
+    "id": "DIS-L24-000039-01-AUR",
+    "name": "The Joint Dispensary",
+    "url": "https://thejointdispensary.com/menu/"
+  },
+  {
+    "id": "MICRO-L25-001290-01-AUR",
+    "name": "Fridley Dispensary",
+    "url": "https://fridleydispensary.com/shop/"
+  },
+  {
+    "id": "DIS-L24-000062-01-AUR",
+    "name": "La Canna",
+    "url": "https://lacanna.co/stores/la-canna"
+  },
+  {
+    "id": "MICRO-L25-000800-01-AUR",
+    "name": "Potshotz MN",
+    "url": "https://potshotzmn.com/menu/"
+  },
+  {
+    "id": "MEZZO-L24-000317-01-AUR",
+    "name": "Dankz",
+    "url": "https://shopdankz.com/stores/dankz-st-cloud"
+  },
+  {
+    "id": "MICRO-L25-001459-01-AUR",
+    "name": "Highnorth",
+    "url": "https://highnorthcg.dispensary.shop/rec/menu"
+  }
+]
