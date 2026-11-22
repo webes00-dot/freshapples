@@ -1,6 +1,7 @@
 name: Scanner V2 release audit
 
 on:
+  workflow_dispatch:
   push:
     branches: [scanner-v2-recovery]
     paths:
@@ -11,9 +12,9 @@ permissions:
   contents: read
 
 jobs:
-  audit:
+  verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,21 +22,81 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Verify normalization rules
+      - name: Verify normalization and audit rules
         run: python3 -m unittest discover -s collector/tests
+
+  capture:
+    name: Capture batch ${{ matrix.batch }}
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        batch: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Install capture dependencies
+        timeout-minutes: 6
         run: |
           python3 -m pip install playwright
           python3 -m playwright install --with-deps chromium
       - name: Build the published public retailer directory
         run: python3 scripts/build_public_snapshot.py
-      - name: Capture public menus
-        run: python3 scripts/scanner_v2_release_audit.py --public-directory dist/data/retailer_locations.json --output "$RUNNER_TEMP/v2-release-audit"
-      - name: Save public menu evidence
-        if: ${{ !cancelled() }}
+      - name: Capture public menus and save each result
+        timeout-minutes: 25
+        env:
+          AUDIT_BATCH: ${{ matrix.batch }}
+        run: |
+          python3 scripts/scanner_v2_release_audit.py \
+            --public-directory dist/data/retailer_locations.json \
+            --batch "$AUDIT_BATCH" --output "$RUNNER_TEMP/v2-menu-batch"
+      - name: Save batch evidence
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: scanner-v2-release-audit
+          name: v2-menu-batch-${{ matrix.batch }}-attempt-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/v2-menu-batch/retailer-*.json
+          retention-days: 14
+          if-no-files-found: ignore
+
+  report:
+    name: Combine retailer coverage
+    needs: [verify, capture]
+    if: ${{ always() && needs.verify.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build the published public retailer directory
+        run: python3 scripts/build_public_snapshot.py
+      - name: Download completed and partial batch evidence
+        uses: actions/download-artifact@v4
+        with:
+          pattern: v2-menu-batch-*-attempt-*
+          path: ${{ runner.temp }}/v2-menu-batches
+      - name: Generate the combined coverage report
+        shell: bash
+        run: |
+          python3 scripts/scanner_v2_release_audit.py \
+            --public-directory dist/data/retailer_locations.json \
+            --merge-batches "$RUNNER_TEMP/v2-menu-batches" --output "$RUNNER_TEMP/v2-release-audit" \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Save coverage report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: scanner-v2-release-audit-attempt-${{ github.run_attempt }}
           path: ${{ runner.temp }}/v2-release-audit/
           retention-days: 14
           if-no-files-found: ignore

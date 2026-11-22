@@ -18,6 +18,10 @@ from scanner_v2_validate import validate
 
 
 PAGE_LIMIT = 30
+BATCH_COUNT = 10
+STORE_TIMEOUT_SECONDS = 240
+STORE_TIMEOUT_STATUS = "Store capture timed out"
+BATCH_ARTIFACT = re.compile(r"v2-menu-batch-(\d+)-attempt-(\d+)")
 CATEGORY_PATH = re.compile(
     r"/(?:rec|menu)/(?:flower|pre[-_]?rolls?|vapes?|vaporizers?|carts?|concentrates?)(?:-\d+)?/?$",
     re.I,
@@ -63,6 +67,24 @@ def targets_from_master(retailers):
             continue
         skipped.append((retailer, reason))
     return targets, skipped
+
+
+def audit_plan(path):
+    directory = json.loads(path.read_text(encoding="utf-8"))
+    targets, skipped = targets_from_master(directory)
+    by_host = defaultdict(list)
+    for retailer in sorted(targets, key=lambda row: row["id"]):
+        by_host[urlsplit(retailer["menu_url"]).hostname].append(retailer)
+    batches = [[] for _ in range(BATCH_COUNT)]
+    for _, stores in sorted(by_host.items(), key=lambda item: (-len(item[1]), item[0])):
+        min(batches, key=len).extend(stores)
+    return directory, batches, skipped
+
+
+def write_json(path, data):
+    pending = path.with_suffix(".tmp")
+    pending.write_text(json.dumps(data, ensure_ascii=False) + "\n", encoding="utf-8")
+    pending.replace(path)
 
 
 async def capture_store(browser, retailer):
@@ -112,7 +134,7 @@ async def capture_store(browser, retailer):
     }
 
 
-async def scan_targets(retailers):
+async def scan_targets(retailers, checkpoint=None):
     from playwright.async_api import async_playwright
 
     gate = asyncio.Semaphore(8)
@@ -123,7 +145,17 @@ async def scan_targets(retailers):
         async def scan(retailer):
             host = urlsplit(retailer["menu_url"]).hostname
             async with hosts[host], gate:
-                return await capture_store(browser, retailer)
+                try:
+                    result = await asyncio.wait_for(capture_store(browser, retailer), STORE_TIMEOUT_SECONDS)
+                except TimeoutError:
+                    result = {
+                        "id": retailer["id"], "retailer": retailer["name"],
+                        "menu_url": retailer["menu_url"], "pages": 0, "products": [],
+                        "statuses": [STORE_TIMEOUT_STATUS],
+                    }
+                if checkpoint:
+                    checkpoint(result)
+                return result
 
         try:
             return await asyncio.gather(*(scan(r) for r in retailers))
@@ -131,15 +163,105 @@ async def scan_targets(retailers):
             await browser.close()
 
 
+def combine_batches(directory, batches, skipped, artifacts):
+    expected = {retailer["id"]: (number, retailer["menu_url"])
+                for number, batch in enumerate(batches, 1) for retailer in batch}
+    captures = {}
+    for folder in artifacts.iterdir() if artifacts.is_dir() else ():
+        match = BATCH_ARTIFACT.fullmatch(folder.name)
+        if not match or not folder.is_dir():
+            continue
+        number, attempt = map(int, match.groups())
+        for path in folder.glob("retailer-*.json"):
+            result = json.loads(path.read_text(encoding="utf-8"))
+            retailer_id = result["id"]
+            if expected.get(retailer_id) != (number, result["menu_url"]):
+                raise ValueError(f"Unexpected capture for retailer {retailer_id} in batch {number}")
+            rank = (STORE_TIMEOUT_STATUS not in result["statuses"], attempt)
+            if retailer_id not in captures or rank > captures[retailer_id][0]:
+                captures[retailer_id] = rank, result
+
+    by_batch = []
+    for number, batch in enumerate(batches, 1):
+        finished = sum(retailer["id"] in captures and captures[retailer["id"]][0][0] for retailer in batch)
+        by_batch.append({"batch": number, "targets": len(batch), "finished": finished})
+    return {
+        "directory_count": len(directory),
+        "skipped": skipped,
+        "results": [captures[key][1] for key in expected if key in captures],
+        "missing": [row for row in directory if row["id"] in expected and row["id"] not in captures],
+        "batches": by_batch,
+    }
+
+
+def write_coverage(path, batch, accepted=None):
+    with path.open("w", encoding="utf-8-sig", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(["Retailer", "Retailer ID", "Menu URL", "Pages checked", "Raw cards", "Validated offers", "Statuses"])
+        for result in batch["results"]:
+            writer.writerow([result["retailer"], result["id"], result["menu_url"], result["pages"],
+                             len(result["products"]), accepted[result["id"]] if accepted is not None else "",
+                             " | ".join(dict.fromkeys(result["statuses"]))])
+        for retailer, reason in batch["skipped"]:
+            writer.writerow([retailer["name"], retailer["id"], retailer.get("menu_url"), 0, 0, "", reason])
+        for retailer in batch.get("missing", []):
+            writer.writerow([retailer["name"], retailer["id"], retailer["menu_url"], 0, 0, "", "Batch did not return a result"])
+
+
+def write_capture_report(output, batch):
+    summary = {
+        "registry_locations": batch["directory_count"],
+        "menu_targets": sum(row["targets"] for row in batch["batches"]),
+        "finished_targets": sum(row["finished"] for row in batch["batches"]),
+        "locations_with_cards": sum(bool(result["products"]) for result in batch["results"]),
+        "raw_cards": sum(len(result["products"]) for result in batch["results"]),
+        "skipped": dict(Counter(reason for _, reason in batch["skipped"])),
+        "limitations": dict(Counter(status for result in batch["results"] for status in set(result["statuses"])
+                                    if status != "Cards captured")),
+        "missing_results": len(batch["missing"]),
+        "batches": batch["batches"],
+    }
+    write_json(output / "public-captures.json", batch)
+    write_json(output / "capture-summary.json", summary)
+    write_coverage(output / "retailer-coverage.csv", batch)
+    print(json.dumps(summary, indent=2))
+    return summary
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--public-directory", type=Path)
     p.add_argument("--captures", type=Path)
     p.add_argument("--master-snapshot", type=Path)
+    p.add_argument("--batch", type=int, choices=range(1, BATCH_COUNT + 1))
+    p.add_argument("--merge-batches", type=Path)
     p.add_argument("--output", type=Path, required=True)
     args = p.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     if args.public_directory and not args.captures and not args.master_snapshot:
+        if args.batch and args.merge_batches:
+            p.error("--batch and --merge-batches are mutually exclusive")
+        if args.batch or args.merge_batches:
+            directory, batches, skipped = audit_plan(args.public_directory)
+            if args.merge_batches:
+                batch = combine_batches(directory, batches, skipped, args.merge_batches)
+                summary = write_capture_report(args.output, batch)
+                if summary["finished_targets"] != summary["menu_targets"]:
+                    raise SystemExit("Some retailer captures did not finish; see the coverage report")
+                return
+            stores = batches[args.batch - 1]
+            indexes = {row["id"]: index for index, row in enumerate(stores, 1)}
+            print(f"Batch {args.batch}/{BATCH_COUNT}: {len(stores)} retailer menus", flush=True)
+
+            def checkpoint(result):
+                write_json(args.output / f"retailer-{indexes[result['id']]:03}.json", result)
+                print(f"{result['retailer']}: {len(result['products'])} cards; {', '.join(result['statuses'])}",
+                      flush=True)
+
+            results = asyncio.run(scan_targets(stores, checkpoint)) if stores else []
+            if any(STORE_TIMEOUT_STATUS in result["statuses"] for result in results):
+                raise SystemExit("A retailer capture timed out; other results were saved")
+            return
         directory = json.loads(args.public_directory.read_text(encoding="utf-8"))
         targets, skipped = targets_from_master(directory)
         results = asyncio.run(scan_targets(targets))
@@ -148,7 +270,7 @@ def main():
             json.dumps({"directory_count": len(directory), "skipped": skipped,
                         "results": results}, ensure_ascii=False) + "\n", encoding="utf-8")
         return
-    if not args.captures or not args.master_snapshot or args.public_directory:
+    if not args.captures or not args.master_snapshot or args.public_directory or args.batch or args.merge_batches:
         p.error("use --public-directory alone or --captures with --master-snapshot")
     batch = json.loads(args.captures.read_text(encoding="utf-8"))
     master = load_snapshot(args.master_snapshot)
@@ -159,14 +281,7 @@ def main():
 
     write_holds(args.output / "holds.csv", results, captured, capture_holds, rows, validated)
     accepted = Counter(row["retailer_id"] for row in validated["accepted"])
-    with (args.output / "retailer-coverage.csv").open("w", encoding="utf-8-sig", newline="") as stream:
-        writer = csv.writer(stream)
-        writer.writerow(["Retailer", "Retailer ID", "Menu URL", "Pages checked", "Raw cards", "Validated offers", "Statuses"])
-        for result in results:
-            writer.writerow([result["retailer"], result["id"], result["menu_url"], result["pages"],
-                             len(result["products"]), accepted[result["id"]], " | ".join(dict.fromkeys(result["statuses"]))])
-        for retailer, status in skipped:
-            writer.writerow([retailer["name"], retailer["id"], retailer.get("menu_url"), 0, 0, 0, status])
+    write_coverage(args.output / "retailer-coverage.csv", batch, accepted)
     summary = {
         "registry_locations": batch["directory_count"],
         "menu_targets": len(results),
