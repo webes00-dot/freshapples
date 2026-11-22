@@ -1,0 +1,48 @@
+name: MNtrees gated preview deployment
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mntrees-preview-deployment
+  cancel-in-progress: false
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment: mntrees-preview
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require Cloudflare deployment credentials
+        run: |
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Cloudflare API token missing"; exit 1; }
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "::error::Cloudflare account ID missing"; exit 1; }
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify preview isolation and production controls
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          cfg=json.loads(Path('wrangler.jsonc').read_text())
+          assert cfg['name']=='mntrees'
+          assert cfg['env']['preview']['name']=='mntrees-recovery-preview'
+          assert cfg['env']['preview']['d1_databases'][0]['database_name']=='mntrees-recovery-preview-reviews'
+          assert cfg['env']['preview']['d1_databases'][0]['database_id']=='369472cb-6f59-415f-97ed-d3d955839ad1'
+          assert cfg['assets']['directory']=='./dist'
+          assert 'https://mntrees.co/' not in cfg.get('routes',[])
+          print('Preview isolation verified')
+          PY
+      - name: Build public storefront from this repository
+        run: bash build.sh
+      - name: Deploy only the preview worker
+        run: npx --yes wrangler@4 deploy --env preview
+      - name: Report deployment
+        run: |
+          echo "Preview Worker: mntrees-recovery-preview" >> "$GITHUB_STEP_SUMMARY"
+          echo "Source SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "This workflow never deploys to mntrees.co" >> "$GITHUB_STEP_SUMMARY"
