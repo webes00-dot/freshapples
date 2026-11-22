@@ -100,6 +100,45 @@ class EliminationPassTests(unittest.TestCase):
         self.assertIsNone(package_size("Pre-rolls 0.33 g | 0.3 g | 3 ct", {}, "Preroll")[0])
         self.assertIsNone(package_size("Pre-Packed 7g 1/8 oz", {}, "Flower")[0])
 
+    def test_card_weights_use_selected_or_priced_package(self):
+        cases = (
+            ("Guava Flower", "THC: 20.8%\n7g\nselected\n3.5g\n$85.00", 7, "selected_card_size"),
+            ("Guava Flower", "THC: 22.1%\n\n$52.00\n\n/3.5g\nAdd to Bag", 3.5, "priced_card_size"),
+            ("Guava Cartridge", "$65.00 /1g\nAdd to Bag", 1, "priced_card_size"),
+            ("Guava Flower", "7g\n3.5g\n$85.00", None, "missing_weight"),
+            ("Guava Flower", "7g\nselected\n$85.00 /3.5g", None, "conflicting_weights"),
+            ("Guava Flower 7g", "$52.00 /3.5g", 7, "unique_weight"),
+        )
+        for title, card, weight, basis in cases:
+            with self.subTest(title=title, card=card):
+                self.assertEqual(package_size(title, {"card_text": card}, "Flower"),
+                                 (weight, None, basis))
+
+    def test_count_inferred_from_total_and_labeled_preroll_weight(self):
+        for title in (
+            "^Lifted North Prerolls - Blueberry Muffin, 2.5 grams (.5g each",
+            "^Lifted North Prerolls - Pineapple Muffin, 2.5 grams (.5g each)",
+        ):
+            with self.subTest(title=title):
+                self.assertEqual(package_size(title, {}, "Preroll"),
+                                 (2.5, 5, "pack_count_from_total_and_unit_weight"))
+        row = run("Grasslandz Guava Prerolls 2.5g (.5g each)", source_category="Pre-Rolls")
+        self.assertEqual((row["package_g"], row["pack_count"], row["identity_status"]),
+                         (2.5, 5, "ready"))
+
+    def test_count_inference_preserves_weight_conflicts(self):
+        for title in (
+            "Prerolls 2.5g (.6g each)",
+            "Prerolls 2.5g (.5g)",
+            "Prerolls 2.5g (.5g each) 4ct",
+            "Prerolls 2.5g selected .5g each",
+            "Prerolls 2.5g each (.5g each)",
+        ):
+            with self.subTest(title=title):
+                package_g, _, reason = package_size(title, {}, "Preroll")
+                self.assertIsNone(package_g)
+                self.assertEqual(reason, "conflicting_weights")
+
     def test_verified_product_line_is_form_specific(self):
         brands = [{"name": "Dogwalkers"}, {"name": "Verist Fields"}]
         old = {"identity_status": "needs_review"}

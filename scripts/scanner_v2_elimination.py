@@ -32,6 +32,13 @@ PACK_EXPR = re.compile(
 COUNT_FIRST_PACK = re.compile(
     r"(?i)(?<![\w.])(?P<count>\d{1,2})\s*[x×]\s*"
     r"(?P<unit>\d+(?:\.\d+)?|\.\d+)\s*(?:g|grams?)\b")
+UNIT_WEIGHT_LABEL = re.compile(r"\s*(?:each|ea|per\s+(?:pre[- ]?roll|joint|stick|unit))\b", re.I)
+CARD_GRAMS = r"((?:\d+(?:\.\d+)?|\.\d+)[ \t]*(?:grams?|gm|g))"
+CARD_SELECTED_SIZE = re.compile(
+    rf"^[ \t]*{CARD_GRAMS}[ \t]*(?:\r?\n[ \t]*)?selected[ \t]*$", re.I | re.M)
+CARD_PRICE_SIZE = re.compile(
+    rf"^[ \t]*\$\d[\d,]*(?:\.\d{{2}})?[ \t]*(?:\r?\n[ \t]*)*/[ \t]*{CARD_GRAMS}[ \t]*$",
+    re.I | re.M)
 DECORATION = re.compile(r"(?i)\b(?:50/50|1/8\s*oz|1/4\s*oz|1/2\s*oz|"
                          r"\d{1,2}\s*(?:pack|pk|ct|count))\b")
 ID_NUMBER = re.compile(r"(?<![a-z])\d{8,12}(?![a-z])")
@@ -159,17 +166,30 @@ def package_size(title, source_metadata, category, product_url=""):
     from unified_scan_rules import WEIGHT, OZ
     matches = list(WEIGHT.finditer(title))
     grams = []
+    unit_weights = set()
     for m in matches:
         qty = OZ.get(re.sub(r"\s+", "", m.group("oz"))) if m.group("oz") else float(m.group("grams"))
         if qty and 0 < qty <= 28:
-            grams.append(round(qty, 3))
+            weight = round(qty, 3)
+            grams.append(weight)
+            if UNIT_WEIGHT_LABEL.match(title, m.end()):
+                unit_weights.add(weight)
     count_match = PACK.search(title)
     count = int(count_match.group(1)) if count_match else None
-    if count and count > 1 and len(set(grams)) == 2:
+    distinct_weights = len(set(grams))
+    if count and count > 1 and distinct_weights == 2:
         smallest, largest = min(grams), max(grams)
         if abs(smallest * count - largest) < .012:
             return largest, count, "unit_and_total_agree"
-    if grams and len(set(grams)) == 1:
+    if (category == "Preroll" and count is None and distinct_weights == 2
+            and not re.search(r"\bselected\b", title, re.I)):
+        unit, total = min(grams), max(grams)
+        if unit > 0 and unit_weights == {unit}:
+            # Compare at the same thousandth-of-a-gram precision used above.
+            units, remainder = divmod(round(total * 1000), round(unit * 1000))
+            if 2 <= units <= 100 and remainder == 0:
+                return total, units, "pack_count_from_total_and_unit_weight"
+    if distinct_weights == 1:
         if count and count > 1:
             # Explicitly labeled unit weights only. An unexplained 1g 2ct
             # might be the total pack weight; do not assume a product size.
@@ -200,6 +220,21 @@ def package_size(title, source_metadata, category, product_url=""):
                     if value:
                         return value, units, "selected_option_confirmed_by_product_url"
         return None, count, "conflicting_weights"
+    card = str(source_metadata.get("card_text") or "")
+    selected = CARD_SELECTED_SIZE.findall(card)
+    priced = CARD_PRICE_SIZE.findall(card)
+    card_weights = {
+        weight
+        for size in [*selected, *priced]
+        if (weight := extract_weight(size)[0]) is not None
+    }
+    if len(card_weights) > 1:
+        return None, count, "conflicting_weights"
+    if card_weights:
+        if count and count > 1:
+            return None, count, "ambiguous_unit_vs_total"
+        basis = "selected_card_size" if selected else "priced_card_size"
+        return card_weights.pop(), count, basis
     return None, count, "missing_weight"
 
 
