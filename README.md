@@ -5,11 +5,11 @@ Canonical replacement source: `webes00-dot/freshapples` (main)
 
 ## Current architecture and release status
 
-- **Public storefront:** Cloudflare Worker `mntrees`, Worker static assets, D1 `mntrees-reviews`. The current live HTML, CSS, JavaScript and Worker route handlers have been recovered into this repository.
+- **Public storefront:** Cloudflare Worker `mntrees`, Worker static assets, D1 `mntrees-reviews`. The current live HTML, CSS, JavaScript and Worker route handlers have been recovered into this repository, and production was redeployed from this source on 2026-11-22.
 - **Published market data:** versioned `data/site-data.json` and `data/catalog.json`, sourced from the current production site with checksums in `data/production-capture-manifest.json`.
-- **Admin portal:** Cloudflare Worker `mntrees-admin`, D1 `mntrees-catalog-staging`. Its deployed code has been preserved in **private** Cloudflare recovery storage but is **not** yet a component of this public repository. Do not paste authentication/server implementation into a public repository.
+- **Admin portal:** Cloudflare Worker `mntrees-admin`, D1 `mntrees-catalog-staging`. Its deployed code has been preserved in **private** Cloudflare recovery storage and as **AES-256-GCM encrypted versioned source** in `recovery/encrypted/workers/`; the decryption key remains separate in the owner's private Library. It is not yet integrated into a reproducible Admin deployment pipeline. Do not paste authentication/server implementation into a public repository.
 - **Preview:** Worker `mntrees-recovery-preview`, separate reviews D1.
-- **Collection and normalization engine:** a verified November 20 developer handoff and clean recovery candidate are preserved privately as archives, but scanner workflows have **not yet** been fully reconciled and imported into this repository.
+- **Collection and normalization engine:** 77 recovered scanner, normalization, test and supporting modules are now versioned here, but unattended scheduling remains blocked until D1 authority and writeback have been reconciled.
 - **Recovery storage:** private namespace `mntrees-private-recovery-snapshots` contains Worker source snapshots, current D1 table data and schema manifests, recovered static assets, and desktop/mobile screenshots.
 - **Publication state:** GitHub storefront builds have passed CI checks; the consolidated architecture has **not** been deployed to production. Production remains on the validated existing Cloudflare Worker version.
 
@@ -34,6 +34,6 @@ Build outputs are in `dist/` and checked in a GitHub Actions artifact, accompani
 - `docs/CLEAN_RECOVERY_CANDIDATE_2026-11-22.md`: tested archive candidate and remaining release gates
 - `docs/LATEST_BUILD_VERIFICATION.json`: most recent CI storefront build receipt
 
-**Production release gate:** successful clean build, complete scan/admin source inventory, private D1 recovery restore test, desktop/mobile comparison, preview deployment and smoke tests, then controlled production deployment with rollback.
+**Storefront release**: clean build, D1 recovery restore, 16-file static byte parity, desktop/mobile DOM parity and isolated preview succeeded, followed by one controlled production redeployment. **Remaining gates:** scanner D1 writeback, secure Admin deploy pipeline, full post-release browser checks and recurring off-platform backup automation. No unattended scanner schedules until verified.
 
 This repository and all scripts must remain independent of discontinued repositories and previous deployment workflows.
