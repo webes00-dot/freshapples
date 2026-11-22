@@ -44,7 +44,12 @@ READ_CARDS = r"""() => {
   ].join(',');
   const text = node => (node?.innerText || '').trim().replace(/\s+/g, ' ');
   const cardText = node => (node?.innerText || '').trim().replace(/[^\S\r\n]+/g, ' ');
-  return Array.from(document.querySelectorAll(selector))
+  const cards = new Set(document.querySelectorAll(selector));
+  for (const link of document.querySelectorAll('a[href]')) {
+    if (link.origin === location.origin && /\/(?:product|products|pdp)\/[^/]+\/?$/i.test(link.pathname)
+        && /\$\s*\d/.test(link.innerText)) cards.add(link.closest(selector) || link);
+  }
+  return Array.from(cards)
     .filter(element => element.getClientRects().length && element.checkVisibility({checkVisibilityCSS: true}))
     .map(element => ({
     text: cardText(element),
@@ -53,6 +58,17 @@ READ_CARDS = r"""() => {
     brand: text(element.querySelector('[data-testid*="brand"],[class*="product-brand"],[class*="productBrand"]')),
     productId: element.getAttribute('data-product-id') || '',
   })).filter(card => card.text.length >= 12 && card.text.length <= 750 && card.text.includes('$'));
+}"""
+
+AGE_VERIFICATION_WIDGET = r"""() => {
+  const prompt = /(?:verify|confirm) (?:your )?age|age verification|are you (?:over |at least )?21|date of birth|birth date/i;
+  const fields = 'input[type="date"], input[autocomplete^="bday"], input[type="file"], input[name*="birth" i]';
+  const visible = node => node.getClientRects().length && node.checkVisibility({checkVisibilityCSS: true});
+  return [...document.querySelectorAll('form, dialog, [role="dialog"], [aria-modal="true"]')].some(widget => {
+    if (!visible(widget) || !prompt.test(widget.innerText || '')) return false;
+    return widget.matches('dialog, [role="dialog"], [aria-modal="true"]') ||
+      [...widget.querySelectorAll(fields)].some(visible);
+  });
 }"""
 
 READ_THC_MINNESOTA = r"""() => {
@@ -188,16 +204,18 @@ async def read_menu(page, url):
                     return f"Embedded menu HTTP {code}", []
             if access_limited:
                 return "Access limited", []
-            age_prompt_seen |= bool(age_frames)
-            if not age_prompt_clicked and attempt < 5:
+            if not age_prompt_clicked:
                 for frame in age_frames:
                     try:
+                        age_prompt_seen |= await frame.evaluate(AGE_VERIFICATION_WIDGET)
                         handle = await frame.evaluate_handle(AGE_CONFIRM_CONTROL)
                         try:
                             control = handle.as_element()
                             if control is not None:
-                                await control.click(timeout=2_000)
-                                age_prompt_clicked = True
+                                age_prompt_seen = True
+                                if attempt < 5:
+                                    await control.click(timeout=2_000)
+                                    age_prompt_clicked = True
                                 break
                         finally:
                             await handle.dispose()

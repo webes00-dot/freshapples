@@ -22,7 +22,10 @@ CASES = [
      "Cards captured after age prompt"),
     (f'<form><input type="date"><div>{PROMPT}<button {REVEAL}>I am 21+</button></div></form>{HIDDEN_MENU}',
      "Age gate"),
-    (f"<div>{PROMPT}<button {REVEAL}>Continue</button></div>{HIDDEN_MENU}", "Age gate"),
+    (f'<div role="dialog">{PROMPT}<button {REVEAL}>Continue</button></div>{HIDDEN_MENU}', "Age gate"),
+    ("<footer>For use only by adults 21 years of age and older.</footer>", "No product cards"),
+    ('<footer>Adults 21 years of age and older.</footer>'
+     '<a href="/products/flower"><h2>Example Flower</h2>$25.00</a>', "Cards captured"),
     (f"<div><p>Verify that you are human.</p>{PROMPT}<button {REVEAL}>I am 21+</button></div>{HIDDEN_MENU}",
      "Access limited"),
 ]
