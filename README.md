@@ -11,7 +11,7 @@ Canonical replacement source: `webes00-dot/freshapples` (main)
 - **Preview:** Worker `mntrees-recovery-preview`, separate reviews D1.
 - **Collection and normalization engine:** 77 recovered scanner, normalization, test and supporting modules are now versioned here, but unattended scheduling remains blocked until D1 authority and writeback have been reconciled.
 - **Recovery storage:** private namespace `mntrees-private-recovery-snapshots` contains Worker source snapshots, current D1 table data and schema manifests, recovered static assets, and desktop/mobile screenshots.
-- **Publication state:** GitHub storefront builds have passed CI checks; the consolidated architecture has **not** been deployed to production. Production remains on the validated existing Cloudflare Worker version.
+- **Publication state:** Replacement storefront was deployed to production on 2026-11-22 (see `docs/PRODUCTION_RELEASE_2026-11-22.md`); this does not mean scanner/Admin consolidation is complete.
 
 ## Building the public storefront
 
@@ -21,7 +21,7 @@ bash build.sh
 
 Build outputs are in `dist/` and checked in a GitHub Actions artifact, accompanied by `dist-manifest.json`. The workflow `.github/workflows/verify-replacement-build.yml` runs on main and pull requests; build receipts are in `docs/LATEST_BUILD_VERIFICATION.json`.
 
-`wrangler.jsonc` defines the current Worker routes, static asset binding, D1 reviews binding and preview environment. Do **not** deploy this source over production until current Admin Portal and scanner functionality, data integrity, private backups and live visual parity have been validated.
+`wrangler.jsonc` defines the current Worker routes, static asset binding, D1 reviews binding and preview environment. Production storefront was deployed from this repository. Before any **new** release, verify current Admin Portal and scanner functionality, data integrity, private backups and live visual parity.
 
 ## Market pricing trends
 
@@ -34,6 +34,6 @@ Build outputs are in `dist/` and checked in a GitHub Actions artifact, accompani
 - `docs/CLEAN_RECOVERY_CANDIDATE_2026-11-22.md`: tested archive candidate and remaining release gates
 - `docs/LATEST_BUILD_VERIFICATION.json`: most recent CI storefront build receipt
 
-**Storefront release**: clean build, D1 recovery restore, 16-file static byte parity, desktop/mobile DOM parity and isolated preview succeeded, followed by one controlled production redeployment. **Remaining gates:** scanner D1 writeback, secure Admin deploy pipeline, full post-release browser checks and recurring off-platform backup automation. No unattended scanner schedules until verified.
+**Storefront release**: clean build, D1 recovery restore, 16-file static byte parity, desktop/mobile DOM parity and isolated preview succeeded, followed by one controlled production redeployment. **Scanner staging:** `.github/workflows/scan.yml` now schedules read-only 8 AM / 8 PM Central scans and archives outputs without publication or D1 writes; its first successful scheduled run still needs verification. **Remaining gates:** scanner D1 writeback, secure Admin deploy pipeline, full post-release browser checks and recurring off-platform backup automation. Do not enable unattended *production publishing* until D1 authority and edit preservation are verified.
 
 This repository and all scripts must remain independent of discontinued repositories and previous deployment workflows.
