@@ -64,7 +64,7 @@ class EliminationPassTests(unittest.TestCase):
     def test_conflicting_card_brand_stays_held(self):
         row = run("Float Cap Junky Flower 3.5g", card_text="Brand: RCWM")
         self.assertEqual(row["brand"], "")
-        self.assertIn("missing_or_conflicting_approved_brand", row["identity_reasons"])
+        self.assertIn("conflicting_approved_brand", row["identity_reasons"])
 
     def test_seltzer_and_float_flavor_are_not_flower_brands(self):
         row = run("Deal! Aura Seltzer 10mg - Lemon Basil - 12oz")
@@ -162,7 +162,8 @@ class EliminationPassTests(unittest.TestCase):
         self.assertEqual((row["brand"], row["product_line"]), ("Good Green", "Big Dog"))
         row = rerank({}, {"raw_title": "Fog Dog Dogwalker .75g Preroll",
                           "source_brand_text": "Watchtower"}, MASTER, brands)
-        self.assertIn("missing_or_conflicting_approved_brand", row["identity_reasons"])
+        self.assertEqual(row["brand"], "")
+        self.assertEqual(row["identity_status"], "ready")
 
     def test_brand_in_middle_and_cultivar_bounded(self):
         z=run("THC: 28.8% CAMPFIRE CANNABIS Guava - 3.5g - Campfire Cannabis 1/8 oz")

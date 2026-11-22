@@ -6,6 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 
 from scanner_v2_capture import capture_rendered
 from scanner_v2_reconcile import reconcile
+from scanner_v2_validate import validate
 
 
 MASTER = {"canonical_strains": ["Guava", "Mendo Breath", "Funk Bomb", "Flower Power"],
@@ -57,6 +58,18 @@ class ScannerV2ReconcileTests(unittest.TestCase):
         self.assertEqual(parsed[0]["identity_status"], "needs_review")
         self.assertIn("strain_not_in_master", parsed[0]["identity_reasons"])
         self.assertEqual(parsed[0]["stock_status"], "not_verified")
+
+    def test_unconfirmed_brand_does_not_hold_a_valid_offer(self):
+        for brand in ("", "Unknown Producer"):
+            with self.subTest(brand=brand):
+                captured, holds = capture_rendered(snap(card("Guava Flower 3.5g", brand)))
+                self.assertFalse(holds)
+                rows = reconcile(captured, MASTER, BRANDS, approved_brands=BRANDS)
+                self.assertEqual(rows[0]["brand"], "")
+                self.assertEqual(rows[0]["identity_status"], "ready")
+                report = validate(rows)
+                self.assertEqual(len(report["accepted"]), 1)
+                self.assertFalse(report["holds"])
 
 
 if __name__ == "__main__":

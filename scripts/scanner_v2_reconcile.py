@@ -25,7 +25,7 @@ def corroborate_forms(rows):
         return row["brand"], row["strain"], row["package_g"], row["pack_count"]
 
     for row in rows:
-        if row["identity_status"] != "ready" or not row["pack_count"]:
+        if row["identity_status"] != "ready" or not row["brand"] or not row["pack_count"]:
             continue
         explicit = infer_category(row["raw_title"], "", "", "")
         path = urlsplit(row["product_url"]).path
@@ -36,7 +36,7 @@ def corroborate_forms(rows):
 
     for row in rows:
         reasons = row["identity_reasons"]
-        if not row["pack_count"] or not reasons or not set(reasons) <= {"missing_type", "category_only_adapter_hint"}:
+        if not row["brand"] or not row["pack_count"] or not reasons or not set(reasons) <= {"missing_type", "category_only_adapter_hint"}:
             continue
         matches = witnesses.get(product_key(row), {})
         if len(matches) == 1:

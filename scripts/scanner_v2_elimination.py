@@ -415,8 +415,8 @@ def rerank(row, observation, master, brands, approved_brands=None):
         proposed["package_g"] = None
     evidence["weight"] = weight_status
     reasons = []
-    if not proposed.get("brand") or brand_status == "multiple_distinct_master_matches":
-        reasons.append("missing_or_conflicting_approved_brand")
+    if conflicting_brand:
+        reasons.append("conflicting_approved_brand")
     if strain_status == "multiple_distinct_master_matches":
         reasons.append("missing_or_conflicting_approved_strain")
     elif not strain:

@@ -38,6 +38,16 @@ class V2ValidatorTests(unittest.TestCase):
         self.assertEqual(len(report["accepted"]),0)
         self.assertEqual(report["holds"][0]["reasons"],["conflicting_sku_identity_or_price"])
 
+    def test_confirmed_brand_wins_over_blank_brand_for_same_sku(self):
+        report = validate([offer(), offer(observation_id="obs2", brand="")])
+        self.assertEqual([row["observation_id"] for row in report["accepted"]], ["obs1"])
+        self.assertEqual(report["duplicates_suppressed"], ["obs2"])
+        self.assertFalse(report["holds"])
+
+    def test_missing_strain_is_held_even_when_brand_is_optional(self):
+        report = validate([offer(brand="", strain="")])
+        self.assertEqual(report["holds"][0]["reasons"], ["missing_strain"])
+
     def test_price_drift_is_not_silently_overwritten(self):
         report=validate([offer(),offer(observation_id="obs2",price=70)])
         self.assertEqual(len(report["accepted"]),0)

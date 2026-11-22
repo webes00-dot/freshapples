@@ -49,8 +49,8 @@ def issue(row):
         errors.append("missing_provenance")
     if row.get("category") not in ACCEPTED:
         errors.append("invalid_type")
-    if not row.get("brand") or not row.get("strain"):
-        errors.append("missing_brand_or_strain")
+    if not row.get("strain"):
+        errors.append("missing_strain")
     try:
         weight = float(row.get("package_g"))
         if not 0 < weight <= 28:
@@ -77,17 +77,17 @@ def issue(row):
 
 def identity_signature(row):
     return tuple(str(row.get(x) or "") for x in (
-        "brand", "strain", "category", "package_g", "pack_count",
+        "strain", "category", "package_g", "pack_count",
         "variant_key", "source_product_id"))
 
 
 def choose_source(rows):
     """Choose one duplicate observation only when identity/price agree.
 
-    Prefer direct official source candidate, then latest timestamp. Identical
-    supplier URL and offer data are duplicates, not distinct retailer SKUs.
+    Prefer a confirmed brand, then official source and latest timestamp.
     """
     return sorted(rows, key=lambda r: (
+        bool(r.get("brand")),
         r.get("source_kind") == "official_menu_candidate",
         str(r.get("observed_at") or ""),
         str(r.get("observation_id") or "")), reverse=True)[0]
@@ -110,8 +110,9 @@ def validate(rows):
     suppressed = []
     for key, variants in sorted(by_sku.items(), key=lambda x: repr(x[0])):
         signatures = {identity_signature(x) for x in variants}
+        brands = {x["brand"] for x in variants if x.get("brand")}
         prices = {float(x["price"]) for x in variants}
-        if len(signatures) != 1 or len(prices) != 1:
+        if len(signatures) != 1 or len(brands) > 1 or len(prices) != 1:
             # Preserve all as review candidates, not silently choose a winner.
             holds.append({"sku_key": list(key),
                           "observation_ids": [x.get("observation_id") for x in variants],
