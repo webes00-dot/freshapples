@@ -25,16 +25,20 @@ function typeOf(o){
  }
  return concentrateForm.test(c)?"Concentrates":null;
 }
+const slashPack=/(?:^|[\s|])(\d+(?:\.\d+)?|\.\d+)\s*g\s*\/\s*(\d{1,2})\s*(?:pk|packs?|ct)\b/i;
+const fractionGram=/^([1-9]\d*)\s*\/\s*([1-9]\d*)\s*g(?:rams?)?\s+/i;
 function packOf(o){
  const text=String(o.raw_scanned_product_name||o.product_name||o.strain||"");
  const actual=numeric(o.package_g);
  const reviewedCount=o.reviewed_identity && Number.isInteger(o.pack_count) && o.pack_count>1 ? o.pack_count : null;
  const mult=text.match(/\b(\d{1,2})\s*[xX×]\s*(0?\.\d+|\d+(?:\.\d+)?)\s*g\b/i)||text.match(/\b(\d{1,2})\s*(?:pk|pack|count|ct)\s*(?:of)?\s*[xX×]?\s*(0?\.\d+|\d+(?:\.\d+)?)\s*g\b/i);
- const reverse=text.match(/(?:^|[\s(])(\d+\.\d+|\.\d+|\d+)\s*g?\s*[xX×]\s*(\d{1,2})\b/i);
+ const reverse=text.match(/(?:^|[\s(])(\d+\.\d+|\.\d+|\d+)\s*g?\s*[xX×]\s*(\d{1,2})\b/i)||text.match(slashPack);
  const pack=text.match(/\b(\d{1,2})\s*(?:-?\s*pack|pk|ct)\b/i)||text.match(/\b(\d{1,2})\s*[xX×]\s*(?:pre.?rolls?|joints?)\b/i);
+ const fraction=typeOf(o)==="Preroll"&&pack
+  ? text.replace(/^(?:dizgo(?:\s+collective)?\s+)+/i,"").match(fractionGram) : null;
  let count=reviewedCount|| (mult?Number(mult[1]):reverse?Number(reverse[2]):pack?Number(pack[1]):null);
- let per=reviewedCount&&actual?actual/reviewedCount:mult?Number(mult[2]):reverse?Number(reverse[1]):null;
- const advertised=(mult||reverse)?Number((count*per).toFixed(3)):null;
+ let per=reviewedCount&&actual?actual/reviewedCount:mult?Number(mult[2]):reverse?Number(reverse[1]):fraction?Number(fraction[1])/Number(fraction[2]):null;
+ const advertised=count&&per?Number((count*per).toFixed(3)):null;
  // Source-listed total is authoritative unless it conflicts with explicit pack math.
  const total=actual||advertised;
  const inconsistent=Boolean(actual&&advertised&&Math.abs(actual-advertised)>.08);
@@ -74,7 +78,37 @@ const FORMAT_FIELD=/\b(?:pre[- ]?roll[- ]?(?:ix|x)|flower\s*bag[- ]?ix|bag[- ]?i
 const PREFIX_BRANDS=["Redwood County Weed Management","Campfire Cannabis","Float Cannabis Company","Float Cannabis","Classified Crops","Elevate Botanicals","Tasty Gems","Lakeside Cannabis","Lifted North","Good Green","Green Canopy","Dizgo Collective","Dope Cannabis","d'Ope Cannabis","Lake Leaf","Grasslandz","Minny Grown","Unbound","RYTHM","Rythm","Avion","Avio","FLÖR","Flor","Flör","Northpark","North Park","Northpark Cannabis Co","Redwood","Campfire","Float","Unwind Cultivation","Lakeside Cannabis","Lakeside Canna","Lakeside Cana","Laketown Farms","Laketown","Oma","Emerald Fire Farms","Emerald Farms","Native Care","SMIILE","Sappy Pappy","Verist Fields","Trailhead Cannabis Company","Trailhead Cannabis","Trailhead"];
 function isMerchField(x){
  const s=String(x||"").trim();
- return !s||NON_STRAIN_FIELD.test(s)||FORMAT_FIELD.test(s)||/^\d+(?:\.\d+)?\s*(?:g|gm|gram|grams?|ct|pk|pack)\b/i.test(s)||/^\d+\s*[- ]?pack\b/i.test(s);
+ return !s||NON_STRAIN_FIELD.test(s)||FORMAT_FIELD.test(s)||slashPack.test(s)||/^\d+(?:\.\d+)?\s*(?:g|gm|gram|grams?|ct|pk|pack)\b/i.test(s)||/^\d+\s*[- ]?pack\b/i.test(s);
+}
+function structuredMenuTitle(o){
+ const title=String(o.raw_scanned_product_name||o.product_name||o.strain||"").trim();
+ const parts=title.split("|").map(part=>part.trim()).filter(Boolean);
+ const brand=canonicalBrand(o.brand||o.brand_family);
+ const first=parts[0]||"";
+ const prefix=brand==="Float Cannabis"||/^float\s/i.test(first)
+  ? /^(?:float(?:\s+cannabis(?:\s+co(?:mpany)?)?)?\s+)+/i
+  : brand==="Dizgo Collective"?/^(?:dizgo(?:\s+collective)?\b\s*)+/i
+  : brand==="Dogwalkers"?/^dog\s*walkers\s+/i
+  : brand==="Unbound"?/^unbound\s+/i:null;
+ const head=prefix?first.replace(prefix,"").trim():first;
+ const isBrand=part=>Boolean(brand)&&canonicalBrand(part)===brand;
+ if(parts.length===3&&slashPack.test(parts[1])&&/^(?:hybrid|indica|sativa)(?:[- ]dominant)?$/i.test(parts[2])
+    &&!isMerchField(head)&&!isBrand(head)){
+  return {strain:head,brand:brand||(/^float\s/i.test(first)?"Float Cannabis":"")};
+ }
+ if(parts.some(part=>/^mixed$/i.test(part))
+    && parts.every(part=>isMerchField(part)||isBrand(part)||/^(?:vape\s+cartridge|live\s+rosin|hash\s+rosin)$/i.test(part)
+       || (part===first&&brand==="Dizgo Collective"&&!head))){
+  return {strain:"Mixed Strains",brand};
+ }
+ if(parts.length===1&&typeOf(o)==="Preroll"&&fractionGram.test(head)){
+  const match=head.replace(fractionGram,"").match(/^(.+?)\s+(?:(?:hybrid|indica|sativa)\s+)?pre[- ]?rolls?\s+\d+\s*[- ]?pack$/i);
+  if(match&&!isMerchField(match[1])){
+   const strain=knownStrain({strain:match[1]})||(/^orion$/i.test(match[1])?"Orion":match[1]);
+   return {strain,brand};
+  }
+ }
+ return null;
 }
 function mnLoonIdentity(o){
  const inputs=[o.strain,o.product_name,o.raw_scanned_product_name];
@@ -298,6 +332,8 @@ function cleanStrain(o){
  if(mnLoon)return mnLoon.strain;
  if(governmentOrangesVariant(o)!==null)return "Government Oranges";
  if(o.reviewed_identity)return String(o.strain||"").trim();
+ const structured=o.product_family_decision==="owner_confirmed_exact_listing"?null:structuredMenuTitle(o);
+ if(structured)return structured.strain;
  const confirmed=explicitProductIdentity(o);
  if(confirmed && (confirmed.strain==="Cereal Milk" || confirmed.strain==="Dirty Laundry" || confirmed.strain==="Killer Cupcake"))return confirmed.strain;
  // Canonical strain aliases reviewed by the catalog owner.
@@ -524,7 +560,7 @@ function canonicalBrand(name){
  if(/^(?:doctor|doc|dr) dabs$/.test(key))return "Doctor Dabs";
  if(key==="waagbigwan"||key==="waabigwan"||key==="wm"||key==="waabigwan mashkiki"||key==="waagbigwan mashkiki")return "Waabigwan Mashkiki";
  if(key==="mischief"||key==="mischief cannabis")return "Mischief Cannabis";
- if(/^(float canna|float cannabis|float cannabis co|float canna co|float cannabis company)$/.test(key))return "Float Cannabis";
+ if(/^(float|float canna|float cannabis|float cannabis co|float canna co|float cannabis company)$/.test(key))return "Float Cannabis";
  if(/^(dizgo|dizgo collective)$/.test(key))return "Dizgo Collective";
  if(["rythm","rhythm","rythym"].includes(key))return "RYTHM";
  if(/^(flor|flor fina|flor fina cannabis|flor by florfina|flor fina by flor)$/.test(key))return "FLÖR";
@@ -555,7 +591,7 @@ function enriched(o){
  const pack=packOf(o),explicit=trailheadTitleIdentity(o)||medusaPackIdentity(o)||dizgoTitleIdentity(o)||reviewedTitleIdentity(o)||ownerStrainBrandIdentity(o)||mnLoonIdentity(o)||explicitProductIdentity(o),goodGreenMystic=/^good\s+green\s+(?:\(?2\s*[x×]\)?\s*)?mystic\s+mint\b/i.test(String(o.strain||o.product_name||"").trim()),goodGreenJacks=/^good\s+green\s+jacks?[\u0027\u2019]?\s*delight\b/i.test(String(o.strain||o.product_name||"").trim()),dirtyLaundryBranded=/stashbox\s*[x×]\s*loon\s+labs\s+live\s+resin\s+dirty\s+laundry/i.test([o.strain,o.product_name,o.product_family,o.displayStrain].join(" ")),valhallaBranded=/^(?:valhalla|vahalla)(?:\s+(?:select|cannabis))?\s+granola\s+funk\b/i.test(String(o.strain||o.product_name||"").trim()),veristTitle=String(o.strain||o.product_name||"").trim(),veristBranded=/^verist(?:\s+fields)?\s+/i.test(veristTitle),veristSubBrand=/\blittle\s+sticks\b/i.test(veristTitle)?"Little Sticks":/\bmr\.?\s*birch\b/i.test(veristTitle)?"Mr. Birch":"Verist Fields",wmBranded=/^wm\s+\S/i.test(String(o.strain||o.product_name||"").trim()),purplePrince=/purple\s+prince\s+royal\s+oasis/i.test([o.strain,o.product_name,o.product_family].join(" "));
  const brand=purplePrince?"Purple Prince":dirtyLaundryBranded?"Stashbox x Loon Labs":valhallaBranded?"Valhalla":veristBranded?veristSubBrand:wmBranded?"Waabigwan Mashkiki":explicit?(explicit.brand||o.brand||o.brand_family):(goodGreenMystic||goodGreenJacks)?"Good Green":(/&shine\s+single\s+l[\u0027\u2019]orange/i.test([o.strain,o.product_name,o.product_family].join(" "))?"&Shine":(o.brand||o.brand_family||(/^\s*marawanna\b/i.test(String(o.product_name||o.strain||""))?"Marawanna":(/^\s*angry apples\s*$/i.test(cleanStrain(o))?"Unbound":""))));
  return {...o,displayStrain:cleanStrain(o),displayType:typeOf(o),pack,
-  displayBrand:canonicalBrand(brand)||"Brand not confirmed",retailer:String(o.retailer||"").trim()};
+  displayBrand:canonicalBrand(brand)||structuredMenuTitle(o)?.brand||"Brand not confirmed",retailer:String(o.retailer||"").trim()};
 }
 function isValidDisplayStrain(s){
  // "Rewind" is a brand label, never a standalone cultivar heading.
