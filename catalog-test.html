@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MNtrees | D1 Catalog Test</title><link rel="stylesheet" href="style.css"></head>
+<body><main class="shell" style="padding:2rem 1rem"><h1>MNtrees — D1 Catalog Test</h1><p id="status">Loading six products from D1…</p><div id="items" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem"></div></main>
+<script>
+(async()=>{const status=document.getElementById('status'),items=document.getElementById('items');
+try{const r=await fetch('/api/catalog-test',{cache:'no-store'});if(!r.ok)throw Error('D1 API HTTP '+r.status);
+const data=await r.json();if(!Array.isArray(data.products))throw Error('Invalid product response');
+status.textContent=data.products.length+' products read from D1';
+for(const p of data.products){const card=document.createElement('article');card.style.cssText='border:1px solid #ddd;padding:1rem;border-radius:12px';
+const title=document.createElement('h2');title.textContent=p.strain||'Strain not linked';card.append(title);
+const info=document.createElement('p');info.textContent=[p.brand||'Brand not linked',p.category,p.grams+'g','$'+Number(p.price).toFixed(2),p.retailer].join(' · ');card.append(info);
+if(p.url){const link=document.createElement('a');link.href=p.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Retailer listing';card.append(link);}
+items.append(card);}
+}catch(e){status.textContent='Unable to load D1 products: '+e.message;status.setAttribute('role','alert');}})();
+</script></body></html>
