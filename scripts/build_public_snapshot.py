@@ -8,6 +8,8 @@ from math import isfinite
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from unified_scan_rules import FRACTIONAL_GRAMS, extract_weight
+
 
 def read(name):
     return json.loads(Path('data', name).read_text(encoding='utf-8'))
@@ -31,6 +33,14 @@ def build_preserved_snapshot(path):
         raise ValueError('The preserved production snapshot is incomplete')
     if any(not row.get('id') for row in offers) or len({row['id'] for row in offers}) != len(offers):
         raise ValueError('The preserved catalog has invalid listing identifiers')
+    for offer in offers:
+        source = str(offer.get('weight_source') or '').strip()
+        fraction = FRACTIONAL_GRAMS.fullmatch(source)
+        # Recover legacy observations whose import stored the denominator.
+        if fraction and fraction['denominator'] and offer.get('package_g') == int(fraction['denominator']):
+            grams, _, _ = extract_weight(source)
+            if grams is not None:
+                offer['package_g'] = grams
     coordinates = read('verified-retailer-coordinates.json')
     for retailer in data['retailers']:
         verified = coordinates.get(retailer['id'])

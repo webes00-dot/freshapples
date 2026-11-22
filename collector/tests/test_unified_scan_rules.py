@@ -5,6 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "scripts"))
 from unified_scan_rules import normalize_observation, infer_category, extract_weight, bounded_prefix
+from scanner_v2_elimination import package_size
 
 MASTER={"canonical_strains":["Barnyard High Test","Fruit Junky","A-Team","Blue Dream",
  "Flower Power","Gak Nana","Mixed Strain","Skywalker OG","Animal Face"],
@@ -18,6 +19,16 @@ def parse(name, brand="", category="", url="https://shop.example.org/product/tes
         "category":category,"url":url,**other},MASTER,BRANDS)
 
 class UnifiedScanRulesTests(unittest.TestCase):
+    def test_fractional_grams_in_titles_and_card_sizes(self):
+        for weight in ("3/4g", "3 / 4 gram", "¾ g", "3⁄4 grams", ".75 gram"):
+            with self.subTest(weight=weight):
+                title = f"Blue Dream {weight} Pre-Roll"
+                self.assertEqual(extract_weight(title)[0], 0.75)
+                self.assertEqual(package_size(title, {}, "Preroll")[0], 0.75)
+                self.assertEqual(package_size("Blue Dream", {"card_text": f"$9\n/{weight}"}, "Preroll")[0], 0.75)
+        self.assertEqual(extract_weight("1/4 oz")[0], 7)
+        self.assertEqual(package_size("3/4g x 2", {}, "Preroll")[:2], (1.5, 2))
+
     def test_barnyard_packaging_out_of_strain(self):
         x=parse("Campfire Cannabis Barnyard High Test | 1/8oz Flower","Campfire Cannabis","Flower")
         self.assertEqual((x["brand"],x["strain"],x["package_g"],x["category"]),

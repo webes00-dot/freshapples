@@ -5,11 +5,15 @@ structured API objects. This module makes ONE decision about brand, strain,
 total package grams, product type and the review gate. It never asserts stock.
 """
 import re
+from unicodedata import numeric
 from pathlib import Path
 from urllib.parse import urlsplit, unquote
 
 ROOT = Path(__file__).resolve().parents[1]
 WEIGHT = re.compile(r"(?<![\w.])(?:(?P<oz>1\s*/\s*(?:8|4|2|1))\s*oz|(?P<grams>(?:\d+(?:\.\d+)?|\.\d+))\s*(?:g|gm|grams?))\b", re.I)
+FRACTION_VALUE = (r"(?:(?P<numerator>\d+)[ \t]*[/⁄][ \t]*(?P<denominator>\d+)"
+                  r"|(?P<symbol>[¼½¾⅐-⅞]))")
+FRACTIONAL_GRAMS = re.compile(rf"(?<![\w./⁄]){FRACTION_VALUE}[ \t]*(?:grams?|gm|g)\b", re.I)
 PACK = re.compile(r"\b(\d{1,2})\s*(?:-?\s*pack|pk|ct|count)\b", re.I)
 PER_STICK = re.compile(r"(?<![\w.])\.?\d+(?:\.\d+)?\s*g\s*(?:pre[- ]?roll|joint)", re.I)
 THC = re.compile(r"\b\d+(?:\.\d+)?\s*%\s*(?:THC|CBD)\b", re.I)
@@ -89,13 +93,29 @@ def infer_category(text, url="", explicit="", context_url=""):
     if CONCENTRATE.search(path):return "Concentrates"
     return ""
 
+def normalize_fractional_grams(value):
+    def replace(match):
+        if match["symbol"]:
+            weight = numeric(match["symbol"])
+        else:
+            denominator = int(match["denominator"])
+            if not denominator:
+                return " "
+            weight = int(match["numerator"]) / denominator
+        return f"{weight:.6f}".rstrip("0").rstrip(".") + "g"
+
+    return FRACTIONAL_GRAMS.sub(replace, str(value or ""))
+
+
 def extract_weight(title, body="", explicit=None):
+    title = normalize_fractional_grams(title)
+    body = normalize_fractional_grams(body)
     # The individual product title outranks the larger card, where multiple
     # prices/weights may be unrelated option selectors.
     source=clean(title)
     matches=list(WEIGHT.finditer(source))
     if not matches and explicit is not None:
-        source=clean(explicit)
+        source=normalize_fractional_grams(clean(explicit))
         matches=list(WEIGHT.finditer(source))
     if not matches:
         source=clean(body)
@@ -117,13 +137,13 @@ def extract_weight(title, body="", explicit=None):
     return grams,count,"title_or_card"
 
 def clean_candidate_fragment(value):
-    return clean(DECORATION.sub(" ", WEIGHT.sub(" ", THC.sub(" ", value))).strip(" -|·•,:()"))
+    return clean(DECORATION.sub(" ", WEIGHT.sub(" ", THC.sub(" ", normalize_fractional_grams(value)))).strip(" -|·•,:()"))
 
 def clean_candidate(title, brand):
     value=unquote(clean(title))
     value=MERCH.sub("",value).strip()
     value=THC.sub(" ",value)
-    value=WEIGHT.sub(" ",value)
+    value=WEIGHT.sub(" ",normalize_fractional_grams(value))
     value=PACK.sub(" ",value)
     if brand:
         rest=bounded_prefix(value,brand)
@@ -190,7 +210,7 @@ def normalize_observation(observation, master=None, brands=None):
                     brand=known
                     break
         if not brand:
-            cleaned_brand=WEIGHT.sub(" ",THC.sub(" ",declared_brand))
+            cleaned_brand=WEIGHT.sub(" ",THC.sub(" ",normalize_fractional_grams(declared_brand)))
             if BAD_STRAIN.fullmatch(clean(cleaned_brand)):
                 reasons.append("invalid_brand_field")
             else:

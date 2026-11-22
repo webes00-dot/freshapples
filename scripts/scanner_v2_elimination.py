@@ -5,7 +5,8 @@ from functools import lru_cache
 from urllib.parse import unquote, urlsplit
 
 from scanner_v2_scope import excluded, flower_weight, product_slug, TARGET
-from unified_scan_rules import clean_candidate, WEIGHT, PACK, THC, extract_weight, infer_category
+from unified_scan_rules import (FRACTION_VALUE, OZ, PACK, THC, WEIGHT, clean_candidate,
+                                extract_weight, infer_category, normalize_fractional_grams)
 
 FORM = re.compile(r"(?i)\b(?:pre[- ]?rolls?|joints?|blunts?|flower|buds?|vapes?|vaporizers?|"
                   r"cartridges?|carts?|disposables?|510|concentrates?|extracts?|hash|"
@@ -33,7 +34,7 @@ COUNT_FIRST_PACK = re.compile(
     r"(?i)(?<![\w.])(?P<count>\d{1,2})\s*[x×]\s*"
     r"(?P<unit>\d+(?:\.\d+)?|\.\d+)\s*(?:g|grams?)\b")
 UNIT_WEIGHT_LABEL = re.compile(r"\s*(?:each|ea|per\s+(?:pre[- ]?roll|joint|stick|unit))\b", re.I)
-CARD_GRAMS = r"((?:\d+(?:\.\d+)?|\.\d+)[ \t]*(?:grams?|gm|g))"
+CARD_GRAMS = rf"((?:{FRACTION_VALUE}|\d+(?:\.\d+)?|\.\d+)[ \t]*(?:grams?|gm|g))"
 CARD_SELECTED_SIZE = re.compile(
     rf"^[ \t]*{CARD_GRAMS}[ \t]*(?:\r?\n[ \t]*)?selected[ \t]*$", re.I | re.M)
 CARD_PRICE_SIZE = re.compile(
@@ -154,16 +155,13 @@ def best_match(matches, source, forbidden=()):
 
 def package_size(title, source_metadata, category, product_url=""):
     """Resolve unit x count and ounce/gram equivalence without guessing."""
-    # Normalize common fractional grams before WEIGHT can read the denominator as grams.
-    title = re.sub(r"(?i)(?<![\w./])1\s*/\s*([248])\s*(?:g|grams?)\b",
-                   lambda m: f"{1 / int(m[1])}g", title)
+    title = normalize_fractional_grams(title)
     per = PACK_EXPR.search(title) or COUNT_FIRST_PACK.search(title)
     if per:
         unit, count = float(per["unit"]), int(per["count"])
         total = round(unit * count, 3)
         if 0 < total <= 28:
             return total, count, "unit_times_quantity"
-    from unified_scan_rules import WEIGHT, OZ
     matches = list(WEIGHT.finditer(title))
     grams = []
     unit_weights = set()
@@ -221,8 +219,8 @@ def package_size(title, source_metadata, category, product_url=""):
                         return value, units, "selected_option_confirmed_by_product_url"
         return None, count, "conflicting_weights"
     card = str(source_metadata.get("card_text") or "")
-    selected = CARD_SELECTED_SIZE.findall(card)
-    priced = CARD_PRICE_SIZE.findall(card)
+    selected = [match[1] for match in CARD_SELECTED_SIZE.finditer(card)]
+    priced = [match[1] for match in CARD_PRICE_SIZE.finditer(card)]
     card_weights = {
         weight
         for size in [*selected, *priced]
