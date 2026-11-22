@@ -1,0 +1,116 @@
+{
+  "status": "staged_for_review_not_published",
+  "retailer": "Frostbite Dispensary",
+  "location": "Roseville, MN",
+  "observed_on": "2026-11-19",
+  "source": "https://mncannabishub.com/dispensaries/frostbite-dispensary-roseville/menu",
+  "source_note": "Third-party menu snapshot, prices may differ from direct retailer menu. Do not treat as verified live stock.",
+  "category": "Vapes",
+  "offers": [
+    {
+      "brand": "Grasslandz",
+      "strain": "Citrus Slushy",
+      "format": "Cartridge",
+      "package_g": 1,
+      "price_usd": 64.99
+    },
+    {
+      "brand": "Grasslandz",
+      "strain": "Grape Moscato",
+      "format": "Cartridge",
+      "package_g": 1,
+      "price_usd": 64.99
+    },
+    {
+      "brand": "True Canna",
+      "strain": "Hibiscus Cooler",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Northpark Cannabis Co.",
+      "strain": "Super Sour Diesel",
+      "format": "Cartridge",
+      "package_g": 1,
+      "price_usd": 65
+    },
+    {
+      "brand": "Grasslandz",
+      "strain": "Maui Wowie",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Nebula",
+      "strain": "Rocket Pop",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Northpark Cannabis Co.",
+      "strain": "Gelato #41",
+      "format": "Cartridge",
+      "package_g": 1,
+      "price_usd": 65
+    },
+    {
+      "brand": "Nebula",
+      "strain": "Strawberry Jelly",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Grasslandz",
+      "strain": "Citrus Slushy",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Northpark Cannabis Co.",
+      "strain": "Granddaddy Purple",
+      "format": "Cartridge",
+      "package_g": 1,
+      "price_usd": 65
+    },
+    {
+      "brand": "True Canna",
+      "strain": "Hibiscus Cooler",
+      "format": "Cartridge",
+      "package_g": 1,
+      "price_usd": 65
+    },
+    {
+      "brand": "Nebula",
+      "strain": "Guava Galaxy",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Lakeside Canna",
+      "strain": "Lemonade Stand",
+      "format": "Disposable",
+      "package_g": 1,
+      "price_usd": 70
+    },
+    {
+      "brand": "Dizgo Collective",
+      "strain": "Pink Runtz",
+      "format": "Live Resin Disposable",
+      "package_g": 1,
+      "price_usd": 75
+    },
+    {
+      "brand": "D'ope",
+      "strain": "Orion",
+      "format": "Live Resin Disposable",
+      "package_g": 1,
+      "price_usd": 75
+    }
+  ]
+}
