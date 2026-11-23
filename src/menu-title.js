@@ -2,7 +2,7 @@ const normalize = value => String(value ?? '').normalize('NFKD')
   .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
 const leadingForm = /^(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:rams?)?\s+)?(?:(?:thc\s+)?(?:vape cartridge|vape pen|disposable)(?:\s+with battery)?|(?:cured|live|hash)\s+(?:resin|rosin)|select grind)\b/i;
-const trailingForm = /\s+(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:rams?)?(?:\s+.*)?|(?:(?:cured|live|hash)\s+)?(?:resin|rosin|distillate)(?:\s+(?:\d*\.?\d+\s*g\b.*|all[- ]in[- ]one\b.*|vape\b.*|disposable\b.*))?|(?:flower|vape(?:\s+cartridge)?|disposable|pre[- ]?rolls?|concentrate))$/i;
+const trailingForm = /\s+(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s+.*)?|(?:(?:cured|live|hash)\s+)?(?:resin|rosin|distillate)(?:\s+(?:\d*\.?\d+\s*g\b.*|all[- ]in[- ]one\b.*|vape\b.*|disposable\b.*))?|(?:flower|vape(?:\s+cartridge)?|disposable|pre[- ]?rolls?|concentrate))$/i;
 const menuDetail = /^(?:(?:deli(?:[- ]style)?|select grind|pre[- ]?packaged|flower|concentrates?|(?:cured |live |hash )?(?:rosin|resin)|distillate|vapes?|vape cartridges?|disposable|pre[- ]?rolls?)|(?:indica|sativa|hybrid)(?:\s+(?:dominant|vibey energy))?|(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s*\/\s*\d+\s*(?:pk|packs?|ct)(?:\s+.*)?)?|\d+\s*(?:pk|packs?|ct))$/i;
 const blend = /^(?:(?:indica|sativa|hybrid)\s+blend|mixed(?:\s+strains?)?)$/i;
 const brandSuffix = /^(?:cannabis(?:\s+(?:co\.?|company))?)\s+/i;
