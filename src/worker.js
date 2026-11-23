@@ -34,7 +34,7 @@ export default {
       ).all();
       return Response.json({products: result.results || []}, {headers: {'Cache-Control': 'no-store', 'Access-Control-Allow-Origin': '*'}});
     }
-    const catalogPaths = ['/data/site-data.json', '/data/catalog.json', '/data/brands.json', '/data/retailer_locations.json'];
+    const catalogPaths = ['/data/site-data.json', '/data/catalog.json', '/data/brands.json', '/data/retailer_locations.json', '/data/published-strains.json'];
     if (request.method === 'GET' && env.CATALOG_DB && catalogPaths.includes(url.pathname)) {
       return liveCatalog(request, env);
     }

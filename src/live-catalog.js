@@ -1,3 +1,5 @@
+import catalogModel from '../catalog-model.js';
+
 const normalize = value => String(value ?? '').normalize('NFKD')
   .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 const aliases = value => Array.isArray(value) ? value :
@@ -243,6 +245,20 @@ export async function liveCatalog(request, env) {
     ]);
     const [retailers, brands, strains, offers] = results.map(result => result.results);
     const data = mergeCatalog(snapshot, {retailers, brands, strains, offers});
+    if (url.pathname === '/data/published-strains.json') {
+      const listings = data.catalog.filter(offer => offer.retailer && offer.strain
+        && Number.isFinite(Number(offer.price)) && Number(offer.price) > 0);
+      const names = new Set();
+      for (const group of catalogModel.groupOffers(listings)) {
+        names.add(group.strain);
+        for (const offer of group.offers) {
+          if (offer.master_strain) names.add(offer.master_strain);
+        }
+      }
+      return Response.json({strains: [...names].sort()}, {
+        headers: {'Cache-Control': 'no-store', 'X-MNtrees-Catalog-Source': 'd1'},
+      });
+    }
     const routes = {
       '/data/catalog.json': data.catalog,
       '/data/brands.json': data.brands,
