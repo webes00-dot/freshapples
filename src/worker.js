@@ -5,6 +5,42 @@ import { onRequestGet as reviewsGet, onRequestPost as reviewsPost } from '../fun
 import { onRequestPost as flagReview } from '../functions/api/reviews/flag.js';
 import { onRequestGet as moderationGet, onRequestPost as moderationPost } from '../functions/api/reviews/moderate.js';
 
+
+// Cache assembled catalog JSON at the edge so repeated page loads do not
+// re-read D1 and recompute all retailer, brand, and strain joins.
+// This caches only successful D1 results. Existing static fallback is unchanged.
+async function cachedLiveCatalog(request, env, ctx) {
+  const url = new URL(request.url);
+  const cacheKey = new Request(url.origin + url.pathname + '?edge-catalog-v1');
+  const cache = caches.default;
+  try {
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      const headers = new Headers(cached.headers);
+      headers.set('Cache-Control', 'no-store');
+      headers.set('X-MNtrees-Catalog-Cache', 'HIT');
+      return new Response(cached.body, {status: cached.status, headers});
+    }
+  } catch (error) {
+    console.warn('Catalog edge cache read failed', error);
+  }
+
+  const response = await liveCatalog(request, env);
+  // Do not cache errors or static fallback: a transient failure must not replace
+  // the last valid catalog assembly in the edge cache.
+  if (response.ok && response.headers.get('X-MNtrees-Catalog-Source') === 'd1') {
+    const headers = new Headers(response.headers);
+    headers.set('Cache-Control', 'public, max-age=300');
+    const cacheable = new Response(response.clone().body, {
+      status: response.status, headers
+    });
+    ctx.waitUntil(cache.put(cacheKey, cacheable).catch(error => {
+      console.warn('Catalog edge cache write failed', error);
+    }));
+  }
+  return response;
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -36,7 +72,7 @@ export default {
     }
     const catalogPaths = ['/data/site-data.json', '/data/catalog.json', '/data/brands.json', '/data/retailer_locations.json', '/data/published-strains.json'];
     if (request.method === 'GET' && env.CATALOG_DB && catalogPaths.includes(url.pathname)) {
-      return liveCatalog(request, env);
+      return cachedLiveCatalog(request, env, ctx);
     }
     // The former site used /map; keep one canonical map entrypoint.
     if (url.pathname === '/map' || url.pathname === '/map/') {
