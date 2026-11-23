@@ -8,6 +8,7 @@ const prerollForm=/\b(?:pre ?rolls?|joints?|blunts?|hash holes?)\b/;
 const vapeForm=/\b(?:vapes?|vaporizers?|disposables?|cartridges?|carts?|aio)\b/;
 const concentrateForm=/\b(?:concentrates?|extracts?|rosin|resin|wax|hash|shatter|badder|budder|diamonds|crumble|distillate|sauce|sugar|kief|dabs?|rso)\b/;
 const kodjoWilfunk=/kodjos\.dispensary\.shop\/rec\/flower\/pdp\/wilfunk-5-pack\//i;
+const isTincture=o=>/\btinctures?\b/i.test([o.category,o.product_form,o.product_name,o.raw_scanned_product_name].join(" "));
 function productSlug(url){
  try{
   const path=new URL(url).pathname;
@@ -15,6 +16,7 @@ function productSlug(url){
  }catch{return "";}
 }
 function typeOf(o){
+ if(isTincture(o))return null;
  // Owner-confirmed: Kodjo's Dizgo Cherry Kush 1g listing is a preroll despite menu category.
  if(String(o.id||"")==="2e7da1544f83ac7cc0f1" || /kodjos\.dispensary\.shop\/rec\/flower\/pdp\/cherry-kush\//i.test(String(o.url||"")))return "Preroll";
  // Kodjo's MAC V2 five-pack is a 2.5g preroll multipack despite its Flower menu category.
@@ -597,6 +599,9 @@ function canonicalBrand(name){
  return raw;
 }
 function enriched(o){
+ if(o.menu_strain)return {...o,displayStrain:o.menu_strain,displayType:typeOf(o),pack:packOf(o),
+   displayBrand:canonicalBrand(o.menu_brand||o.brand)||"Brand not confirmed",
+   retailer:String(o.retailer||"").trim()};
  if(o.reviewed_identity)return {...o, displayStrain:cleanStrain(o), displayType:typeOf(o),
    pack:packOf(o), displayBrand:canonicalBrand(o.brand)||"Brand not confirmed",
    retailer:String(o.retailer||"").trim()};
@@ -829,7 +834,7 @@ function groupOffers(input){
   // invalid-looking scraped fields such as "Pre-pack". The review parser may
   // recover a genuine master strain from the full product title.
   const earlyReviewed=reviewedPublicIdentity(original);
-  if(earlyReviewed){
+  if(earlyReviewed&&!original.menu_strain){
     o.displayStrain=earlyReviewed.strain;
     if(earlyReviewed.brand)o.displayBrand=earlyReviewed.brand;
   }
@@ -843,8 +848,8 @@ function groupOffers(input){
   // become a cultivar heading, even if the published master_strain is stale.
   const confirmedMnLoon=mnLoonIdentity(original)||mnLoonIdentity(o);
   const confirmedReviewedTitle=reviewedTitleIdentity(original);
-  o.displayStrain=confirmedMnLoon?.strain || confirmedReviewedTitle?.strain || canonicalSkywalker(o.displayStrain) || canonicalSkywalker(original.master_strain) || original.master_strain || canonicalPublishedHeading(o.displayStrain);
-  if(confirmedMnLoon)o.displayBrand="MN Loon";
+  o.displayStrain=original.menu_strain || confirmedMnLoon?.strain || confirmedReviewedTitle?.strain || canonicalSkywalker(o.displayStrain) || canonicalSkywalker(original.master_strain) || original.master_strain || canonicalPublishedHeading(o.displayStrain);
+  if(confirmedMnLoon&&!original.menu_brand)o.displayBrand="MN Loon";
   if(/^(?:the\s+)?soap$/i.test(o.displayStrain))o.displayStrain="Soap";
   // Owner-requested comparison grouping: Skywalker, Skywalker OG and
   // Skywalker Kush share one shopper card, while the offer metadata retains
@@ -891,6 +896,8 @@ function groupOffers(input){
   if(approved){o.displayStrain=approved.strain;if(approved.brand)o.displayBrand=approved.brand;}
   // Canonicalize after master_strain fallback: legacy published names must
   // not create duplicate cards when an approved alias already exists.
+  if(original.menu_strain)o.displayStrain=original.menu_strain;
+  if(original.menu_brand)o.displayBrand=canonicalBrand(original.menu_brand);
   o.displayStrain=canonicalPublishedHeading(o.displayStrain);
   // Same Looner 1g disposable is labeled Sweet Orange/Sweet Oranges across retailers.
   if(/^sweet\s+oranges?$/i.test(o.displayStrain) &&
@@ -926,5 +933,5 @@ function groupOffers(input){
  }
  return [...byKey.values()].sort((a,b)=>a.strain.localeCompare(b.strain)||a.brand.localeCompare(b.brand)||a.type.localeCompare(b.type));
 }
-return {typeOf,packOf,filterSize,cleanStrain,canonicalBrand,enriched,groupOffers,priceComparisonMinimums,rankPriceCaptures};
+return {typeOf,packOf,filterSize,cleanStrain,canonicalBrand,enriched,groupOffers,priceComparisonMinimums,rankPriceCaptures,isTincture};
 });

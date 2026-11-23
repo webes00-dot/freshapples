@@ -1,4 +1,5 @@
 import catalogModel from '../catalog-model.js';
+import { menuIdentityResolver } from './menu-title.js';
 
 const normalize = value => String(value ?? '').normalize('NFKD')
   .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -146,6 +147,7 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
   }
 
   const findStrain = directoryIndex(strains, 'canonical_name');
+  const readMenuIdentity = menuIdentityResolver([...catalogBrands.values()], findStrain, catalogModel.enriched);
   const genetics = new Map();
   for (const entry of snapshot.strain_genetics || []) {
     const key = normalize(entry.strain);
@@ -175,19 +177,22 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
 
   function enrich(offer) {
     const retailer = catalogRetailers.get(offer.retailer_id);
-    const strain = findStrain(offer.master_strain || offer.strain);
     const brand = findBrand(offer.brand_family) || findBrand(offer.brand);
+    const menuIdentity = readMenuIdentity({...offer, brand: brand?.canonical_name || offer.brand});
+    const strain = findStrain(menuIdentity?.strain || offer.master_strain || offer.strain);
     return {
       ...offer,
       ...values({
         retailer: retailer?.name, address: retailer?.address,
         master_strain: strain?.canonical_name, strain_type: strain?.classification || strain?.indica_sativa,
-        brand: brand?.canonical_name, brand_family: brand?.canonical_name,
+        brand: menuIdentity?.brand || brand?.canonical_name,
+        brand_family: menuIdentity?.brand || brand?.canonical_name,
+        menu_strain: menuIdentity?.strain, menu_brand: menuIdentity?.brand,
       }),
     };
   }
 
-  const catalog = snapshot.catalog.map(enrich);
+  const catalog = snapshot.catalog.filter(offer => !catalogModel.isTincture(offer)).map(enrich);
   const productKeys = new Map();
   for (const [index, offer] of catalog.entries()) {
     const key = listingKey(offer);
@@ -197,6 +202,7 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
   }
   for (const row of offers) {
     const offer = JSON.parse(row.public_json);
+    if (catalogModel.isTincture(offer)) continue;
     const product = enrich({
       id: offer.id, retailer_id: offer.store_id, retailer: offer.retailer,
       strain: offer.strain || offer.product_name, brand: offer.brand || '',
