@@ -3,7 +3,7 @@ const normalize = value => String(value ?? '').normalize('NFKD')
 
 const leadingForm = /^(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:rams?)?\s+)?(?:(?:thc\s+)?(?:vape cartridge|vape pen|disposable)(?:\s+with battery)?|(?:cured|live|hash)\s+(?:resin|rosin)|select grind)\b/i;
 const trailingForm = /\s+(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s+.*)?|(?:(?:cured|live|hash)\s+)?(?:resin|rosin|distillate)(?:\s+(?:\d*\.?\d+\s*g\b.*|all[- ]in[- ]one\b.*|vape\b.*|disposable\b.*))?|(?:flower|vape(?:\s+cartridge)?|disposable|pre[- ]?rolls?|concentrate))$/i;
-const menuDetail = /^(?:(?:deli(?:[- ]style)?|select grind|pre[- ]?packaged|flower|concentrates?|(?:cured |live |hash )?(?:rosin|resin)|distillate|vapes?|vape cartridges?|disposable|pre[- ]?rolls?)|(?:indica|sativa|hybrid)(?:\s+(?:dominant|vibey energy))?|(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s*\/\s*\d+\s*(?:pk|packs?|ct)(?:\s+.*)?)?|\d+\s*(?:pk|packs?|ct))$/i;
+const menuDetail = /^(?:(?:deli(?:[- ]style)?|select grind|pre[- ]?packaged|flower|concentrates?|(?:cured |live |hash )?(?:rosin|resin)|distillate|vapes?|vape cartridges?|disposable(?: vape)?|pre[- ]?rolls?)|(?:indica|sativa|hybrid)(?:\s+(?:dominant|vibey energy))?|(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s*\/\s*\d+\s*(?:pk|packs?|ct)(?:\s+.*)?)?|\d+\s*(?:pk|packs?|ct))$/i;
 const blend = /^(?:(?:indica|sativa|hybrid)\s+blend|mixed(?:\s+strains?)?)$/i;
 const brandSuffix = /^(?:cannabis(?:\s+(?:co\.?|company))?)\s+/i;
 const leadingWeight = /^(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?\s+(?=(?:vape|cartridge|disposable|pre[- ]?roll|jar)\b)/i;
@@ -148,7 +148,8 @@ export function menuIdentityResolver(directory, findStrain, existingIdentity) {
       .some(match => match?.brand === parsed.brand))
       || formNoise.test(priorName) || menuDetail.test(priorName)
       || /^(?:thc$|cannabis(?:\s+(?:co|company))?\b)/i.test(priorName)
-      || /\s\d+\.\d+$/.test(priorName) || blend.test(priorName);
+      || /\s\d+\.\d+$/.test(priorName) || blend.test(priorName)
+      || (parsedStrain && parsed.brand && priorKey.endsWith(' ' + normalize(parsed.strain)));
     const category = normalize(offer.category);
     const explicitBlend = strain === 'Mixed Strains';
     const brandOnly = strain === 'Strain not specified';

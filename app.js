@@ -120,11 +120,6 @@ function renderComparisons(input){
  $('checked').textContent=input.length.toLocaleString()+' advertised retailer offers across '+groups.length+' strain cards';
  $('comparisonCount').textContent=priceSorted ? retailerLink.label+' · Lowest advertised price first' : groups.filter(g=>new Set(g.offers.filter(active).map(o=>o.retailer)).size>1).length+' strains listed at multiple retailers';
  const cards=groups.map(g=>{
-  const offersByForm=new Map();
-  for(const offer of g.offers){
-   if(!offersByForm.has(offer.displayType))offersByForm.set(offer.displayType,[]);
-   offersByForm.get(offer.displayType).push(offer);
-  }
   const subtype=g.type==='Preroll'?'Pre-Rolls':g.type==='Flower'?'Flower':g.type==='Mixed forms'?'Multiple forms':g.type==='Vape'?'Vapes':'Concentrates';
   const detail=g.size;
   const renderOffer=o=>{
@@ -157,16 +152,11 @@ function renderComparisons(input){
    (summary.withParents?'<span>Lineage</span> '+esc([summary.withParents.parent1,summary.withParents.parent2].filter(Boolean).join(' × ')):
    summary.related?'<span>Related strain</span> '+esc(summary.related.strain)+'*':
    '<span>Origin</span> Possible custom cross / locally bred variation')+'</div>';
-  const formOrder=['Flower','Preroll','Concentrates','Vape'];
-  const offerSections=formOrder.filter(form=>offersByForm.has(form)).map(form=>{
-   const offers=offersByForm.get(form).sort((a,b)=>Number(!active(a))-Number(!active(b))||a.price-b.price||a.retailer.localeCompare(b.retailer));
-   const visibleOffers=offers.slice(0,3).map(renderOffer).join('');
-   const extraCount=offers.length-3;
-   const extraOffers=extraCount>0?'<details class="more-stores"><summary><span class="more-plus" aria-hidden="true">+</span><span class="more-label">Show '+extraCount+' more '+(extraCount===1?'offer':'offers')+'</span><span class="more-less">Show fewer offers</span></summary><div class="more-stores-content">'+offers.slice(3).map(renderOffer).join('')+'</div></details>':'';
-   if(offersByForm.size===1)return visibleOffers+extraOffers;
-   const label={Flower:'Flower',Preroll:'Pre-rolls',Concentrates:'Concentrates',Vape:'Vapes'}[form];
-   return '<section class="compact-offer-section"><h4>'+label+'</h4>'+visibleOffers+extraOffers+'</section>';
-  }).join('');
+  const sortedOffers=[...g.offers].sort((a,b)=>Number(!active(a))-Number(!active(b))||a.price-b.price||a.retailer.localeCompare(b.retailer));
+  const visibleOffers=sortedOffers.slice(0,3).map(renderOffer).join('');
+  const extraCount=sortedOffers.length-3;
+  const extraOffers=extraCount>0?'<details class="more-stores"><summary><span class="more-plus" aria-hidden="true">+</span><span class="more-label">Show '+extraCount+' more '+(extraCount===1?'offer':'offers')+'</span><span class="more-less">Show fewer offers</span></summary><div class="more-stores-content">'+sortedOffers.slice(3).map(renderOffer).join('')+'</div></details>':'';
+  const offerSections=visibleOffers+extraOffers;
    const brands=[...new Set(g.offers.map(o=>o.displayBrand).filter(x=>x!=='Brand not confirmed'))];
    const brandSummary=brands.length>1?brands.length+' brands · ':'';
    const redwoodProfile = hasRedwoodReference ? ' data-redwood-profile' : '';
