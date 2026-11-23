@@ -37,16 +37,31 @@ function brandIndex(directory) {
   for (const [alias, brand] of Object.entries(menuBrandNames)) {
     if (!names.has(normalize(alias))) names.set(normalize(alias), brand);
   }
-  return names;
+  const starts = new Map();
+  const ends = new Map();
+  for (const [key, brand] of names) {
+    if (!brand) continue;
+    const words = key.split(' ');
+    for (const [index, word] of [[starts, words[0]], [ends, words.at(-1)]]) {
+      index.set(word, Math.max(index.get(word) || 0, words.length));
+    }
+  }
+  return {names, starts, ends};
 }
 
-function edgeBrand(text, names, side) {
+function edgeBrand(text, index, side) {
+  const edge = side === 'start' ? text.match(/^\S+/)?.[0] : text.match(/\S+$/)?.[0];
+  if (!edge) return null;
+  const normalizedEdge = normalize(edge).split(' ');
+  const count = side === 'start' ? index.starts.get(normalizedEdge[0])
+    : index.ends.get(normalizedEdge.at(-1));
+  if (!count) return null;
   const words = [...text.matchAll(/\S+/g)];
-  for (let size = Math.min(words.length, 8); size > 0; size--) {
+  for (let size = Math.min(words.length, count); size > 0; size--) {
     const boundary = side === 'start' ? words[size - 1].index + words[size - 1][0].length
       : words[words.length - size].index;
     const key = normalize(side === 'start' ? text.slice(0, boundary) : text.slice(boundary));
-    const brand = names.get(key);
+    const brand = index.names.get(key);
     if (brand) {
       const remaining = side === 'start' ? text.slice(boundary) : text.slice(0, boundary);
       return {brand, remaining: remaining.replace(/^[\s:–-]+|[\s:–-]+$/g, '')};
@@ -55,7 +70,8 @@ function edgeBrand(text, names, side) {
   return null;
 }
 
-function readTitle(offer, names) {
+function readTitle(offer, index) {
+  const {names} = index;
   const title = String(offer.product_name || offer.strain || '').trim();
   if (!title) return null;
   const form = String(offer.category || '').toLowerCase();
@@ -63,25 +79,24 @@ function readTitle(offer, names) {
   const parts = title.split(/\s*\|\s*|\s+[–-]\s+/).filter(Boolean);
   let brand = names.get(normalize(offer.brand)) || '';
   let changed = false;
-  for (const part of parts) {
-    const match = edgeBrand(part, names, 'start') || edgeBrand(part, names, 'end');
-    if (!brand && match) brand = match.brand;
-  }
-  const pairedBrand = parts.map(part => edgeBrand(part, names, 'end'))
+  const fields = parts.map(part => ({
+    part, start: edgeBrand(part, index, 'start'), end: edgeBrand(part, index, 'end'),
+  }));
+  brand ||= fields.map(field => field.start || field.end).find(Boolean)?.brand || '';
+  const pairedBrand = fields.map(field => field.end)
     .find(match => match?.brand !== brand && match?.remaining && names.get(normalize(match.remaining)) === brand);
   if (pairedBrand) brand = pairedBrand.brand;
   const candidates = [];
   let hasBlend = false;
-  for (const part of parts) {
+  for (const {part, start, end} of fields) {
     let field = part;
-    const brandMatch = edgeBrand(field, names, 'start');
-    if (brandMatch && brandMatch.brand === brand) {
-      field = brandMatch.remaining.replace(brandSuffix, '');
-      const repeated = edgeBrand(field, names, 'start');
+    if (start && start.brand === brand) {
+      field = start.remaining.replace(brandSuffix, '');
+      const repeated = edgeBrand(field, index, 'start');
       if (repeated?.brand === brand) field = repeated.remaining;
       changed = true;
     }
-    const suffix = edgeBrand(field, names, 'end');
+    const suffix = field === part ? end : edgeBrand(field, index, 'end');
     if (suffix?.brand === brand && suffix.remaining) {
       field = suffix.remaining;
       changed = true;
@@ -116,10 +131,11 @@ function readTitle(offer, names) {
 }
 
 export function menuIdentityResolver(directory, findStrain, existingIdentity) {
-  const names = brandIndex(directory);
+  const index = brandIndex(directory);
   return offer => {
     if (offer.reviewed_identity || offer.product_family_decision === 'owner_confirmed_exact_listing') return null;
-    const parsed = readTitle(offer, names);
+    if (offer.brand && offer.product_name === offer.strain && offer.strain === offer.master_strain) return null;
+    const parsed = readTitle(offer, index);
     if (!parsed) return null;
     const existing = existingIdentity(offer);
     const priorName = existing.displayStrain;
@@ -128,7 +144,7 @@ export function menuIdentityResolver(directory, findStrain, existingIdentity) {
     const strain = parsedStrain?.canonical_name || parsed.strain;
     const master = findStrain(offer.master_strain);
     const priorKey = normalize(priorName);
-    const hasResidue = (parsed.brand && [edgeBrand(priorName, names, 'start'), edgeBrand(priorName, names, 'end')]
+    const hasResidue = (parsed.brand && [edgeBrand(priorName, index, 'start'), edgeBrand(priorName, index, 'end')]
       .some(match => match?.brand === parsed.brand))
       || formNoise.test(priorName) || menuDetail.test(priorName)
       || /^(?:thc$|cannabis(?:\s+(?:co|company))?\b)/i.test(priorName)
