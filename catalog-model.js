@@ -28,7 +28,10 @@ function typeOf(o){
  if(prerollForm.test(c)||prerollForm.test(form)||prerollForm.test(title))return "Preroll";
  if(vapeForm.test(c)||vapeForm.test(form)||vapeForm.test(title))return "Vape";
  if(concentrateForm.test(c)||concentrateForm.test(form))return "Concentrates";
- if(c.includes("flower")||c==="bud"||c==="buds")return "Flower";
+ if(c.includes("flower")||c==="bud"||c==="buds"){
+  // Dogwalkers sells pre-rolls. A Flower label alone cannot verify their format or pack weight.
+  return canonicalBrand(o.brand||o.brand_family)==="Dogwalkers"?null:"Flower";
+ }
  return null;
 }
 const slashPack=/(?:^|[\s|])(\d+(?:\.\d+)?|\.\d+)\s*g\s*\/\s*(\d{1,2})\s*(?:pk|packs?|ct)\b/i;
