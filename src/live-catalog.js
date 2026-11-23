@@ -86,11 +86,37 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
   }
 
   const catalogBrands = new Map(snapshot.brands.map(brand => [normalize(brand.name), brand]));
-  const findBrand = directoryIndex(brands, 'canonical_name');
+  const brandTags = new Map((snapshot.business_tags?.brands || []).map(tag => [normalize(tag.name), tag]));
+  const findLiveBrand = directoryIndex(brands, 'canonical_name');
+  const legacyByBrand = new Map();
+  const legacyAliases = new Map();
+  for (const [key, legacy] of catalogBrands) {
+    const legacyNames = [legacy.name, ...aliases(legacy.aliases)];
+    const matches = new Set(legacyNames.map(findLiveBrand).filter(Boolean));
+    const row = findLiveBrand(legacy.name) || (matches.size === 1 ? matches.values().next().value : null);
+    if (!row) continue;
+    const entries = legacyByBrand.get(row) || [];
+    entries.push(legacy);
+    legacyByBrand.set(row, entries);
+    for (const name of legacyNames) {
+      const alias = normalize(name);
+      if (legacyAliases.has(alias) && legacyAliases.get(alias) !== row) legacyAliases.set(alias, null);
+      else legacyAliases.set(alias, row);
+    }
+    if (key !== normalize(row.canonical_name)) catalogBrands.delete(key);
+  }
+  const findBrand = name => findLiveBrand(name) || legacyAliases.get(normalize(name));
+  const inheritedTags = new Map();
+  for (const [key, tag] of brandTags) {
+    const row = findBrand(tag.name);
+    if (!row || key === normalize(row.canonical_name)) continue;
+    if (!inheritedTags.has(row)) inheritedTags.set(row, tag);
+    brandTags.delete(key);
+  }
   for (const row of brands) {
     const key = normalize(row.canonical_name);
-    const existing = catalogBrands.get(key)
-      || aliases(row.aliases).map(name => catalogBrands.get(normalize(name))).find(Boolean);
+    const legacy = legacyByBrand.get(row) || [];
+    const existing = catalogBrands.get(key) || legacy[0];
     catalogBrands.set(key, {
       ...existing,
       ...values({
@@ -99,8 +125,22 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
         cultivation_type: row.cultivation_type, research_status: row.research_status,
         ownership_group: row.ownership_group,
       }),
-      aliases: [...new Set([...aliases(existing?.aliases), ...aliases(row.aliases)])],
+      aliases: [...new Set([...aliases(row.aliases), ...legacy.flatMap(entry => [entry.name, ...aliases(entry.aliases)])])]
+        .filter(name => normalize(name) !== key && findBrand(name) === row),
     });
+    const tag = {...(brandTags.get(key) || inheritedTags.get(row)), name: row.canonical_name, canonical_name: row.canonical_name};
+    const verified = new Set(tag.verified_tags || []);
+    for (const [field, label, status] of [
+      ['tribal', 'Tribal', row.tribal_status],
+      ['sea', 'SEA', row.sea_status],
+      ['corporate', 'Corporate', row.corporate_tag],
+    ]) {
+      if (status !== 'Yes' && status !== 'No') continue;
+      tag[field] = status;
+      if (status === 'Yes') verified.add(label);
+      else verified.delete(label);
+    }
+    brandTags.set(key, {...tag, verified_tags: [...verified]});
   }
 
   const findStrain = directoryIndex(strains, 'canonical_name');
@@ -134,7 +174,7 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
   function enrich(offer) {
     const retailer = catalogRetailers.get(offer.retailer_id);
     const strain = findStrain(offer.master_strain || offer.strain);
-    const brand = findBrand(offer.brand_family || offer.brand);
+    const brand = findBrand(offer.brand_family) || findBrand(offer.brand);
     return {
       ...offer,
       ...values({
@@ -178,6 +218,7 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
   return {
     ...snapshot, catalog,
     retailers: [...catalogRetailers.values()], brands: [...catalogBrands.values()],
+    business_tags: {...snapshot.business_tags, brands: [...brandTags.values()]},
     strain_genetics: [...genetics.values()].flat(), strain_types: strainTypes,
     strain_profile_references: references,
   };
@@ -191,7 +232,7 @@ export async function liveCatalog(request, env) {
 
   const queries = [
     "SELECT source_key, license_id, display_name, address, menu_url, website_url, aliases, ownership_group FROM retailers",
-    "SELECT canonical_name, aliases, website_url, summary, about_url, cultivation_type, logo_url, research_status, ownership_group FROM brands",
+    "SELECT canonical_name, aliases, website_url, summary, about_url, cultivation_type, logo_url, research_status, ownership_group, tribal_status, sea_status, corporate_tag FROM brands",
     "SELECT canonical_name, aliases, classification, indica_sativa, parent1, parent2, breeder, terpenes, flowering_time, known_children, notes, reference_url, reference_name FROM strains",
     "SELECT observed_at, price_cents, source_url, public_json FROM scanner_offers ORDER BY observed_at DESC, offer_key",
   ];
