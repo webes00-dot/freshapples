@@ -7,30 +7,37 @@ const numeric=n=>Number.isFinite(Number(n))&&Number(n)>0?Number(n):null;
 const prerollForm=/\b(?:pre ?rolls?|joints?|blunts?|hash holes?)\b/;
 const vapeForm=/\b(?:vapes?|vaporizers?|disposables?|cartridges?|carts?|aio)\b/;
 const concentrateForm=/\b(?:concentrates?|extracts?|rosin|resin|wax|hash|shatter|badder|budder|diamonds|crumble|distillate|sauce|sugar|kief|dabs?|rso)\b/;
+const kodjoWilfunk=/kodjos\.dispensary\.shop\/rec\/flower\/pdp\/wilfunk-5-pack\//i;
+function productSlug(url){
+ try{
+  const path=new URL(url).pathname;
+  return simplify(decodeURIComponent(path.match(/\/(?:pdp|products?)\/(.+)/i)?.[1]||""));
+ }catch{return "";}
+}
 function typeOf(o){
  // Owner-confirmed: Kodjo's Dizgo Cherry Kush 1g listing is a preroll despite menu category.
  if(String(o.id||"")==="2e7da1544f83ac7cc0f1" || /kodjos\.dispensary\.shop\/rec\/flower\/pdp\/cherry-kush\//i.test(String(o.url||"")))return "Preroll";
  // Kodjo's MAC V2 five-pack is a 2.5g preroll multipack despite its Flower menu category.
  if(String(o.id||"")==="b922017567392166d488" || /kodjos\.dispensary\.shop\/rec\/flower\/pdp\/mac-v2-5pck-/i.test(String(o.url||"")))return "Preroll";
+ if(kodjoWilfunk.test(o.url))return "Preroll";
  const c=simplify(o.category);
  if(/\b(edible|edibles|gummy|gummies|chocolate|beverage|drink|tincture|topical|battery|batteries|accessory|accessories|charger|lighter|grinder|merchandise|gear)\b/.test(c))return null;
- if(prerollForm.test(c))return "Preroll";
- if(vapeForm.test(c))return "Vape";
+ const form=simplify(o.product_form);
+ const title=[o.raw_scanned_product_name,o.product_name,productSlug(o.url)].map(simplify)
+  .join(" ").replace(/\b(?:add to|in) cart\b/g,"");
+ if(prerollForm.test(c)||prerollForm.test(form)||prerollForm.test(title))return "Preroll";
+ if(vapeForm.test(c)||vapeForm.test(form)||vapeForm.test(title))return "Vape";
+ if(concentrateForm.test(c)||concentrateForm.test(form))return "Concentrates";
  if(c.includes("flower")||c==="bud"||c==="buds")return "Flower";
- // Older imports sometimes used Concentrates for any product containing an extract.
- if(!o.reviewed_identity){
-  const title=simplify(o.raw_scanned_product_name||o.product_name);
-  if(prerollForm.test(title))return "Preroll";
-  if(vapeForm.test(title))return "Vape";
- }
- return concentrateForm.test(c)?"Concentrates":null;
+ return null;
 }
 const slashPack=/(?:^|[\s|])(\d+(?:\.\d+)?|\.\d+)\s*g\s*\/\s*(\d{1,2})\s*(?:pk|packs?|ct)\b/i;
 const fractionGram=/^([1-9]\d*)\s*\/\s*([1-9]\d*)\s*g(?:rams?)?\s+/i;
 function packOf(o){
  const text=String(o.raw_scanned_product_name||o.product_name||o.strain||"");
- const actual=numeric(o.package_g);
- const reviewedCount=o.reviewed_identity && Number.isInteger(o.pack_count) && o.pack_count>1 ? o.pack_count : null;
+ const corrected=kodjoWilfunk.test(o.url);
+ const actual=corrected?2.5:numeric(o.package_g);
+ const reviewedCount=corrected?5:o.reviewed_identity && Number.isInteger(o.pack_count) && o.pack_count>1 ? o.pack_count : null;
  const mult=text.match(/\b(\d{1,2})\s*[xX×]\s*(0?\.\d+|\d+(?:\.\d+)?)\s*g\b/i)||text.match(/\b(\d{1,2})\s*(?:pk|pack|count|ct)\s*(?:of)?\s*[xX×]?\s*(0?\.\d+|\d+(?:\.\d+)?)\s*g\b/i);
  const reverse=text.match(/(?:^|[\s(])(\d+\.\d+|\.\d+|\d+)\s*g?\s*[xX×]\s*(\d{1,2})\b/i)||text.match(slashPack);
  const pack=text.match(/\b(\d{1,2})\s*(?:-?\s*pack|pk|ct)\b/i)||text.match(/\b(\d{1,2})\s*[xX×]\s*(?:pre.?rolls?|joints?)\b/i);
@@ -635,6 +642,33 @@ function offerIdentity(o){
    o.displayType,weight===null?"unknown":String(weight),
    Number.isFinite(price)?price.toFixed(2):"unknown",o.product_variant||"",offerVariant(o)].join("|");
 }
+// Minimum qualifying price captures per comparison group.
+const priceComparisonMinimums=Object.freeze({
+ brand:Object.freeze({Flower:10,Preroll:10,Concentrates:5}),
+ retailer:Object.freeze({Flower:0,Preroll:0,Concentrates:0}),
+});
+function rankPriceCaptures(offers,type,groupType,groupFor){
+ const minimum=priceComparisonMinimums[groupType]?.[type];
+ if(minimum===undefined)return [];
+ const groups=new Map();
+ for(const offer of offers){
+  if(typeOf(offer)!==type)continue;
+  const price=numeric(offer.analytics_price)||numeric(offer.price);
+  if(!price)continue;
+  const product=enriched(offer);
+  const {total,inconsistent}=product.pack;
+  if(!total||inconsistent)continue;
+  const group=groupFor(product);
+  if(!group?.key||!group.name)continue;
+  if(!groups.has(group.key))groups.set(group.key,{name:group.name,captures:new Map()});
+  const identity=offerIdentity({...product,price})+"|"+String(offer.checked_at||"");
+  groups.get(group.key).captures.set(identity,price/total);
+ }
+ return [...groups.values()].filter(({captures})=>captures.size>=minimum)
+  .map(({name,captures})=>({
+   name,count:captures.size,avg:[...captures.values()].reduce((sum,value)=>sum+value,0)/captures.size,
+  })).sort((a,b)=>a.avg-b.avg||a.name.localeCompare(b.name));
+}
 function offerSourceQuality(o){
  const url=String(o.url||"").toLowerCase();
  const direct=/\/(?:pdp|product|products)\//.test(url);
@@ -889,5 +923,5 @@ function groupOffers(input){
  }
  return [...byKey.values()].sort((a,b)=>a.strain.localeCompare(b.strain)||a.brand.localeCompare(b.brand)||a.type.localeCompare(b.type));
 }
-return {typeOf,packOf,filterSize,cleanStrain,canonicalBrand,enriched,groupOffers};
+return {typeOf,packOf,filterSize,cleanStrain,canonicalBrand,enriched,groupOffers,priceComparisonMinimums,rankPriceCaptures};
 });

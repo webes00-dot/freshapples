@@ -99,10 +99,8 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
   list: document.getElementById('ranking-' + direction)
  }));
  const money = n => '$' + n.toFixed(2);
- const classify = offer => MNtreesCatalog.typeOf(offer);
  let catalog = [];
  let ranked = [];
- let minimumOffers = 0;
 
  function drawRankings() {
   const max = Math.max(1, ...ranked.map(brand => brand.avg));
@@ -123,7 +121,7 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
     const width = Math.max(3, Math.min(100, brand.avg / max * 100)).toFixed(1);
     return `<div class="ranking-item">
      <span class="ranking-number">${rank + 1}</span>
-     <span class="ranking-name"><a class="ranking-brand-link" href="./?brand=${encodeURIComponent(brand.name)}#compareTitle" aria-label="View cataloged products for ${esc(brand.name)}">${esc(brand.name)}</a>${cultivationBadge(brand.name)}${businessBadges(brand.name)}<small>${brand.count} qualifying ${brand.count === 1 ? 'offer' : 'offers'}</small></span>
+     <span class="ranking-name"><a class="ranking-brand-link" href="./?brand=${encodeURIComponent(brand.name)}#compareTitle" aria-label="View cataloged products for ${esc(brand.name)}">${esc(brand.name)}</a>${cultivationBadge(brand.name)}${businessBadges(brand.name)}<small>${brand.count} price ${brand.count === 1 ? 'capture' : 'captures'}</small></span>
      <span class="ranking-price">${money(brand.avg)}/g</span>
      <div class="ranking-track"><span class="ranking-fill" style="width:${width}%"></span></div>
     </div>`;
@@ -134,35 +132,15 @@ Promise.all([brandDirectory, businessTags, publishedBrandNames]).then(() => {
  function render() {
   const type = select.value;
   expanded = false;
-  minimumOffers = type === 'Concentrates' ? 0 : 10;
-  const groups = new Map();
-  for (const offer of catalog) {
-   if (classify(offer) !== type) continue;
-   const brand = canonicalBrand(offer.brand);
-   const price = Number(offer.analytics_price || offer.price);
-   const grams = Number(offer.package_g);
-   if (!brand || /^(unknown|unconfirmed|brand not confirmed|n\/a)$/i.test(brand) ||
-       !Number.isFinite(price) || price <= 0 || price > 500 ||
-       !Number.isFinite(grams) || grams <= 0 || grams > 112) continue;
-   const key = norm(brand);
-   if (!groups.has(key)) groups.set(key, {name: brand, values: [], seen: new Set()});
-   const group = groups.get(key);
-   const unique = [offer.retailer_id || offer.retailer || '', offer.strain || offer.product_name || '',
-    offer.category || '', grams, price].join('|').toLowerCase();
-   if (group.seen.has(unique)) continue;
-   group.seen.add(unique);
-   group.values.push(price / grams);
-  }
-  ranked = [...groups.values()]
-   .filter(group => group.values.length > 0 && group.values.length >= minimumOffers)
-   .map(group => ({
-    name: group.name,
-    count: group.values.length,
-    avg: group.values.reduce((sum, value) => sum + value, 0) / group.values.length
-   }))
-   .sort((a, b) => a.avg - b.avg || a.name.localeCompare(b.name));
+  const minimum = MNtreesCatalog.priceComparisonMinimums.brand[type];
+  ranked = MNtreesCatalog.rankPriceCaptures(catalog, type, 'brand', offer => {
+   const name = offer.displayBrand;
+   if (!name || /^(unknown|unconfirmed|brand not confirmed|n\/a)$/i.test(name)) return null;
+   return {key: norm(name), name};
+  });
   drawRankings();
-  note.textContent = ranked.length + ' qualifying brands for '+type.toLowerCase()+'. '+(minimumOffers ? 'Minimum '+minimumOffers+' distinct qualifying offers per brand. ' : '')+'Rankings are mean advertised $/g (not a median or cheapest offer). One product offered in several stores may contribute several observations. Price, potency, grade and package-size differences are not controlled; these are menu snapshots, not verified stock.';
+  note.textContent = ranked.length + ' qualifying brands. Minimum ' + minimum +
+   ' price captures per brand. Rankings use mean advertised price per gram.';
  }
 
  panels.forEach(panel => {
