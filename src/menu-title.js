@@ -7,6 +7,7 @@ const menuDetail = /^(?:(?:deli(?:[- ]style)?|select grind|pre[- ]?packaged|flow
 const blend = /^(?:(?:indica|sativa|hybrid)\s+blend|mixed(?:\s+strains?)?)$/i;
 const brandSuffix = /^(?:cannabis(?:\s+(?:co\.?|company))?)\s+/i;
 const leadingWeight = /^(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?\s+(?=(?:vape|cartridge|disposable|pre[- ]?roll|jar)\b)/i;
+const weightedGrade = /^\d*\.?\d+\s*g(?:m|rams?)?\s+(?:premium|popcorn|smalls?|shake|whole buds?)$/i;
 const formNoise = /\b(?:cartridge|disposable|vape|concentrate|select grind|pre[- ]?rolls?|cured resin|live resin|cured rosin|vibey energy|tincture)\b/i;
 
 // Menu labels that are absent from the brand directory, or name a product line.
@@ -94,7 +95,7 @@ function readTitle(offer, names) {
       changed = true;
       continue;
     }
-    if (!field || menuDetail.test(field) || /^\d+\s*mg$/i.test(field)) {
+    if (!field || menuDetail.test(field) || weightedGrade.test(field) || /^\d+\s*mg$/i.test(field)) {
       changed = true;
       continue;
     }
