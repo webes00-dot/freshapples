@@ -42,3 +42,50 @@
 }
 .market-page details { margin-top: 1rem; }
 .market-page summary { cursor: pointer; }
+
+#history-chart .market-price-chart {
+  margin: 0 0 1.25rem;
+  padding: clamp(.5rem, 2vw, 1rem);
+  border: 1px solid #dce6df;
+  border-radius: .75rem;
+  background: #fff;
+}
+
+.market-price-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#history-chart figcaption {
+  margin: 0 0 .5rem;
+  font-size: 1.125rem;
+  font-weight: 750;
+}
+
+.market-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem 1.2rem;
+  margin: 0 0 .75rem;
+  padding: 0;
+  list-style: none;
+  font-size: .875rem;
+  font-weight: 700;
+}
+
+.market-chart-legend li {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.market-chart-legend li::before {
+  content: '';
+  width: 1rem;
+  height: 3px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+#history-status:empty { display: none; }
