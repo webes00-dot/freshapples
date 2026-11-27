@@ -36,11 +36,16 @@ function urlIdentity(value) {
   return url.host.toLowerCase() + url.pathname.replace(/\/$/, '');
 }
 
+const productPage = url => /\/(products?\/|pdp\/)/i.test(url);
+const reviewed = offer => offer.reviewed_identity || offer.product_family_decision === 'owner_confirmed_exact_listing';
+
 function listingKey(offer) {
   const url = urlIdentity(offer.url);
   if (!offer.retailer_id || !url) return '';
   const key = [offer.retailer_id, url, Number(offer.package_g) || 0];
-  if (!/\/(products?\/|pdp\/)/i.test(url)) {
+  if (productPage(url)) {
+    key.push(catalogModel.typeOf(offer));
+  } else {
     key.push(normalize(offer.master_strain || offer.strain), normalize(offer.brand), normalize(offer.category));
   }
   return key.join('|');
@@ -178,7 +183,7 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
   function enrich(offer) {
     const retailer = catalogRetailers.get(offer.retailer_id);
     const brand = findBrand(offer.brand_family) || findBrand(offer.brand);
-    const menuIdentity = readMenuIdentity({...offer, brand: brand?.canonical_name || offer.brand});
+    const menuIdentity = readMenuIdentity(offer);
     const strain = findStrain(menuIdentity?.strain || offer.master_strain || offer.strain);
     return {
       ...offer,
@@ -187,18 +192,27 @@ export function mergeCatalog(snapshot, {retailers, brands, strains, offers}) {
         master_strain: strain?.canonical_name, strain_type: strain?.classification || strain?.indica_sativa,
         brand: menuIdentity?.brand || brand?.canonical_name,
         brand_family: menuIdentity?.brand || brand?.canonical_name,
-        menu_strain: menuIdentity?.strain, menu_brand: menuIdentity?.brand,
+        menu_strain: menuIdentity?.strain,
+        menu_brand: menuIdentity?.brand || (brand && normalize(offer.brand) !== normalize(brand.canonical_name)
+          ? brand.canonical_name : ''),
       }),
     };
   }
 
-  const catalog = snapshot.catalog.filter(offer => !catalogModel.isTincture(offer)).map(enrich);
+  const catalog = [];
   const productKeys = new Map();
-  for (const [index, offer] of catalog.entries()) {
+  for (const entry of snapshot.catalog) {
+    if (catalogModel.isTincture(entry)) continue;
+    const offer = enrich(entry);
     const key = listingKey(offer);
-    if (!key) continue;
-    if (productKeys.has(key)) productKeys.set(key, null);
-    else productKeys.set(key, index);
+    const index = key && productKeys.get(key);
+    if (Number.isInteger(index) && productPage(urlIdentity(offer.url))) {
+      const prior = catalog[index];
+      if (reviewed(offer) && !reviewed(prior)) catalog[index] = offer;
+      continue;
+    }
+    if (key) productKeys.set(key, productKeys.has(key) ? null : catalog.length);
+    catalog.push(offer);
   }
   for (const row of offers) {
     const offer = JSON.parse(row.public_json);

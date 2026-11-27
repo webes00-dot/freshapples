@@ -42,6 +42,9 @@ PLACEHOLDER = re.compile(r"(?i)^(?:unknown|n/?a|none|assorted|variety|house|"
                          r"(?:brand|strain)\s+(?:not\s+)?(?:available|confirmed|specified|listed)|"
                          r"mixed(?:\s+strains?)?|sativa|indica|hybrid|other)$")
 PACKAGE_SUFFIX = re.compile(r"(?i)\s+\d+(?:\.\d+)?\s*(?:g(?:rams?)?|mg|%|ct|pk)$")
+TITLE_RULES = {name: re.compile(pattern, re.I) for name, pattern in json.loads(
+    (ROOT.parent / "src" / "menu-title-rules.json").read_text(encoding="utf-8")
+).items()}
 
 
 def key(value):
@@ -270,12 +273,13 @@ class Names:
         return "new"
 
 
-def strain_name(title, brand):
-    fields = re.split(r"\s*\|\s*|\s+[-–—]\s+", title.strip())
+def strain_name(title, brand, category=""):
+    fields = re.split(r"\s*\|\s*|\s+[-–—]\s+", TITLE_RULES["promotion"].sub("", title.strip()))
     distinct = []
     for field in fields:
         field = PACKAGE_SUFFIX.sub("", field.strip()).strip(" -–—,")
-        if not field or DETAIL.fullmatch(field) or key(field) == key(brand):
+        field = TITLE_RULES["packSuffix"].sub("", TITLE_RULES["potency"].sub("", field)).strip()
+        if not field or DETAIL.fullmatch(field) or TITLE_RULES["packaging"].fullmatch(field) or key(field) == key(brand):
             continue
         # A separately labeled brand is safe to remove. A shared substring is not.
         if key(brand) and key(field).startswith(key(brand) + " "):
@@ -284,6 +288,8 @@ def strain_name(title, brand):
                 if key(" ".join(words[:end])) == key(brand):
                     field = " ".join(words[end:])
                     break
+        if "roll" in category:
+            field = TITLE_RULES["stickLine"].sub("", field)
         distinct.append(field)
     if len(distinct) != 1:
         return ""
@@ -315,9 +321,9 @@ def discover_products(offers, indexes):
         explicit_strain = offer.get("observed_strain")
         strain = ""
         if isinstance(explicit_strain, str) and explicit_strain:
-            strain = strain_name(explicit_strain, observed_brand)
+            strain = strain_name(explicit_strain, observed_brand, category)
         elif brand and isinstance(title, str) and category in STRAIN_CATEGORIES:
-            strain = strain_name(title, observed_brand)
+            strain = strain_name(title, observed_brand, category)
         evidence = {field: offer.get(field) for field in
                     ("url", "store_id", "retailer", "product_name", "observed_brand",
                      "observed_product_name", "observed_strain", "category", "checked_at")}

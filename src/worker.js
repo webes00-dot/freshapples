@@ -12,7 +12,7 @@ import { onRequestGet as moderationGet, onRequestPost as moderationPost } from '
 // This caches only successful D1 results. Existing static fallback is unchanged.
 async function cachedLiveCatalog(request, env, ctx) {
   const url = new URL(request.url);
-  const cacheKey = new Request(url.origin + url.pathname + '?edge-catalog-v1');
+  const cacheKey = new Request(url.origin + url.pathname + '?edge-catalog-v2');
   const cache = caches.default;
   try {
     const cached = await cache.match(cacheKey);

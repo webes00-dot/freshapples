@@ -1,3 +1,5 @@
+import titleRules from './menu-title-rules.json' with { type: 'json' };
+
 const normalize = value => String(value ?? '').normalize('NFKD')
   .replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
@@ -5,10 +7,17 @@ const leadingForm = /^(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:rams?)?\s+)?(?:(?:th
 const trailingForm = /\s+(?:(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s+.*)?|(?:(?:cured|live|hash)\s+)?(?:resin|rosin|distillate)(?:\s+(?:\d*\.?\d+\s*g\b.*|all[- ]in[- ]one\b.*|vape\b.*|disposable\b.*))?|(?:flower|vape(?:\s+cartridge)?|disposable|pre[- ]?rolls?|concentrate))$/i;
 const menuDetail = /^(?:(?:deli(?:[- ]style)?|select grind|pre[- ]?packaged|flower|concentrates?|(?:cured |live |hash )?(?:rosin|resin)|distillate|vapes?|vape cartridges?|disposable(?: vape)?|pre[- ]?rolls?)|(?:indica|sativa|hybrid)(?:\s+(?:dominant|vibey energy))?|(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?(?:\s*\/\s*\d+\s*(?:pk|packs?|ct)(?:\s+.*)?)?|\d+\s*(?:pk|packs?|ct))$/i;
 const blend = /^(?:(?:indica|sativa|hybrid)\s+blend|mixed(?:\s+strains?)?)$/i;
-const brandSuffix = /^(?:cannabis(?:\s+(?:co\.?|company))?)\s+/i;
+const brandSuffix = /^(?:cannabis(?:\s+(?:co\.?|company))?|co\.?|company|llc\.?|inc\.?)\s+/i;
 const leadingWeight = /^(?:\d+\s*\/\s*\d+|\d*\.?\d+)\s*g(?:m|rams?)?\s+(?=(?:vape|cartridge|disposable|pre[- ]?roll|jar)\b)/i;
 const weightedGrade = /^\d*\.?\d+\s*g(?:m|rams?)?\s+(?:premium|popcorn|smalls?|shake|whole buds?)$/i;
 const formNoise = /\b(?:cartridge|disposable|vape|concentrate|select grind|pre[- ]?rolls?|cured resin|live resin|cured rosin|vibey energy|tincture)\b/i;
+const promotion = new RegExp(titleRules.promotion, 'i');
+const potency = new RegExp(titleRules.potency, 'i');
+const packaging = new RegExp(titleRules.packaging, 'i');
+const stickLine = new RegExp(titleRules.stickLine, 'i');
+const packSuffix = new RegExp(titleRules.packSuffix, 'i');
+const unsafeHeading = value => potency.test(value) && !/[a-z]/i.test(value.replace(/(?:total|THC|CBD)/ig, ''))
+  || menuDetail.test(value) || packaging.test(value) || weightedGrade.test(value);
 
 // Menu labels that are absent from the brand directory, or name a product line.
 const menuBrandNames = {
@@ -70,15 +79,28 @@ function edgeBrand(text, index, side) {
   return null;
 }
 
-function readTitle(offer, index) {
+function dropObservedPrefix(text, label) {
+  const words = text.match(/\S+/g) || [];
+  const key = normalize(label);
+  if (!key) return text;
+  for (let length = 1; length < words.length; length++) {
+    if (normalize(words.slice(0, length).join(' ')) === key) {
+      return words.slice(length).join(' ').replace(/^[\s:–-]+/, '');
+    }
+  }
+  return text;
+}
+
+function readTitle(offer, index, findStrain) {
   const {names} = index;
-  const title = String(offer.product_name || offer.strain || '').trim();
+  const raw = String(offer.product_name || offer.strain || '').trim();
+  const title = raw.replace(promotion, '');
   if (!title) return null;
   const form = String(offer.category || '').toLowerCase();
   const weight = Number(offer.package_g);
   const parts = title.split(/\s*\|\s*|\s+[–-]\s+/).filter(Boolean);
   let brand = names.get(normalize(offer.brand)) || '';
-  let changed = false;
+  let changed = raw !== title;
   const fields = parts.map(part => ({
     part, start: edgeBrand(part, index, 'start'), end: edgeBrand(part, index, 'end'),
   }));
@@ -96,11 +118,6 @@ function readTitle(offer, index) {
       if (repeated?.brand === brand) field = repeated.remaining;
       changed = true;
     }
-    const suffix = field === part ? end : edgeBrand(field, index, 'end');
-    if (suffix?.brand === brand && suffix.remaining) {
-      field = suffix.remaining;
-      changed = true;
-    }
     if (names.get(normalize(field))) {
       changed = true;
       continue;
@@ -110,18 +127,28 @@ function readTitle(offer, index) {
       changed = true;
       continue;
     }
-    if (!field || menuDetail.test(field) || weightedGrade.test(field) || /^\d+\s*mg$/i.test(field)) {
+    if (!field || unsafeHeading(field) || /^\d+\s*mg$/i.test(field)) {
       changed = true;
       continue;
     }
     const old = field;
+    if (!start && end && findStrain(dropObservedPrefix(end.remaining, offer.brand))) {
+      field = dropObservedPrefix(field, offer.brand);
+    }
+    field = field.replace(potency, '').replace(packSuffix, '').trim();
+    if (/pre[- ]?roll/i.test(form)) field = field.replace(stickLine, '');
     field = field.replace(leadingWeight, '').replace(leadingForm, '').replace(trailingForm, '').trim();
     if (form === 'flower' && weight > 0) {
       const size = field.match(/\s+(\d+\.\d+)$/);
       if (size && Number(size[1]) === weight) field = field.slice(0, size.index);
     }
+    const suffix = field === part ? end : edgeBrand(field, index, 'end');
+    if (suffix?.remaining && (suffix.brand === brand || (start && findStrain(suffix.remaining)))) {
+      field = suffix.remaining;
+      if (suffix.brand !== brand) brand = suffix.brand;
+    }
     if (field !== old) changed = true;
-    if (field && !menuDetail.test(field) && /[a-z]/i.test(field)) candidates.push(field);
+    if (field && !unsafeHeading(field) && /[a-z]/i.test(field)) candidates.push(field);
   }
   if (!changed) return null;
   if (candidates.length === 1) return {strain: candidates[0], brand};
@@ -135,7 +162,7 @@ export function menuIdentityResolver(directory, findStrain, existingIdentity) {
   return offer => {
     if (offer.reviewed_identity || offer.product_family_decision === 'owner_confirmed_exact_listing') return null;
     if (offer.brand && offer.product_name === offer.strain && offer.strain === offer.master_strain) return null;
-    const parsed = readTitle(offer, index);
+    const parsed = readTitle(offer, index, findStrain);
     if (!parsed) return null;
     const existing = existingIdentity(offer);
     const priorName = existing.displayStrain;
@@ -146,7 +173,7 @@ export function menuIdentityResolver(directory, findStrain, existingIdentity) {
     const priorKey = normalize(priorName);
     const hasResidue = (parsed.brand && [edgeBrand(priorName, index, 'start'), edgeBrand(priorName, index, 'end')]
       .some(match => match?.brand === parsed.brand))
-      || formNoise.test(priorName) || menuDetail.test(priorName)
+      || formNoise.test(priorName) || unsafeHeading(priorName) || stickLine.test(priorName) || packSuffix.test(priorName)
       || /^(?:thc$|cannabis(?:\s+(?:co|company))?\b)/i.test(priorName)
       || /\s\d+\.\d+$/.test(priorName) || blend.test(priorName)
       || (parsedStrain && parsed.brand && priorKey.endsWith(' ' + normalize(parsed.strain)));
@@ -155,9 +182,11 @@ export function menuIdentityResolver(directory, findStrain, existingIdentity) {
     const brandOnly = strain === 'Strain not specified';
     const named = Boolean(parsedStrain);
     const corrected = normalize(parsed.strain) === priorKey || normalize(strain) === priorKey || explicitBlend || brandOnly
-      || (hasResidue && (named || /^(?:vapes?|concentrates?)$/.test(category) || offer.product_name?.includes('|')));
+      || (hasResidue && (named || unsafeHeading(priorName) || stickLine.test(priorName) || packSuffix.test(priorName)
+        || /^(?:vapes?|concentrates?)$/.test(category) || offer.product_name?.includes('|')));
     if (!corrected || (master && normalize(master.canonical_name) !== normalize(strain) && !hasResidue)) return null;
-    if (strain === priorName && (!parsed.brand || parsed.brand === priorBrand)) return null;
+    if (strain === priorName && normalize(strain) === normalize(offer.strain)
+      && (!parsed.brand || (parsed.brand === priorBrand && normalize(parsed.brand) === normalize(offer.brand)))) return null;
     return {strain, brand: parsed.brand};
   };
 }

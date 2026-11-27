@@ -1,0 +1,7 @@
+{
+  "promotion": "^(?:(?:on sale|offer conditions apply)\\s+)+",
+  "potency": "(?:^|\\s+)(?:(?:total\\s+)?(?:THC|CBD)\\s*:?\\s*)?\\d+(?:\\.\\d+)?\\s*%$",
+  "packaging": "^(?:\\d*\\.?\\d+\\s*g(?:m|rams?)?\\s+)?(?:(?:pre[- ]?loaded\\s+)?chillum|jar|(?:vape\\s+)?cartridge|disposable)(?:\\s+.*)?$",
+  "stickLine": "^(?:big|little)\\s+sticks?\\b\\s*",
+  "packSuffix": "(?:^|\\s+)\\d+\\s*(?:pck|pk|packs?|ct|count)(?:\\s*#\\s*\\d+)?$"
+}
