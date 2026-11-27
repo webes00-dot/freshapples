@@ -6,6 +6,7 @@ Never claims stock and never qualifies for automatic publication.
 """
 from html.parser import HTMLParser
 import hashlib
+import json
 import math
 import re
 from urllib.parse import urljoin, urlsplit
@@ -15,6 +16,36 @@ WEIGHT=re.compile(r"/\s*(\d+(?:\.\d+)?)\s*g\b", re.I)
 PRODUCT_PATH=re.compile(r"/(?:rec|med)/(?:view/pdp/p|[^/]+/pdp/[^/]+)/v/[^/?#]+",re.I)
 LABEL=re.compile(r"\b(Flower|Preroll|Pre-Roll|Vapes/Carts|Vapes|Concentrates|Edibles)\b(?=\s*(?:Indica(?:-dom)?|Sativa(?:-dom)?|Hybrid|50/50|THC\s*:|CBD\s*:|$))",re.I)
 CATEGORY={"flower":"Flower","preroll":"Preroll","pre-roll":"Preroll","infused-preroll":"Infused Preroll","vapes":"Vape","vapes-carts":"Vape","vapes/carts":"Vape"}
+
+def storefront_data(html):
+    """Read the public server-rendered storefront payload without running scripts."""
+    decoder = json.JSONDecoder()
+    root = {}
+    variants = {}
+
+    def visit(node):
+        if isinstance(node, dict):
+            if node.get("variant_id") and node.get("product_name"):
+                variants[node["variant_id"]] = node
+                return
+            for child in node.values():
+                visit(child)
+        elif isinstance(node, list):
+            for child in node:
+                visit(child)
+
+    for match in re.finditer(r"window\.__remixContext\s*=\s*(?=\{)|__remixContext\.p\(\s*(?=[\[{])", html):
+        try:
+            payload, _ = decoder.raw_decode(html, match.end())
+        except ValueError:
+            continue
+        if isinstance(payload, dict) and "state" in payload:
+            loaders = payload["state"].get("loaderData", {})
+            root = loaders.get("root") or {}
+            visit({key: value for key, value in loaders.items() if key != "root"})
+        else:
+            visit(payload)
+    return root, variants
 
 # Exact visible leading manufacturer names; longest first to avoid partial collisions.
 KNOWN_BRANDS=(
@@ -81,6 +112,7 @@ def extract_cards(html,base_url):
     offers=[]
     seen=set()
     host=urlsplit(base_url).hostname
+    _, variants = storefront_data(html)
     for card in parser.cards:
         url=urljoin(base_url,card["href"])
         parts=urlsplit(url)
@@ -125,8 +157,12 @@ def extract_cards(html,base_url):
             continue
         seen.add(key)
         maker,strain=split_brand_and_strain(title)
+        structured = variants.get(parts.path.rstrip("/").rsplit("/", 1)[-1], {})
+        observed_brand = structured.get("brand")
         offers.append({
-            "url":url,"product_name":title,"strain":strain,"brand":maker,
+            "url":url,"product_name":title,"strain":strain,"brand":observed_brand or maker,
+            "observed_brand": observed_brand,
+            "observed_product_name": structured.get("product_name"),
             "category":category,"package_g":float(weight.group(1)) if weight else None,
             "price":amount,"source_method":"flowhub_html_card_review_only",
             "stock_status":"not_verified","weight_status":"advertised_card" if weight else "unverified"

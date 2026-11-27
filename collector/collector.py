@@ -119,6 +119,7 @@ def extract_product(product, retailer, page_url, checked_at, store_id=''):
     identity = f"{store_id or retailer}|{source_id or url}|{name}"
     return {"id": hashlib.sha256(identity.encode()).hexdigest()[:20], "retailer": retailer, "store_id": store_id,
             "product_name": name, "strain": "", "brand": str(brand), "category": "",
+            "observed_brand": str(brand),
             "package_g": None, "price": round(price, 2), "url": url,
             "source_id": source_id, "checked_at": checked_at,
             "weight_status": "unverified", "stock_status": "not_verified", "source_method": "jsonld"}
@@ -259,6 +260,7 @@ def scan_target(target, extra_categories, checked_at, delay):
                         "offers":len(category_rows)
                     })
             # Deduplicate repeated recommended/menu sections before staging.
+            batch.sort(key=lambda item: bool(item.get("observed_product_name")))
             batch = list({(x.get("store_id"), x["url"], x["product_name"]): x for x in batch}.values())
             status["count"] = len(batch)
             status["html_bytes"] = len(result["html"].encode("utf-8"))
@@ -322,8 +324,10 @@ def scan_target(target, extra_categories, checked_at, delay):
     return statuses, extracted
 
 
-def run_scan(limit=None, delay=1.5, include_license=None, workers=1):
+def run_scan(limit=None, delay=1.5, include_license=None, workers=1, targets_path=None):
     targets = rows("menu_targets.csv")
+    if targets_path and targets_path.exists():
+        targets = json.loads(targets_path.read_text(encoding="utf-8"))
     extra_categories = rows("menu_categories.csv")
     if limit is not None:
         chosen = targets[:limit]
@@ -360,7 +364,8 @@ if __name__ == "__main__":
     parser.add_argument("--delay", type=float, default=1.5)
     parser.add_argument("--include-license", type=str, action="append", default=[])
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--targets", type=Path)
     args = parser.parse_args()
-    result = run_scan(args.limit, args.delay, args.include_license, args.workers)
+    result = run_scan(args.limit, args.delay, args.include_license, args.workers, args.targets)
     print(json.dumps({"checked_at": result["checked_at"], "targets_checked": result["targets_checked"],
                       "counts": result["counts"], "published": result["published"]}, indent=2))
