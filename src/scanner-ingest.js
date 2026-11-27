@@ -54,7 +54,7 @@ async function getSigningKey(kid) {
   );
 }
 
-async function scannerRun(request) {
+export async function scannerRun(request) {
   const token = request.headers.get('Authorization')?.match(/^Bearer ([A-Za-z0-9._-]+)$/)?.[1];
   const parts = token?.split('.') || [];
   if (parts.length !== 3 || token.length > 16_384) return null;

@@ -1,4 +1,5 @@
 import { ingestScannerOffers } from './scanner-ingest.js';
+import { scannerEntities } from './scanner-entities.js';
 import { liveCatalog } from './live-catalog.js';
 import { onRequestPost, onRequestGet } from '../functions/api/feedback.js';
 import { onRequestGet as reviewsGet, onRequestPost as reviewsPost } from '../functions/api/reviews.js';
@@ -46,6 +47,9 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/api/internal/scanner-offers') {
       return ingestScannerOffers(request, env.CATALOG_DB);
+    }
+    if (url.pathname === '/api/internal/scanner-entities') {
+      return scannerEntities(request, env.CATALOG_DB);
     }
     if (url.pathname === '/api/feedback') {
       if (request.method === 'POST') return onRequestPost({request, env});

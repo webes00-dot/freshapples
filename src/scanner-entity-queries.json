@@ -1,0 +1,42 @@
+{
+  "retailers": {
+    "sql": "SELECT id, source_key, license_id, display_name, aliases, address, menu_url FROM retailers ORDER BY id",
+    "params": 0
+  },
+  "brands": {
+    "sql": "SELECT canonical_name, aliases FROM brands",
+    "params": 0
+  },
+  "strains": {
+    "sql": "SELECT canonical_name, aliases FROM strains",
+    "params": 0
+  },
+  "aliases": {
+    "sql": "SELECT lower(entity_type) AS entity_type, observed_name, canonical_name FROM entity_aliases WHERE lower(action) IN ('normalize', 'canonical')",
+    "params": 0
+  },
+  "reviews": {
+    "sql": "SELECT entity_type, entity_key, reason FROM review_queue WHERE reason IN ('scanner_new_entity','scanner_identity_uncertain','scanner_retailer_conflict')",
+    "params": 0
+  },
+  "add_review": {
+    "sql": "INSERT INTO review_queue (entity_type, entity_key, reason, payload_json) SELECT ?, ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM review_queue WHERE entity_type = ? AND entity_key = ? AND reason = ?)",
+    "params": 7
+  },
+  "add_retailer_menu": {
+    "sql": "UPDATE retailers SET menu_url = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND trim(coalesce(menu_url, '')) = ''",
+    "params": 2
+  },
+  "add_retailer": {
+    "sql": "INSERT INTO retailers (source_key, display_name, license_id, address, menu_url, website_url, raw_json) SELECT ?, ?, ?, ?, ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM retailers WHERE upper(license_id) = ?) ON CONFLICT(source_key) DO NOTHING",
+    "params": 8
+  },
+  "add_brand": {
+    "sql": "INSERT INTO brands (canonical_name, research_status, raw_json) VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO NOTHING",
+    "params": 2
+  },
+  "add_strain": {
+    "sql": "INSERT INTO strains (canonical_name, review_status, raw_json) VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO NOTHING",
+    "params": 2
+  }
+}
