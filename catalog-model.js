@@ -29,7 +29,7 @@ function typeOf(o){
   .join(" ").replace(/\b(?:add to|in) cart\b/g,"");
  if(prerollForm.test(c)||prerollForm.test(form)||prerollForm.test(title))return "Preroll";
  if(vapeForm.test(c)||vapeForm.test(form)||vapeForm.test(title))return "Vape";
- if(concentrateForm.test(c)||concentrateForm.test(form))return "Concentrates";
+ if(concentrateForm.test(c)||concentrateForm.test(form)||/\b(?:live resin|cured resin|live rosin|hash rosin|distillate|shatter|badder|budder|crumble|kief|rso|concentrates?)\b/.test(title))return "Concentrates";
  if(c.includes("flower")||c==="bud"||c==="buds"){
   // Dogwalkers sells pre-rolls. A Flower label alone cannot verify their format or pack weight.
   return canonicalBrand(o.brand||o.brand_family)==="Dogwalkers"?null:"Flower";
@@ -655,26 +655,39 @@ const priceComparisonMinimums=Object.freeze({
  brand:Object.freeze({Flower:10,Preroll:10,Concentrates:5}),
  retailer:Object.freeze({Flower:0,Preroll:0,Concentrates:0}),
 });
+// Ranking identity excludes price and capture timestamp: use the newest observed
+// price for each distinct store, product identity, form, weight and variant.
+function rankingIdentity(o){
+ const store=String(o.retailer_id||o.store_id||"").trim()||simplify(o.retailer);
+ return [store,simplify(o.displayStrain),simplify(o.displayBrand),o.displayType,
+  String(o.pack.total),o.pack.count||1,o.product_variant||"",offerVariant(o)].join("|");
+}
 function rankPriceCaptures(offers,type,groupType,groupFor){
  const minimum=priceComparisonMinimums[groupType]?.[type];
  if(minimum===undefined)return [];
  const groups=new Map();
  for(const offer of offers){
   if(typeOf(offer)!==type)continue;
+  if(/^(?:hidden|removed|unavailable|inactive|out_of_stock)$/i.test(String(offer.availability_status||"")))continue;
   const price=numeric(offer.analytics_price)||numeric(offer.price);
   if(!price)continue;
   const product=enriched(offer);
   const {total,inconsistent}=product.pack;
-  if(!total||inconsistent)continue;
+  if(!total||inconsistent||!isValidDisplayStrain(product.displayStrain))continue;
   const group=groupFor(product);
   if(!group?.key||!group.name)continue;
   if(!groups.has(group.key))groups.set(group.key,{name:group.name,captures:new Map()});
-  const identity=offerIdentity({...product,price})+"|"+String(offer.checked_at||"");
-  groups.get(group.key).captures.set(identity,price/total);
+  const identity=rankingIdentity(product);
+  const captures=groups.get(group.key).captures;
+  const previous=captures.get(identity);
+  const date=String(offer.checked_at||"");
+  const quality=offerSourceQuality(offer);
+  if(!previous||date>previous.date||(date===previous.date&&quality>previous.quality))
+   captures.set(identity,{date,quality,value:price/total});
  }
  return [...groups.values()].filter(({captures})=>captures.size>=minimum)
   .map(({name,captures})=>({
-   name,count:captures.size,avg:[...captures.values()].reduce((sum,value)=>sum+value,0)/captures.size,
+   name,count:captures.size,avg:[...captures.values()].reduce((sum,item)=>sum+item.value,0)/captures.size,
   })).sort((a,b)=>a.avg-b.avg||a.name.localeCompare(b.name));
 }
 function offerSourceQuality(o){
