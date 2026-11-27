@@ -2,7 +2,6 @@
 """Reconcile licensed storefronts and menu identities into the D1 masters."""
 import argparse
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 import json
@@ -18,16 +17,16 @@ from xml.etree import ElementTree
 from brand_aliases import canonical_brand
 from collector import ROOT, fetch, rows
 from flowhub_adapter import storefront_data
+from publish_offers import request_json, workflow_token
 
 HUB = "mncannabishub.com"
 SITEMAP = f"https://{HUB}/sitemaps/dispensaries.xml"
-D1_DATABASE = "457785f2-ab73-4858-b524-ba613a2b5388"
+ENTITY_ENDPOINT = "https://mntrees.co/api/internal/scanner-entities"
 SITE_LICENSE = re.compile(r"[A-Z0-9]+-L\d{2}-\d{6}-\d{2}-AUR", re.I)
 FLOWHUB_HOST = re.compile(r"[a-z0-9-]+\.dispensary\.shop")
 AGGREGATORS = ("leafly.com", "weedmaps.com", "jointcommerce.com",
                "twincitycannabis.com", HUB, "thcminnesota.com",
                "google.com", "facebook.com", "instagram.com")
-RETAILER_FIELDS = "id, source_key, license_id, display_name, aliases, address, menu_url"
 CHECKED_SOURCES = {"jsonld", "flowhub_html_card_review_only", "tymber_html_card"}
 REVIEW_REASONS = ("scanner_new_entity", "scanner_identity_uncertain", "scanner_retailer_conflict")
 STRAIN_CATEGORIES = {"flower", "preroll", "pre roll", "infused preroll", "infused pre roll",
@@ -74,40 +73,31 @@ def alias_parts(value):
 
 class D1:
     def __init__(self):
-        account = os.environ["CLOUDFLARE_ACCOUNT_ID"]
-        self.token = os.environ["CLOUDFLARE_API_TOKEN"]
-        self.url = f"https://api.cloudflare.com/client/v4/accounts/{account}/d1/database/{D1_DATABASE}/query"
+        self.token = workflow_token()
 
-    def query(self, sql, params=()):
-        body = json.dumps(statement(sql, *params)).encode()
-        request = Request(self.url, data=body, headers={
+    def query(self, operation, params=()):
+        return self.batch([statement(operation, *params)])[0]
+
+    def batch(self, commands):
+        request = Request(ENTITY_ENDPOINT, data=json.dumps(commands).encode(), headers={
             "Authorization": "Bearer " + self.token, "Content-Type": "application/json",
+            "User-Agent": "MNtrees-Scanner/1.0",
         })
-        with urlopen(request, timeout=45) as response:
-            payload = json.load(response)
-        results = payload.get("result") or []
-        if not payload.get("success") or len(results) != 1 or not results[0].get("success"):
-            raise RuntimeError("Unsuccessful D1 entity reconciliation")
-        return results[0]["results"]
+        return request_json(request, attempts=8)
 
 
-def statement(sql, *params):
-    return {"sql": sql, "params": list(params)}
+def statement(operation, *params):
+    return {"operation": operation, "params": list(params)}
 
 
 def commit(db, commands):
-    with ThreadPoolExecutor(max_workers=5) as pool:
-        for _ in pool.map(lambda item: db.query(**item), commands):
-            pass
+    for start in range(0, len(commands), 20):
+        db.batch(commands[start:start + 20])
 
 
 def review(entity, identity, reason, evidence):
-    return statement(
-        """INSERT INTO review_queue (entity_type, entity_key, reason, payload_json)
-           SELECT ?, ?, ?, ? WHERE NOT EXISTS
-           (SELECT 1 FROM review_queue WHERE entity_type = ? AND entity_key = ? AND reason = ?)""",
-        entity, identity, reason, json.dumps(evidence), entity, identity, reason,
-    )
+    return statement("add_review", entity, identity, reason, json.dumps(evidence),
+                     entity, identity, reason)
 
 
 class MenuLinks(HTMLParser):
@@ -203,18 +193,14 @@ def discover_retailers(current, pages, *, delay=1):
                 continue
             if matches:
                 commands.append(statement(
-                    """UPDATE retailers SET menu_url = ?, updated_at = CURRENT_TIMESTAMP
-                       WHERE id = ? AND trim(coalesce(menu_url, '')) = ''""",
+                    "add_retailer_menu",
                     record["menu_url"], matches[0]["id"],
                 ))
                 matches[0]["menu_url"] = record["menu_url"]
                 events.append(("retailer", record["name"], "scanner_new_entity", {**record, "change": "menu added"}))
                 continue
             commands.append(statement(
-                """INSERT INTO retailers (source_key, display_name, license_id, address, menu_url, website_url, raw_json)
-                   SELECT ?, ?, ?, ?, ?, ?, ?
-                   WHERE NOT EXISTS (SELECT 1 FROM retailers WHERE upper(license_id) = ?)
-                   ON CONFLICT(source_key) DO NOTHING""",
+                "add_retailer",
                 "scanner:" + license_id, record["name"], license_id, record["address"],
                 record["menu_url"], record["website_url"], json.dumps({"source": "scanner", **record}), license_id,
             ))
@@ -314,14 +300,19 @@ def discover_products(offers, indexes):
             continue
         category = key(offer.get("category"))
         observed_brand = offer.get("observed_brand")
-        if not acceptable(observed_brand) or category not in STRAIN_CATEGORIES | {"", "vape", "vapes"}:
+        if category not in STRAIN_CATEGORIES | {"", "vape", "vapes"}:
             continue
-        brand = canonical_brand(observed_brand)
+        brand = canonical_brand(observed_brand) if acceptable(observed_brand) else ""
         title = offer.get("observed_product_name")
-        strain = strain_name(title, observed_brand) if isinstance(title, str) and category in STRAIN_CATEGORIES else ""
+        explicit_strain = offer.get("observed_strain")
+        strain = ""
+        if isinstance(explicit_strain, str) and explicit_strain:
+            strain = strain_name(explicit_strain, observed_brand)
+        elif brand and isinstance(title, str) and category in STRAIN_CATEGORIES:
+            strain = strain_name(title, observed_brand)
         evidence = {field: offer.get(field) for field in
                     ("url", "store_id", "retailer", "product_name", "observed_brand",
-                     "observed_product_name", "category", "checked_at")}
+                     "observed_product_name", "observed_strain", "category", "checked_at")}
         for entity, label in (("brand", brand), ("strain", strain)):
             if not acceptable(label) or (entity, key(label)) in seen:
                 continue
@@ -333,11 +324,8 @@ def discover_products(offers, indexes):
             if match == "ambiguous":
                 events.append((entity, label, "scanner_identity_uncertain", evidence))
                 continue
-            table, status_column = {"brand": ("brands", "research_status"),
-                                    "strain": ("strains", "review_status")}[entity]
             commands.append(statement(
-                f"""INSERT INTO {table} (canonical_name, {status_column}, raw_json)
-                    VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO NOTHING""",
+                "add_" + entity,
                 label, json.dumps({"source": "scanner", "name": label, **evidence}),
             ))
             index.add(label, label)
@@ -350,8 +338,7 @@ def save(db, commands, events, *, dry_run):
         return evidence.get("license") or evidence.get("identity") or key(name)
 
     existing = {(row["entity_type"], row["entity_key"], row["reason"])
-                for row in db.query("""SELECT entity_type, entity_key, reason FROM review_queue
-                                      WHERE reason IN (?, ?, ?)""", REVIEW_REASONS)}
+                for row in db.query("reviews")}
     new_events = []
     for kind, name, reason, evidence in events:
         event_key = (kind, identity(name, evidence), reason)
@@ -376,7 +363,7 @@ def main():
     options = parser.parse_args()
     db = D1()
     if options.phase == "retailers":
-        current = db.query(f"SELECT {RETAILER_FIELDS} FROM retailers ORDER BY id")
+        current = db.query("retailers")
         try:
             pages = hub_pages(int(os.getenv("GITHUB_RUN_NUMBER", "1")))
         except (OSError, ValueError, RuntimeError, ElementTree.ParseError) as error:
@@ -385,14 +372,13 @@ def main():
         commands, events = discover_retailers(current, pages)
         result = save(db, commands, events, dry_run=options.dry_run)
         if options.targets and not options.dry_run:
-            current = db.query(f"SELECT {RETAILER_FIELDS} FROM retailers ORDER BY id")
+            current = db.query("retailers")
             targets = target_rows(current, rows("menu_targets.csv"))
             options.targets.write_text(json.dumps(targets), encoding="utf-8")
             print(f"Scheduled scan targets: {len(targets)}")
     else:
-        redirects = db.query("""SELECT lower(entity_type) AS entity_type, observed_name, canonical_name
-                                FROM entity_aliases WHERE lower(action) IN ('normalize', 'canonical')""")
-        indexes = {entity: Names(db.query(f"SELECT canonical_name, aliases FROM {table}"),
+        redirects = db.query("aliases")
+        indexes = {entity: Names(db.query(table),
                                   [row for row in redirects if row["entity_type"] == entity])
                    for entity, table in (("brand", "brands"), ("strain", "strains"))}
         offers = json.loads((ROOT / "data" / "candidate_products.json").read_text(encoding="utf-8"))

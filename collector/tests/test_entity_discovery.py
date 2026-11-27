@@ -9,6 +9,9 @@ from discover_entities import Names, discover_products, review, target_rows
 from flowhub_adapter import extract_cards
 
 
+OPERATIONS = json.loads((Path(__file__).resolve().parents[2] / "src" / "scanner-entity-queries.json").read_text())
+
+
 class EntityDiscoveryTests(unittest.TestCase):
     def test_structured_flowhub_identity_is_matched_to_the_exact_card(self):
         variant = {"variant_id": "v1", "brand": "Example Farms", "product_name": "Plum Pie | 3.5g"}
@@ -41,13 +44,13 @@ class EntityDiscoveryTests(unittest.TestCase):
         ]
         commands, events = discover_products(offers, indexes)
         for command in commands * 2:
-            db.execute(command["sql"], command["params"])
+            db.execute(OPERATIONS[command["operation"]]["sql"], command["params"])
         self.assertEqual(db.execute("SELECT canonical_name FROM brands").fetchall(), [("One Example",)])
         self.assertEqual(db.execute("SELECT canonical_name FROM strains").fetchall(), [("Plum Pie",)])
         self.assertIn(("strain", "BlueDream", "scanner_identity_uncertain"), [e[:3] for e in events])
         for _ in range(2):
             command = review("strain", "plum pie", "scanner_new_entity", offers[1])
-            db.execute(command["sql"], command["params"])
+            db.execute(OPERATIONS[command["operation"]]["sql"], command["params"])
         self.assertEqual(db.execute("SELECT count(*) FROM review_queue").fetchone(), (1,))
 
     def test_d1_targets_add_retailers_and_preserve_deeper_same_host_menu(self):

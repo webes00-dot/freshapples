@@ -115,11 +115,18 @@ def extract_product(product, retailer, page_url, checked_at, store_id=''):
     brand = product.get("brand") or ""
     if isinstance(brand, dict):
         brand = brand.get("name") or ""
+    properties = product.get("additionalProperty") or []
+    if isinstance(properties, dict):
+        properties = [properties]
+    strain_fields = {str(item.get("value")).strip() for item in properties
+                     if isinstance(item, dict) and str(item.get("name", "")).casefold() in ("strain", "cultivar")
+                     and isinstance(item.get("value"), str) and item["value"].strip()}
     source_id = str(product.get("sku") or product.get("productID") or "").strip()
     identity = f"{store_id or retailer}|{source_id or url}|{name}"
     return {"id": hashlib.sha256(identity.encode()).hexdigest()[:20], "retailer": retailer, "store_id": store_id,
             "product_name": name, "strain": "", "brand": str(brand), "category": "",
             "observed_brand": str(brand),
+            "observed_strain": strain_fields.pop() if len(strain_fields) == 1 else "",
             "package_g": None, "price": round(price, 2), "url": url,
             "source_id": source_id, "checked_at": checked_at,
             "weight_status": "unverified", "stock_status": "not_verified", "source_method": "jsonld"}
@@ -214,6 +221,7 @@ def scan_target(target, extra_categories, checked_at, delay):
                     item = {
                         **offer, "retailer": target["retailer"],
                         "store_id": target["license"], "source_id": "",
+                        "observed_brand": offer["brand"], "observed_strain": offer["strain"],
                         "checked_at": checked_at, "source_method": "ty mber_html_card".replace(" ", ""),
                         "stock_status": "not_verified", "weight_status": "title_explicit",
                     }

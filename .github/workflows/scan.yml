@@ -58,9 +58,6 @@ jobs:
       - name: Discover retail locations and load scan targets from D1
         if: steps.source.outputs.run_id == ''
         continue-on-error: true
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           python3 collector/discover_entities.py retailers \
             --targets "$RUNNER_TEMP/menu-targets.json" \
@@ -72,9 +69,6 @@ jobs:
         run: python3 collector/publish_offers.py
       - name: Reconcile discovered brands and strains with D1
         if: steps.source.outputs.run_id == ''
-        env:
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           python3 collector/discover_entities.py products \
             --output "$RUNNER_TEMP/product-discoveries.json"
