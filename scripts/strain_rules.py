@@ -432,7 +432,7 @@ def identify_product(name):
     if dizgo:
         return {"strain": dizgo.group(1).strip(), "brand": "Dizgo Collective"}
     # Owner-reviewed product/brand normalization; packaging is not a strain.
-    if re.fullmatch(r"(?i)stashbox\s*x\s*loon\s+labs\s+live\s+resin\s+dirty\s+laundry", raw):
+    if re.fullmatch(r"stashbox\s*[x×]\s*loon\s+labs\s+live\s+resin\s+dirty\s+laundry(?:\s*[|–-]?\s*1\s*g)?", clean, re.I):
         return {"strain": "Dirty Laundry", "brand": "Stashbox x Loon Labs"}
     if re.fullmatch(r"(?i)the\s+soap", raw):
         return {"strain": "Soap"}
