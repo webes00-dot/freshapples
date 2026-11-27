@@ -26,8 +26,8 @@ class EntityDiscoveryTests(unittest.TestCase):
     def test_master_insert_respects_aliases_and_is_safe_to_repeat(self):
         db = sqlite3.connect(":memory:")
         db.executescript("""
-          CREATE TABLE brands (canonical_name TEXT COLLATE NOCASE UNIQUE, research_status TEXT, raw_json TEXT);
-          CREATE TABLE strains (canonical_name TEXT COLLATE NOCASE UNIQUE, review_status TEXT, raw_json TEXT);
+          CREATE TABLE brands (canonical_name TEXT COLLATE NOCASE UNIQUE, research_status TEXT, raw_json TEXT, updated_at TEXT);
+          CREATE TABLE strains (canonical_name TEXT COLLATE NOCASE UNIQUE, review_status TEXT, raw_json TEXT, updated_at TEXT);
           CREATE TABLE review_queue (entity_type TEXT, entity_key TEXT, reason TEXT, payload_json TEXT);
         """)
         indexes = {
@@ -35,11 +35,12 @@ class EntityDiscoveryTests(unittest.TestCase):
             "strain": Names([{"canonical_name": "Blue Dream", "aliases": "Blue Test"}], []),
         }
         common = {"category": "Flower", "source_method": "flowhub_html_card_review_only",
-                  "url": "https://example.dispensary.shop/rec/flower/pdp/plum-pie/v/v1"}
+                  "url": "https://example.dispensary.shop/rec/flower/pdp/plum-pie/v/v1", "store_id": "store-one"}
         offers = [
             {**common, "observed_brand": "Existing Farms", "observed_product_name": "Blue Test | 3.5g"},
             {**common, "observed_brand": "One Example", "observed_product_name": "Plum Pie | 3.5g | 22%"},
-            {**common, "observed_brand": "One Example", "observed_product_name": "Indica Blend | 3.5g"},
+            {**common, "store_id": "store-two", "observed_brand": "One Example", "observed_product_name": "Plum Pie | 3.5g"},
+            {**common, "observed_brand": "Single Source", "observed_product_name": "Indica Blend | 3.5g"},
             {**common, "observed_brand": "One Example", "observed_product_name": "BlueDream"},
         ]
         commands, events = discover_products(offers, indexes)
@@ -48,6 +49,7 @@ class EntityDiscoveryTests(unittest.TestCase):
         self.assertEqual(db.execute("SELECT canonical_name FROM brands").fetchall(), [("One Example",)])
         self.assertEqual(db.execute("SELECT canonical_name FROM strains").fetchall(), [("Plum Pie",)])
         self.assertIn(("strain", "BlueDream", "scanner_identity_uncertain"), [e[:3] for e in events])
+        self.assertIn(("brand", "Single Source", "scanner_single_source"), [e[:3] for e in events])
         for _ in range(2):
             command = review("strain", "plum pie", "scanner_new_entity", offers[1])
             db.execute(OPERATIONS[command["operation"]]["sql"], command["params"])

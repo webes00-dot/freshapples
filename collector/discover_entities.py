@@ -3,6 +3,7 @@
 import argparse
 from collections import defaultdict
 from datetime import datetime, timezone
+from difflib import get_close_matches
 from html.parser import HTMLParser
 import json
 import os
@@ -28,13 +29,15 @@ AGGREGATORS = ("leafly.com", "weedmaps.com", "jointcommerce.com",
                "twincitycannabis.com", HUB, "thcminnesota.com",
                "google.com", "facebook.com", "instagram.com")
 CHECKED_SOURCES = {"jsonld", "flowhub_html_card_review_only", "tymber_html_card"}
-REVIEW_REASONS = ("scanner_new_entity", "scanner_identity_uncertain", "scanner_retailer_conflict")
+REVIEW_REASONS = ("scanner_new_entity", "scanner_identity_uncertain", "scanner_retailer_conflict",
+                  "scanner_single_source", "scanner_reclassified")
 STRAIN_CATEGORIES = {"flower", "preroll", "pre roll", "infused preroll", "infused pre roll",
                      "concentrate", "concentrates"}
 DETAIL = re.compile(r"(?i)^(?:\d+(?:\.\d+)?\s*(?:g(?:rams?)?|mg|%|pk|ct)|(?:indica|sativa|hybrid)(?:\s+dominant)?|(?:deli|prepackaged|premium)\s+flower)$")
 FORMAT = re.compile(r"(?i)\b(?:pre[ -]?rolls?|disposable|cartridge|distillate|"
                     r"rosin|resin|deli|small buds|smalls|shake|popcorn|pack|flower|"
-                    r"blends?|infused|live|sale|cart|limited release|sample|grams?)\b")
+                    r"blends?|infused|live|sale|cart|limited release|sample|grams?|pre[ -]?packaged|"
+                    r"(?:little|big) sticks?|mixed buds|dogwalkers?|box|single|hybrid|sativa|indica)\b")
 PLACEHOLDER = re.compile(r"(?i)^(?:unknown|n/?a|none|assorted|variety|house|"
                          r"(?:brand|strain)\s+(?:not\s+)?(?:available|confirmed|specified|listed)|"
                          r"mixed(?:\s+strains?)?|sativa|indica|hybrid|other)$")
@@ -257,7 +260,9 @@ class Names:
         matches = self.exact.get(token, set())
         if len(matches) == 1:
             return "current"
-        if matches or self.compact.get(token.replace(" ", "")):
+        compact = token.replace(" ", "")
+        if (matches or self.compact.get(compact)
+                or (len(compact) >= 7 and get_close_matches(compact, self.compact, n=1, cutoff=0.91))):
             return "ambiguous"
         return "new"
 
@@ -281,7 +286,7 @@ def strain_name(title, brand):
         return ""
     name = distinct[0]
     if (FORMAT.search(name) or PLACEHOLDER.fullmatch(name)
-            or re.search(r"\d\s*(?:%|g\b|mg\b|ct\b)|[$@!]|\b(?:THC|CBD)\b", name, re.I)):
+            or re.search(r"\d\s*(?:%|g\b|mg\b|ct\b|p(?:a)?ck\b)|\d\s*[./]\s*\d|[$@!#]|\b(?:THC|CBD)\b", name, re.I)):
         return ""
     return name
 
@@ -294,7 +299,7 @@ def acceptable(label):
 def discover_products(offers, indexes):
     commands = []
     events = []
-    seen = set()
+    evidence_by_name = defaultdict(dict)
     for offer in offers:
         if offer.get("source_method") not in CHECKED_SOURCES or not direct_url(offer.get("url")):
             continue
@@ -314,22 +319,34 @@ def discover_products(offers, indexes):
                     ("url", "store_id", "retailer", "product_name", "observed_brand",
                      "observed_product_name", "observed_strain", "category", "checked_at")}
         for entity, label in (("brand", brand), ("strain", strain)):
-            if not acceptable(label) or (entity, key(label)) in seen:
+            if not acceptable(label) or not offer.get("store_id"):
                 continue
-            index = indexes[entity]
-            match = index.check(label)
-            seen.add((entity, key(label)))
-            if match == "current":
-                continue
-            if match == "ambiguous":
-                events.append((entity, label, "scanner_identity_uncertain", evidence))
-                continue
-            commands.append(statement(
-                "add_" + entity,
-                label, json.dumps({"source": "scanner", "name": label, **evidence}),
-            ))
-            index.add(label, label)
-            events.append((entity, label, "scanner_new_entity", evidence))
+            evidence_by_name[entity, key(label)].setdefault(offer["store_id"], (label, evidence))
+    for (entity, _), locations in sorted(evidence_by_name.items()):
+        label, evidence = next(iter(locations.values()))
+        index = indexes[entity]
+        match = index.check(label)
+        if match == "current":
+            continue
+        evidence = {**evidence, "retailer_count": len(locations),
+                    "supporting_urls": list(dict.fromkeys(item["url"] for _, item in locations.values()))[:6]}
+        if entity == "brand":
+            shortened = re.sub(r"(?:\s+(?:cannabis|co|company|llc|supply|inc|collective))+$", "", key(label))
+            if (shortened != key(label) and index.check(shortened) != "new"
+                    or re.search(r"\s+(?:x|by)\s+|[/+]", label, re.I)):
+                match = "ambiguous"
+        if match == "ambiguous":
+            events.append((entity, label, "scanner_identity_uncertain", evidence))
+            continue
+        if len(locations) < 2:
+            events.append((entity, label, "scanner_single_source", evidence))
+            continue
+        commands.append(statement(
+            "add_" + entity,
+            label, json.dumps({"source": "scanner", "name": label, **evidence}),
+        ))
+        index.add(label, label)
+        events.append((entity, label, "scanner_new_entity", evidence))
     return commands, events
 
 
