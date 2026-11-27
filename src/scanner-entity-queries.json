@@ -4,11 +4,11 @@
     "params": 0
   },
   "brands": {
-    "sql": "SELECT canonical_name, aliases FROM brands",
+    "sql": "SELECT canonical_name, aliases FROM brands WHERE coalesce(research_status, '') <> 'scanner_hold'",
     "params": 0
   },
   "strains": {
-    "sql": "SELECT canonical_name, aliases FROM strains",
+    "sql": "SELECT canonical_name, aliases FROM strains WHERE coalesce(review_status, '') <> 'scanner_hold'",
     "params": 0
   },
   "aliases": {
@@ -16,7 +16,7 @@
     "params": 0
   },
   "reviews": {
-    "sql": "SELECT entity_type, entity_key, reason FROM review_queue WHERE reason IN ('scanner_new_entity','scanner_identity_uncertain','scanner_retailer_conflict')",
+    "sql": "SELECT entity_type, entity_key, reason FROM review_queue WHERE reason IN ('scanner_new_entity','scanner_identity_uncertain','scanner_retailer_conflict','scanner_single_source','scanner_reclassified')",
     "params": 0
   },
   "add_review": {
@@ -32,11 +32,11 @@
     "params": 8
   },
   "add_brand": {
-    "sql": "INSERT INTO brands (canonical_name, research_status, raw_json) VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO NOTHING",
+    "sql": "INSERT INTO brands (canonical_name, research_status, raw_json) VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO UPDATE SET research_status=excluded.research_status, raw_json=excluded.raw_json, updated_at=CURRENT_TIMESTAMP WHERE brands.research_status='scanner_hold' AND json_extract(brands.raw_json,'$.source')='scanner'",
     "params": 2
   },
   "add_strain": {
-    "sql": "INSERT INTO strains (canonical_name, review_status, raw_json) VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO NOTHING",
+    "sql": "INSERT INTO strains (canonical_name, review_status, raw_json) VALUES (?, 'needs_review', ?) ON CONFLICT(canonical_name) DO UPDATE SET review_status=excluded.review_status, raw_json=excluded.raw_json, updated_at=CURRENT_TIMESTAMP WHERE strains.review_status='scanner_hold' AND json_extract(strains.raw_json,'$.source')='scanner'",
     "params": 2
   }
 }

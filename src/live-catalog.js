@@ -240,8 +240,8 @@ export async function liveCatalog(request, env) {
 
   const queries = [
     "SELECT source_key, license_id, display_name, address, menu_url, website_url, aliases, ownership_group FROM retailers",
-    "SELECT canonical_name, aliases, website_url, summary, about_url, cultivation_type, logo_url, research_status, ownership_group, tribal_status, sea_status, corporate_tag FROM brands",
-    "SELECT canonical_name, aliases, classification, indica_sativa, parent1, parent2, breeder, terpenes, flowering_time, known_children, notes, reference_url, reference_name FROM strains",
+    "SELECT canonical_name, aliases, website_url, summary, about_url, cultivation_type, logo_url, research_status, ownership_group, tribal_status, sea_status, corporate_tag FROM brands WHERE coalesce(research_status, '') <> 'scanner_hold'",
+    "SELECT canonical_name, aliases, classification, indica_sativa, parent1, parent2, breeder, terpenes, flowering_time, known_children, notes, reference_url, reference_name FROM strains WHERE coalesce(review_status, '') <> 'scanner_hold'",
     "SELECT observed_at, price_cents, source_url, public_json FROM scanner_offers ORDER BY observed_at DESC, offer_key",
   ];
   try {
