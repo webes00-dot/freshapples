@@ -71,6 +71,8 @@ def direct_url(value):
 
 
 def alias_parts(value):
+    if isinstance(value, list):
+        return value
     return re.split(r"[,;|\n]", value or "")
 
 
@@ -252,8 +254,9 @@ class Names:
     def add(self, label, canonical):
         token = key(label)
         if token and canonical:
-            self.exact[token].add(canonical)
-            self.compact[token.replace(" ", "")].add(canonical)
+            canonical_key = key(canonical)
+            self.exact[token].add(canonical_key)
+            self.compact[token.replace(" ", "")].add(canonical_key)
 
     def check(self, label):
         token = key(label)
@@ -328,8 +331,8 @@ def discover_products(offers, indexes):
         match = index.check(label)
         if match == "current":
             continue
-        evidence = {**evidence, "retailer_count": len(locations),
-                    "supporting_urls": list(dict.fromkeys(item["url"] for _, item in locations.values()))[:6]}
+        supporting_urls = list(dict.fromkeys(item["url"] for _, item in locations.values()))
+        evidence = {**evidence, "retailer_count": len(locations), "supporting_urls": supporting_urls[:3]}
         if entity == "brand":
             shortened = re.sub(r"(?:\s+(?:cannabis|co|company|llc|supply|inc|collective))+$", "", key(label))
             if (shortened != key(label) and index.check(shortened) != "new"
@@ -338,7 +341,7 @@ def discover_products(offers, indexes):
         if match == "ambiguous":
             events.append((entity, label, "scanner_identity_uncertain", evidence))
             continue
-        if len(locations) < 2:
+        if min(len(locations), len(supporting_urls)) < 2:
             events.append((entity, label, "scanner_single_source", evidence))
             continue
         commands.append(statement(
@@ -395,7 +398,17 @@ def main():
             print(f"Scheduled scan targets: {len(targets)}")
     else:
         redirects = db.query("aliases")
-        indexes = {entity: Names(db.query(table),
+        # The storefront still displays names from its verified baseline. They
+        # count as existing even when there is no corresponding D1 master row.
+        baseline = json.loads((ROOT.parent / "data" / "site-data.json").read_text(encoding="utf-8"))
+        published = {
+            "brand": [{"canonical_name": brand.get("name"), "aliases": brand.get("aliases")}
+                      for brand in baseline["brands"]],
+            "strain": [{"canonical_name": name, "aliases": None}
+                       for name in {*baseline.get("strain_types", {}), *baseline.get("strain_profile_references", {})}
+                                    if name],
+        }
+        indexes = {entity: Names(db.query(table) + published[entity],
                                   [row for row in redirects if row["entity_type"] == entity])
                    for entity, table in (("brand", "brands"), ("strain", "strains"))}
         offers = json.loads((ROOT / "data" / "candidate_products.json").read_text(encoding="utf-8"))

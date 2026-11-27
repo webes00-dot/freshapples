@@ -39,7 +39,8 @@ class EntityDiscoveryTests(unittest.TestCase):
         offers = [
             {**common, "observed_brand": "Existing Farms", "observed_product_name": "Blue Test | 3.5g"},
             {**common, "observed_brand": "One Example", "observed_product_name": "Plum Pie | 3.5g | 22%"},
-            {**common, "store_id": "store-two", "observed_brand": "One Example", "observed_product_name": "Plum Pie | 3.5g"},
+            {**common, "store_id": "store-two", "url": "https://another.dispensary.shop/rec/flower/pdp/plum-pie/v/v2",
+             "observed_brand": "One Example", "observed_product_name": "Plum Pie | 3.5g"},
             {**common, "observed_brand": "Single Source", "observed_product_name": "Indica Blend | 3.5g"},
             {**common, "observed_brand": "One Example", "observed_product_name": "BlueDream"},
         ]
