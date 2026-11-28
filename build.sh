@@ -34,6 +34,17 @@ python3 - <<'PY'
 from pathlib import Path
 import hashlib,json
 root=Path('dist')
+brand_corrections = json.loads(Path('data/listing-brand-corrections.json').read_text())
+for name in ('catalog.json', 'site-data.json'):
+    path = root / 'data' / name
+    payload = json.loads(path.read_text())
+    catalog = payload if name == 'catalog.json' else payload['catalog']
+    for offer in catalog:
+        listing_id = offer.get('id')
+        if listing_id in brand_corrections:
+            offer['brand'] = brand_corrections[listing_id]
+            offer['reviewed_identity'] = True
+    path.write_text(json.dumps(payload, ensure_ascii=False) + '\n', encoding='utf-8')
 paths=sorted(p for p in root.rglob('*') if p.is_file())
 manifest={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
 Path('dist-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
