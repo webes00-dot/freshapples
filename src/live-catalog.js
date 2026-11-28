@@ -30,13 +30,21 @@ function directoryIndex(rows, nameField) {
   return name => exact.get(normalize(name)) ?? alternate.get(normalize(name));
 }
 
+const leaflyProductPath = /^(?:www\.)?leafly\.com(\/dispensary-info\/[^/]+\/p\/\d+)(?:\/|$)/i;
+
 function urlIdentity(value) {
   if (!httpUrl(value)) return '';
   const url = new URL(value);
-  return url.host.toLowerCase() + url.pathname.replace(/\/$/, '');
+  const path = url.host.toLowerCase() + url.pathname.replace(/\/$/, '');
+  const leaflyProduct = path.match(leaflyProductPath);
+  if (leaflyProduct) {
+    const variant = url.searchParams.get('variant');
+    return 'leafly.com' + leaflyProduct[1] + (variant ? '?variant=' + encodeURIComponent(variant) : '');
+  }
+  return path;
 }
 
-const productPage = url => /\/(products?\/|pdp\/)/i.test(url);
+const productPage = url => /\/(products?\/|pdp\/)/i.test(url) || leaflyProductPath.test(url.split('?')[0]);
 const reviewed = offer => offer.reviewed_identity || offer.product_family_decision === 'owner_confirmed_exact_listing';
 
 function listingKey(offer) {
